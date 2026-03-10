@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Item Calculator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2933 0, #020617 60%);
+      color: #0f172a;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .app-shell {
+      max-width: 960px;
+      width: 100%;
+      background: #f8fafc;
+      border-radius: 18px;
+      box-shadow:
+        0 20px 45px rgba(15, 23, 42, 0.55),
+        0 0 0 1px rgba(15, 23, 42, 0.3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      background: linear-gradient(135deg, #1d4ed8, #4f46e5);
+      color: #e5e7eb;
+      padding: 1.1rem 2rem 0.9rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .title-block h1 {
+      font-size: 1.5rem;
+      font-weight: 650;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .title-block small {
+      display: block;
+      font-size: 0.78rem;
+      opacity: 0.85;
+      margin-top: 0.15rem;
+    }
+
+    .title-block span.logo-icon {
+      font-size: 1.5rem;
+    }
+
+    .meta-block {
+      text-align: right;
+      font-size: 0.78rem;
+    }
+
+    .header-version {
+      display: inline-block;
+      background: rgba(15, 23, 42, 0.2);
+      color: #e0e7ff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.16rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(191, 219, 254, 0.5);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .header-author a {
+      color: #dbeafe;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .header-author a:hover {
+      text-decoration: underline;
+    }
+
+    .app-body {
+      padding: 1.25rem 1.75rem 1.75rem 1.75rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+      .app-body {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .main-column,
+    .side-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 6px 18px rgba(148, 163, 184, 0.18);
+      padding: 1rem 1.1rem;
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-title {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: #64748b;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card-title span.emoji {
+      font-size: 1.05rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      margin-bottom: 0.4rem;
+    }
+
+    .btn {
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.06s;
+      white-space: nowrap;
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #eff6ff;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5f5;
+    }
+
+    .btn-secondary:hover { background: #e5e7eb; }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+    }
+
+    .btn-danger:hover { background: #fecaca; }
+
+    .btn-outline {
+      background: transparent;
+      color: #0f172a;
+      border: 1px dashed #cbd5e1;
+    }
+
+    .btn-outline:hover {
+      border-style: solid;
+      background: #f8fafc;
+    }
+
+    .btn-warning {
+      background: #f97316;
+      color: #fffbeb;
+      border: 1px solid #fed7aa;
+    }
+
+    .btn-warning:hover { background: #ea580c; }
+
+    .btn-success {
+      background: #16a34a;
+      color: #ecfdf5;
+      border: 1px solid #bbf7d0;
+    }
+
+    .btn-success:hover { background: #15803d; }
+
+    .btn-ghost {
+      background: transparent;
+      color: #64748b;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.55rem;
+    }
+
+    .btn-ghost:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .calc-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.2rem;
+      flex-wrap: wrap;
+    }
+
+    select,
+    input[type="number"],
+    input[type="text"],
+    textarea {
+      background: #ffffff;
+      border-radius: 999px;
+      border: 1px solid #d4d4ff;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.82rem;
+      color: #0f172a;
+      outline: none;
+      min-height: 2.1rem;
+      transition: border-color 0.14s, box-shadow 0.14s, background 0.14s;
+    }
+
+    select {
+      border-radius: 999px;
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #64748b 50%), linear-gradient(135deg, #64748b 50%, transparent 50%);
+      background-position: calc(100% - 12px) 50%, calc(100% - 8px) 50%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      padding-right: 1.6rem;
+    }
+
+    select:focus,
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
+    input[type="number"] {
+      max-width: 80px;
+      text-align: center;
+    }
+
+    input.item-name { flex: 2; min-width: 150px; border-radius: 10px; }
+    input.ingr-name { flex: 2; min-width: 140px; border-radius: 10px; }
+
+    textarea {
+      width: 100%;
+      border-radius: 10px;
+      min-height: 110px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: #f8fafc;
+    }
+
+    .cart-list {
+      margin-top: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #dbeafe;
+      font-size: 0.8rem;
+      color: #1e293b;
+    }
+
+    .cart-item span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .cart-item-qty {
+      font-weight: 600;
+      color: #1d4ed8;
+      min-width: 2.2rem;
+    }
+
+    .empty-state {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      background: #f1f5f9;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .result-section {
+      margin-top: 0.4rem;
+    }
+
+    .result-section h3 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.45rem;
+    }
+
+    .result-item {
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.78rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-item.base {
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+      color: #065f46;
+    }
+
+    .result-item.intermediate {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      color: #3730a3;
+    }
+
+    .result-item-name {
+      max-width: 70%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .result-item-qty {
+      font-weight: 700;
+      margin-left: 0.4rem;
+    }
+
+    .ingredients-builder {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+
+    .ingredient-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .ingredient-row input[type="number"] {
+      max-width: 70px;
+    }
+
+    .recipe-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+
+    .recipe-item {
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 0.4rem 0.6rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      align-items: flex-start;
+      font-size: 0.78rem;
+    }
+
+    .recipe-item-main {
+      max-width: 80%;
+    }
+
+    .recipe-item-name {
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 0.15rem;
+    }
+
+    .recipe-item-ingr {
+      color: #64748b;
+      font-size: 0.76rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      padding: 0.12rem 0.55rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .collapsible-header {
+      cursor: pointer;
+    }
+
+    .collapsible-body {
+      overflow: hidden;
+      transition: max-height 0.25s ease, opacity 0.25s ease, margin-top 0.25s ease;
+      max-height: 2000px;
+      opacity: 1;
+      margin-top: 0.35rem;
+    }
+
+    .collapsible-body.collapsed {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+    }
+
+    .collapse-toggle {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.15rem;
+    }
+
+    .io-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .merge-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.76rem;
+      color: #64748b;
+      margin-bottom: 0.3rem;
+    }
+
+    .merge-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+
+    #importFileInput { display: none; }
+
+    .toast {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: #0f172a;
+      border-radius: 999px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.78rem;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      border-color: #fecaca;
+      color: #fecaca;
+    }
+
+    .toast span.icon {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <header class="app-header">
+    <div class="title-block">
+      <h1>
+        <span class="logo-icon">⚔️</span>
+        Item Calculator
+      </h1>
+      <small>Calculate base resources and intermediates for your crafts.</small>
+    </div>
+    <div class="meta-block">
+      <div class="header-version">v 0.1</div>
+      <div class="header-author">
+        Developed by Yama ·
+        <a href="mailto:yamauti@gmail.com">yamauti@gmail.com</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-body">
+    <!-- MAIN COLUMN: Calculator + Results -->
+    <section class="main-column">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="emoji">🧮</span> Calculator</div>
+            <div class="card-subtitle">Select items you want to craft and get all required ingredients.</div>
+          </div>
+        </div>
+
+        <div class="calc-row">
+          <select id="calcItem">
+            <option value="">— Select An Item —</option>
+          </select>
+          <input type="number" id="calcQty" min="1" value="1" />
+          <button class="btn btn-secondary" onclick="addToCart()">+ Add To List</button>
+        </div>
+
+        <div class="cart-list" id="cartList"></div>
+
+        <button class="btn btn-primary" style="width:100%; margin-top:0.6rem;" onclick="calculate()">
+          Calculate Ingredients
+        </button>
+      </div>
+
+      <div class="card" id="resultCard" style="display:none;">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><span class="emoji">✅</span> Required Ingredients</div>
+            <div class="card-subtitle">Total base resources and intermediate crafts for your list.</div>
+          </div>
+        </div>
+        <div id="resultContent"></div>
+      </div>
+    </section>
+
+    <!-- SIDE COLUMN: Recipes / Add / Import-Export -->
+    <section class="side-column">
+      <!-- Saved Recipes -->
+      <div class="card">
+        <div class="card-header collapsible-header" onclick="toggleSection('recipesBody', 'recipesToggle')">
+          <div class="card-title">
+            <span class="emoji">📦</span> Saved Recipes
+          </div>
+          <button class="btn-ghost" type="button" id="recipesToggle">
+            ▲ Collapse
+          </button>
+        </div>
+        <div class="collapsible-body" id="recipesBody">
+          <div class="recipe-list" id="recipeList">
+            <div class="empty-state">No recipes yet.</div>
+          </div>
+          <div class="localstorage-note" style="margin-top:0.5rem; font-size:0.76rem; color:#64748b;">
+            Recipes are stored locally in your browser. Use Export / Import or <strong>Restore Default</strong> to manage them.
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Recipe -->
+      <div class="card">
+        <div class="card-header collapsible-header" onclick="toggleSection('addRecipeBody', 'addRecipeToggle')">
+          <div class="card-title">
+            <span class="emoji">📋</span> Add Recipe
+          </div>
+          <button class="btn-ghost" type="button" id="addRecipeToggle">
+            ▲ Collapse
+          </button>
+        </div>
+        <div class="collapsible-body" id="addRecipeBody">
+          <div class="recipe-form">
+            <div class="form-row">
+              <input type="text" id="recipeName" class="item-name" placeholder="Item name (e.g. Thorium Boots)" />
+              <input type="number" id="recipeYields" min="1" value="1" title="How many units this recipe produces" />
+              <span style="color:#94a3b8; font-size:0.78rem;">unit(s) per craft</span>
+            </div>
+            <div class="ingredients-builder" id="ingredientsBuilder">
+              <div class="ingredient-row">
+                <input type="number" class="ingr-qty" min="1" placeholder="Qty" />
+                <input type="text" class="ingr-name" placeholder="Ingredient (e.g. Thorium Bar)" />
+                <button class="btn btn-danger" type="button" onclick="removeIngredientRow(this)">✕</button>
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:0.2rem;">
+              <button class="btn btn-outline" type="button" onclick="addIngredientRow()">+ Add Ingredient</button>
+              <button class="btn btn-primary" type="button" onclick="saveRecipe()">Save Recipe</button>
+            </div>
+            <div id="recipeError" style="color:#b91c1c; font-size:0.78rem; margin-top:0.3rem;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Import / Export -->
+      <div class="card">
+        <div class="card-header collapsible-header" onclick="toggleSection('ioBody', 'ioToggle')">
+          <div class="card-title">
+            <span class="emoji">💾</span> Import / Export
+          </div>
+          <button class="btn-ghost" type="button" id="ioToggle">
+            ▲ Collapse
+          </button>
+        </div>
+        <div class="collapsible-body" id="ioBody">
+          <div class="io-row">
+            <button class="btn btn-success" type="button" onclick="exportRecipes()">⬇ Export JSON</button>
+            <label class="btn btn-warning" for="importFileInput">⬆ Import JSON</label>
+            <input type="file" id="importFileInput" accept=".json,application/json" onchange="handleImportFile(event)" />
+          </div>
+
+          <div class="merge-options">
+            <span style="font-weight:600;">On import:</span>
+            <label><input type="radio" name="importMode" value="merge" checked /> Merge with existing recipes</label>
+            <label><input type="radio" name="importMode" value="replace" /> Replace all recipes</label>
+          </div>
+
+          <button class="btn btn-outline" type="button" style="margin-bottom:0.5rem;" onclick="restoreDefaults()">
+            🔄 Restore Default Recipes
+          </button>
+
+          <div style="margin-bottom:0.3rem; color:#94a3b8; font-size:0.78rem;">Or paste JSON directly:</div>
+          <textarea id="jsonPasteArea" rows="5" placeholder='{"Thorium Boots": {"yields": 1, "ingredients": [...]}}'></textarea>
+          <div style="margin-top:0.4rem;">
+            <button class="btn btn-warning" type="button" onclick="importFromPaste()">⬆ Load Pasted JSON</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast">
+  <span class="icon">ℹ️</span>
+  <span id="toastText"></span>
+</div>
+
+<script>
+  // ─── UTILITIES ────────────────────────────────────────────────────────────
+  function toTitleCase(str) {
+    return str.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+  }
+
+  function normalizeRecipes(raw) {
+    const result = {};
+    for (const [key, recipe] of Object.entries(raw)) {
+      const normKey = toTitleCase(key);
+      result[normKey] = {
+        yields: recipe.yields,
+        ingredients: recipe.ingredients.map(i => ({
+          name: toTitleCase(i.name),
+          qty: i.qty
+        }))
+      };
+    }
+    return result;
+  }
+
+  // ─── STATE ────────────────────────────────────────────────────────────────
+  let recipes = {};
+  let cart    = [];
+  const LS_KEY = 'item-calculator-recipes-v1';
+
+  // ─── DEFAULT RECIPES (raw, then normalized) ──────────────────────────────
+  const defaultRecipesRaw = {
+    "Perfect Fur": {
+      "yields": 5,
+      "ingredients": [{ "name": "furry fur", "qty": 30 }]
+    },
+    "Perfect Norse Essence": {
+      "yields": 1,
+      "ingredients": [{ "name": "Norse Essence", "qty": 30 }]
+    },
+    "Artisan's Frame": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "Steel bar", "qty": 10 },
+        { "name": "Chadcoal", "qty": 100 },
+        { "name": "helmet helmet", "qty": 5000 }
+      ]
+    },
+    "Furstring": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "perfect fur", "qty": 25 },
+        { "name": "yellow feather", "qty": 100 },
+        { "name": "nut", "qty": 5000 }
+      ]
+    },
+    "cryolite": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "cryolite ore", "qty": 15 },
+        { "name": "norse essence", "qty": 5 },
+        { "name": "carrot", "qty": 5000 }
+      ]
+    },
+    "repair stone 2": {
+      "yields": 1,
+      "ingredients": [{ "name": "thorium bar", "qty": 100 }]
+    },
+    "Thorium Boots": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 10 },
+        { "name": "perfect fur", "qty": 25 },
+        { "name": "norse essence", "qty": 2 },
+        { "name": "thorium bar", "qty": 47 }
+      ]
+    },
+    "Thorium Chestplate": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 63 },
+        { "name": "perfect fur", "qty": 80 },
+        { "name": "norse essence", "qty": 2 },
+        { "name": "thorium bar", "qty": 108 }
+      ]
+    },
+    "Thorium Gloves": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 10 },
+        { "name": "perfect fur", "qty": 25 },
+        { "name": "norse essence", "qty": 2 },
+        { "name": "thorium bar", "qty": 47 }
+      ]
+    },
+    "Thorium Helmet": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 19 },
+        { "name": "perfect fur", "qty": 40 },
+        { "name": "norse essence", "qty": 2 },
+        { "name": "thorium bar", "qty": 62 }
+      ]
+    },
+    "Thorium Pickaxe": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 40 },
+        { "name": "Norse Essence", "qty": 5 },
+        { "name": "Thorium Bar", "qty": 30 },
+        { "name": "Jotunn Eye", "qty": 10 }
+      ]
+    },
+    "Thorium Axe": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 40 },
+        { "name": "Norse Essence", "qty": 5 },
+        { "name": "Thorium Bar", "qty": 30 },
+        { "name": "Mammoth Bitusk", "qty": 10 }
+      ]
+    },
+    "Thorium Sword": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 140 },
+        { "name": "Artisan's Frame", "qty": 7 },
+        { "name": "Perfect Norse Essence", "qty": 2 },
+        { "name": "Thorium Bar", "qty": 98 }
+      ]
+    },
+    "Thorium Longsword": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 140 },
+        { "name": "Artisan's Frame", "qty": 7 },
+        { "name": "Perfect Norse Essence", "qty": 2 },
+        { "name": "Thorium Bar", "qty": 98 }
+      ]
+    },
+    "Thorium Bow": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 140 },
+        { "name": "Furstring", "qty": 7 },
+        { "name": "Perfect Norse Essence", "qty": 2 },
+        { "name": "Thorium Bar", "qty": 98 }
+      ]
+    },
+    "Thorium Staff": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "crystalized yellow substance", "qty": 140 },
+        { "name": "Cryolite", "qty": 3 },
+        { "name": "Perfect Norse Essence", "qty": 2 },
+        { "name": "Thorium Bar", "qty": 98 }
+      ]
+    },
+    "copper bar": {
+      "yields": 1,
+      "ingredients": [{ "name": "copper ore", "qty": 2 }]
+    },
+    "tin bar": {
+      "yields": 1,
+      "ingredients": [{ "name": "tin ore", "qty": 3 }]
+    },
+    "bronze bar": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "copper bar", "qty": 2 },
+        { "name": "tin bar", "qty": 1 }
+      ]
+    },
+    "iron bar": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "iron ore", "qty": 5 },
+        { "name": "ash log", "qty": 8 }
+      ]
+    },
+    "charcoal": {
+      "yields": 1,
+      "ingredients": [{ "name": "pyrewood log", "qty": 10 }]
+    },
+    "steel bar": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "iron bar", "qty": 3 },
+        { "name": "charcoal", "qty": 1 }
+      ]
+    },
+    "chadcoal": {
+      "yields": 1,
+      "ingredients": [{ "name": "ironwood log", "qty": 10 }]
+    },
+    "thorium bar": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "thorium ore", "qty": 42 },
+        { "name": "chadcoal", "qty": 30 }
+      ]
+    },
+    "palm face": {
+      "yields": 1,
+      "ingredients": [{ "name": "palm tree log", "qty": 50 }]
+    },
+    "sunstone bar": {
+      "yields": 1,
+      "ingredients": [
+        { "name": "sunstone ore", "qty": 480 },
+        { "name": "palm face", "qty": 56 }
+      ]
+    }
+  };
+
+  // ─── LOCALSTORAGE ─────────────────────────────────────────────────────────
+  function saveToLS() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(recipes)); }
+    catch (e) { console.warn('localStorage write failed:', e); }
+  }
+
+  function loadFromLS() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+    } catch (e) { console.warn('localStorage read failed:', e); }
+    return null;
+  }
+
+  // Restore default recipes: clear LS, reset from hardcoded
+  function restoreDefaults() {
+    if (!confirm('This will remove your custom recipes and restore the default set. Continue?')) {
+      return;
+    }
+    try { localStorage.removeItem(LS_KEY); } catch {}
+    recipes = normalizeRecipes(defaultRecipesRaw);
+    saveToLS();
+    cart = [];
+    renderCart();
+    renderRecipeList();
+    updateItemSelect();
+    document.getElementById('resultCard').style.display = 'none';
+    showToast('Default recipes restored.', false);
+  }
+
+  // ─── INIT ─────────────────────────────────────────────────────────────────
+  (function init() {
+    const stored = loadFromLS();
+    if (stored) {
+      recipes = stored;
+      showToast('Recipes loaded from browser storage.');
+    } else {
+      recipes = normalizeRecipes(defaultRecipesRaw);
+      saveToLS();
+    }
+    renderRecipeList();
+    updateItemSelect();
+  })();
+
+  // ─── TOAST ────────────────────────────────────────────────────────────────
+  function showToast(msg, isError = false) {
+    const el = document.getElementById('toast');
+    const textEl = document.getElementById('toastText');
+    textEl.textContent = msg;
+    el.classList.remove('error');
+    if (isError) el.classList.add('error');
+    el.classList.add('show');
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => { el.classList.remove('show'); }, 2500);
+  }
+
+  // ─── COLLAPSIBLE ──────────────────────────────────────────────────────────
+  function toggleSection(bodyId, toggleId) {
+    const body   = document.getElementById(bodyId);
+    const toggle = document.getElementById(toggleId);
+    const collapsed = body.classList.toggle('collapsed');
+    toggle.textContent = collapsed ? '▼ Expand' : '▲ Collapse';
+  }
+
+  // ─── RECIPE FORM ──────────────────────────────────────────────────────────
+  function addIngredientRow() {
+    const builder = document.getElementById('ingredientsBuilder');
+    const row = document.createElement('div');
+    row.className = 'ingredient-row';
+    row.innerHTML = `
+      <input type="number" class="ingr-qty" min="1" placeholder="Qty" />
+      <input type="text"   class="ingr-name" placeholder="Ingredient" />
+      <button class="btn btn-danger" type="button" onclick="removeIngredientRow(this)">✕</button>
+    `;
+    builder.appendChild(row);
+  }
+
+  function removeIngredientRow(btn) {
+    const builder = document.getElementById('ingredientsBuilder');
+    if (builder.children.length > 1) btn.parentElement.remove();
+  }
+
+  function saveRecipe() {
+    const rawName = document.getElementById('recipeName').value.trim();
+    const name    = toTitleCase(rawName);
+    const yields  = parseInt(document.getElementById('recipeYields').value) || 1;
+    const errEl   = document.getElementById('recipeError');
+
+    if (!name) { errEl.textContent = 'Please enter an item name.'; return; }
+
+    const rows = document.querySelectorAll('#ingredientsBuilder .ingredient-row');
+    const ingredients = [];
+
+    for (const row of rows) {
+      const qty     = parseInt(row.querySelector('.ingr-qty').value);
+      const ingName = toTitleCase(row.querySelector('.ingr-name').value.trim());
+      if (!ingName || !qty || qty < 1) {
+        errEl.textContent = 'Please fill in all ingredient fields correctly.';
+        return;
+      }
+      ingredients.push({ name: ingName, qty });
+    }
+
+    if (ingredients.length === 0) { errEl.textContent = 'Add at least one ingredient.'; return; }
+    if (ingredients.some(i => i.name === name)) {
+      errEl.textContent = 'An item cannot be an ingredient of itself.'; return;
+    }
+
+    errEl.textContent = '';
+    const isNew = !recipes[name];
+    recipes[name] = { yields, ingredients };
+    saveToLS();
+
+    document.getElementById('recipeName').value   = '';
+    document.getElementById('recipeYields').value = '1';
+    document.getElementById('ingredientsBuilder').innerHTML = `
+      <div class="ingredient-row">
+        <input type="number" class="ingr-qty" min="1" placeholder="Qty" />
+        <input type="text"   class="ingr-name" placeholder="Ingredient" />
+        <button class="btn btn-danger" type="button" onclick="removeIngredientRow(this)">✕</button>
+      </div>
+    `;
+
+    renderRecipeList();
+    updateItemSelect();
+    showToast(`Recipe "${name}" ${isNew ? 'saved' : 'updated'}!`);
+  }
+
+  function deleteRecipe(name) {
+    delete recipes[name];
+    saveToLS();
+    renderRecipeList();
+    updateItemSelect();
+    showToast(`Recipe "${name}" deleted.`);
+  }
+
+  function renderRecipeList() {
+    const list  = document.getElementById('recipeList');
+    const names = Object.keys(recipes).sort();
+    if (names.length === 0) {
+      list.innerHTML = '<div class="empty-state">No recipes yet. Add one below.</div>';
+      return;
+    }
+    list.innerHTML = names.map(name => {
+      const r      = recipes[name];
+      const ingStr = r.ingredients.map(i => `${i.qty}× ${i.name}`).join(', ');
+      const yNote  = r.yields > 1 ? ` <span style="color:#94a3b8">(yields ${r.yields})</span>` : '';
+      const safeName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      return `
+        <div class="recipe-item">
+          <div class="recipe-item-main">
+            <div class="recipe-item-name">${name}${yNote}</div>
+            <div class="recipe-item-ingr">${ingStr}</div>
+          </div>
+          <button class="btn btn-danger" type="button" onclick="deleteRecipe('${safeName}')">✕</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ─── SELECT ITEMS ─────────────────────────────────────────────────────────
+  function updateItemSelect() {
+    const sel     = document.getElementById('calcItem');
+    const current = sel.value;
+    const sorted  = Object.keys(recipes).sort();
+    sel.innerHTML = '<option value="">— Select An Item —</option>' +
+      sorted.map(n =>
+        `<option value="${n}" ${n === current ? 'selected' : ''}>${n}</option>`
+      ).join('');
+  }
+
+  // ─── CART ─────────────────────────────────────────────────────────────────
+  function addToCart() {
+    const item = document.getElementById('calcItem').value;
+    const qty  = parseInt(document.getElementById('calcQty').value) || 1;
+    if (!item) return;
+    const existing = cart.find(c => c.item === item);
+    if (existing) existing.qty += qty;
+    else cart.push({ item, qty });
+    renderCart();
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart() {
+    const cartList = document.getElementById('cartList');
+    if (cart.length === 0) {
+      cartList.innerHTML = '<div class="empty-state">No items in list yet.</div>';
+      return;
+    }
+    cartList.innerHTML = cart.map((c, i) => `
+      <div class="cart-item">
+        <span><span class="cart-item-qty">${c.qty}×</span> ${c.item}</span>
+        <button class="btn btn-danger" type="button" onclick="removeFromCart(${i})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  // ─── CALCULATION ─────────────────────────────────────────────────────────
+  function expand(itemName, qty, baseAccum, interAccum, stack = new Set()) {
+    const recipe = recipes[itemName];
+    if (!recipe) {
+      baseAccum[itemName] = (baseAccum[itemName] || 0) + qty;
+      return;
+    }
+    if (stack.has(itemName)) {
+      console.warn(`Cycle detected at: ${itemName}`);
+      baseAccum[itemName] = (baseAccum[itemName] || 0) + qty;
+      return;
+    }
+    const timesToCraft = Math.ceil(qty / recipe.yields);
+    if (stack.size > 0) {
+      interAccum[itemName] = (interAccum[itemName] || 0) + timesToCraft * recipe.yields;
+    }
+    const newStack = new Set(stack).add(itemName);
+    for (const ingr of recipe.ingredients) {
+      expand(ingr.name, ingr.qty * timesToCraft, baseAccum, interAccum, newStack);
+    }
+  }
+
+  function calculate() {
+    if (cart.length === 0) {
+      showToast('Add at least one item to the list first.', true);
+      return;
+    }
+    const baseAccum  = {};
+    const interAccum = {};
+    for (const { item, qty } of cart) {
+      expand(item, qty, baseAccum, interAccum, new Set());
+    }
+    renderResult(baseAccum, interAccum);
+  }
+
+  function renderResult(base, inter) {
+    const card    = document.getElementById('resultCard');
+    const content = document.getElementById('resultContent');
+    card.style.display = 'block';
+
+    let html = '';
+
+    // Base
+    html += '<div class="result-section"><h3>🪨 Base Ingredients</h3>';
+    const baseEntries = Object.entries(base).sort((a, b) => b[1] - a[1]);
+    if (baseEntries.length > 0) {
+      html += '<div class="result-grid">';
+      for (const [name, qty] of baseEntries) {
+        html += `
+          <div class="result-item base">
+            <span class="result-item-name">${name}</span>
+            <span class="result-item-qty">${qty.toLocaleString()}</span>
+          </div>`;
+      }
+      html += '</div>';
+    } else {
+      html += '<div class="empty-state">No base ingredients.</div>';
+    }
+    html += '</div>';
+
+    // Intermediates
+    const interEntries = Object.entries(inter).sort((a, b) => b[1] - a[1]);
+    if (interEntries.length > 0) {
+      html += '<div class="result-section"><h3>⚗️ Intermediate Items</h3><div class="result-grid">';
+      for (const [name, qty] of interEntries) {
+        html += `
+          <div class="result-item intermediate">
+            <span class="result-item-name">${name}</span>
+            <span class="result-item-qty">${qty.toLocaleString()}</span>
+          </div>`;
+      }
+      html += '</div></div>';
+    }
+
+    content.innerHTML = html;
+    card.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ─── IMPORT / EXPORT ─────────────────────────────────────────────────────
+  function exportRecipes() {
+    if (Object.keys(recipes).length === 0) {
+      showToast('No recipes to export.', true);
+      return;
+    }
+    const blob = new Blob([JSON.stringify(recipes, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = 'recipes.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Recipes exported successfully.');
+  }
+
+  function handleImportFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      processImport(e.target.result);
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  function importFromPaste() {
+    const raw = document.getElementById('jsonPasteArea').value.trim();
+    if (!raw) {
+      showToast('Paste area is empty.', true);
+      return;
+    }
+    processImport(raw);
+  }
+
+  function processImport(raw) {
+    let parsed;
+    try { parsed = JSON.parse(raw); }
+    catch { showToast('Invalid JSON. Please check the format.', true); return; }
+
+    if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+      showToast('JSON must be an object mapping item names to recipes.', true); return;
+    }
+
+    const errors = [];
+    for (const [name, recipe] of Object.entries(parsed)) {
+      if (typeof recipe.yields !== 'number' || recipe.yields < 1) {
+        errors.push(`"${name}": invalid or missing "yields".`);
+        continue;
+      }
+      if (!Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) {
+        errors.push(`"${name}": "ingredients" must be a non-empty array.`);
+        continue;
+      }
+      for (const ingr of recipe.ingredients) {
+        if (typeof ingr.name !== 'string' || typeof ingr.qty !== 'number' || ingr.qty < 1) {
+          errors.push(`"${name}": ingredient "${ingr.name}" has an invalid format.`);
+        }
+      }
+    }
+
+    if (errors.length > 0) {
+      console.error('Import errors:', errors);
+      showToast('Import failed. Check console for details.', true);
+      return;
+    }
+
+    const normalized = normalizeRecipes(parsed);
+    const mode = document.querySelector('input[name="importMode"]:checked').value;
+    recipes = mode === 'replace' ? normalized : { ...recipes, ...normalized };
+
+    saveToLS();
+    renderRecipeList();
+    updateItemSelect();
+    showToast(`${Object.keys(parsed).length} recipe(s) imported (${mode === 'replace' ? 'replaced all' : 'merged'}).`);
+  }
+</script>
+</body>
+</html>
