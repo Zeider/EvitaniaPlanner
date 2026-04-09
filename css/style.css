@@ -183,9 +183,54 @@ select:focus, input:focus, textarea:focus { border-color: #6366f1; box-shadow: 0
 select { appearance: none; background-image: linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%); background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 2rem; }
 textarea { border-radius: 10px; min-height: 90px; resize: vertical; font-family: ui-monospace, monospace; background: var(--input-bg-alt); width: 100%; }
 
+/* ── SHARED QTY ROW ──────────────────────────────── */
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.qty-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+.qty-row input[type="number"] {
+  width: 90px;
+  text-align: center;
+}
+
+/* ── CATEGORY SELECTS ────────────────────────────── */
+.category-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+.category-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.category-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  min-width: 80px;
+  white-space: nowrap;
+}
+.category-row .calc-row {
+  flex: 1;
+}
+
+/* ── CALC ROW ────────────────────────────────────── */
 .calc-row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
 .calc-row select { flex: 1; min-width: 200px; }
 .calc-row input[type="number"] { width: 90px; min-width: 90px; text-align: center; }
+
+/* ── CRAFT LIST ──────────────────────────────────── */
 .craft-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.7rem; }
 .craft-item { display: flex; justify-content: space-between; align-items: center; padding: 0.38rem 0.85rem; border-radius: 999px; background: var(--craft-bg); border: 1px solid var(--craft-border); font-size: 0.82rem; color: var(--text-main); gap: 0.5rem; }
 .craft-item-left { display: flex; align-items: center; gap: 0.4rem; flex: 1; min-width: 0; }
@@ -193,6 +238,7 @@ textarea { border-radius: 10px; min-height: 90px; resize: vertical; font-family:
 .craft-item-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .empty-state { font-size: 0.8rem; color: var(--text-muted); padding: 0.38rem 0.85rem; background: rgba(148,163,184,0.1); border-radius: 999px; display: inline-flex; align-items: center; }
 
+/* ── INVENTORY TABLE ─────────────────────────────── */
 .inventory-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.25rem; }
 .inventory-table th { text-align: left; color: var(--text-soft); font-weight: 600; padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--card-border); font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.07em; }
 .inventory-table td { padding: 0.32rem 0.6rem; vertical-align: middle; }
@@ -211,26 +257,31 @@ textarea { border-radius: 10px; min-height: 90px; resize: vertical; font-family:
 .inv-remaining.partial { color: #facc15; }
 .inv-remaining.full    { color: var(--text-main); }
 
+/* ── SUMMARY ROW / PILLS ─────────────────────────── */
 .summary-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-bottom: 0.85rem; }
 .summary-label { font-size: 0.8rem; color: var(--text-soft); font-weight: 600; }
 .pill-green  { background: var(--pill-green-bg);  color: var(--pill-green-text);  font-size: 0.72rem; font-weight: 600; border-radius: 999px; padding: 0.12rem 0.6rem; }
 .pill-red    { background: var(--pill-red-bg);    color: var(--pill-red-text);    font-size: 0.72rem; font-weight: 600; border-radius: 999px; padding: 0.12rem 0.6rem; }
 .pill-yellow { background: var(--pill-yellow-bg); color: var(--pill-yellow-text); font-size: 0.72rem; font-weight: 600; border-radius: 999px; padding: 0.12rem 0.6rem; }
 
+/* ── RECIPE LIST ─────────────────────────────────── */
 .recipe-list { display: flex; flex-direction: column; gap: 0.4rem; max-height: 320px; overflow-y: auto; padding-right: 0.2rem; margin-top: 0.5rem; }
 .recipe-item { border-radius: 10px; border: 1px solid var(--recipe-border); background: var(--recipe-bg); padding: 0.45rem 0.7rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; font-size: 0.8rem; }
 .recipe-item-name { font-weight: 600; color: var(--text-main); margin-bottom: 0.15rem; }
 .recipe-item-ingr { color: var(--text-muted); font-size: 0.76rem; }
 
+/* ── INGREDIENTS BUILDER ─────────────────────────── */
 .ingredients-builder { display: flex; flex-direction: column; gap: 0.45rem; margin-top: 0.5rem; }
 .ingredient-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .ingredient-row input[type="number"] { width: 90px; min-width: 90px; text-align: center; }
 .ingredient-row input[type="text"]   { flex: 1; min-width: 180px; }
 
+/* ── COLLAPSIBLE ─────────────────────────────────── */
 .collapsible-header { cursor: pointer; }
 .collapsible-body { overflow: hidden; transition: max-height 0.28s ease, opacity 0.28s ease, margin-top 0.28s ease; max-height: 3000px; opacity: 1; margin-top: 0.5rem; }
 .collapsible-body.collapsed { max-height: 0; opacity: 0; margin-top: 0; }
 
+/* ── MISC ────────────────────────────────────────── */
 .divider { border: none; border-top: 1px solid var(--divider); margin: 0.7rem 0; }
 .localstorage-note { margin-top: 0.6rem; font-size: 0.76rem; color: var(--text-muted); }
 .merge-options { display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem; align-items: center; }
@@ -238,6 +289,167 @@ textarea { border-radius: 10px; min-height: 90px; resize: vertical; font-family:
 input[type="radio"] { accent-color: #6366f1; cursor: pointer; }
 .recalc-note { font-size: 0.73rem; color: var(--text-muted); margin-top: 0.6rem; font-style: italic; }
 
+/* ── TOAST ───────────────────────────────────────── */
 .toast { position: fixed; bottom: 1.25rem; right: 1.25rem; background: var(--toast-bg); border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.78rem; color: var(--toast-text); border: 1px solid var(--toast-border); opacity: 0; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999; }
 .toast.show  { opacity: 1; transform: translateY(0); }
 .toast.error { border-color: #f87171; color: #fca5a5; }
+
+/* ── VIEW TOGGLE ─────────────────────────────────── */
+.view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--btn-outline-border);
+  border-radius: 999px;
+  overflow: hidden;
+  font-size: 0.74rem;
+}
+.view-toggle-btn {
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.85rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.view-toggle-btn.active {
+  background: var(--btn-primary-bg);
+  color: #fff;
+}
+.view-toggle-btn:hover:not(.active) {
+  background: rgba(148,163,184,0.1);
+  color: var(--text-main);
+}
+
+/* ── BY ITEM VIEW ────────────────────────────────── */
+.by-item-disclaimer {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  padding: 0.2rem 0.5rem;
+  font-style: italic;
+}
+
+.by-item-block {
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  margin-bottom: 0.85rem;
+  overflow: hidden;
+}
+.by-item-block:last-child { margin-bottom: 0; }
+
+.by-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background: var(--recipe-bg);
+  border-bottom: 1px solid var(--card-border);
+  cursor: pointer;
+  gap: 0.75rem;
+  user-select: none;
+}
+.by-item-header:hover { background: var(--table-hover); }
+
+.by-item-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  flex: 1;
+}
+.by-item-qty {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.by-item-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 130px;
+  justify-content: flex-end;
+}
+.progress-bar-bg {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--card-border);
+  overflow: hidden;
+  min-width: 60px;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--btn-primary-bg);
+  transition: width 0.3s ease;
+}
+.progress-bar-fill.complete { background: var(--btn-success-bg); }
+.progress-pct {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  white-space: nowrap;
+  min-width: 2.8rem;
+  text-align: right;
+}
+.progress-pct.complete { color: var(--pill-green-text); }
+
+.by-item-collapse-btn {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.by-item-body {
+  padding: 0.6rem 0.5rem 0.7rem;
+}
+.by-item-body.collapsed { display: none; }
+
+/* ── INGREDIENT TREE ─────────────────────────────── */
+.tree-root { display: flex; flex-direction: column; gap: 0; }
+
+.tree-node { display: flex; flex-direction: column; }
+
+.tree-node-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  transition: background 0.1s;
+}
+.tree-node-row:hover { background: var(--table-hover); }
+
+.tree-indent { display: flex; align-items: stretch; flex-shrink: 0; }
+.tree-indent-line { width: 16px; border-left: 1px dashed var(--card-border); margin-left: 7px; flex-shrink: 0; }
+
+.tree-node-name { flex: 1; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tree-node-name.is-inter { color: var(--text-soft); }
+
+.tree-node-type { font-size: 0.62rem; padding: 0.08rem 0.38rem; border-radius: 999px; font-weight: 600; flex-shrink: 0; }
+.tree-node-type.base  { background: var(--pill-green-bg);  color: var(--pill-green-text); }
+.tree-node-type.inter { background: rgba(99,102,241,0.15); color: #a5b4fc; }
+
+.tree-node-nums { display: flex; gap: 0.3rem; align-items: center; flex-shrink: 0; font-size: 0.75rem; white-space: nowrap; }
+.tree-num-req  { color: var(--text-muted); }
+.tree-num-have { color: var(--text-soft); }
+.tree-num-need { font-weight: 700; min-width: 3.5rem; text-align: right; }
+.tree-num-need.zero    { color: var(--pill-green-text); }
+.tree-num-need.partial { color: #facc15; }
+.tree-num-need.full    { color: var(--text-main); }
+
+.tree-children { display: flex; flex-direction: column; }
+
+/* ── PER-ROW QUANTITY INPUT ──────────────────────── */
+.craft-qty-input {
+  width: 70px;
+  min-width: 70px;
+  text-align: center;
+  flex-shrink: 0;
+}

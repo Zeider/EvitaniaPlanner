@@ -1,7 +1,9 @@
 // ── CRAFT LIST ────────────────────────────────────
-function addToCraftList() {
-  var item = document.getElementById('craftItemSelect').value;
-  var qty  = parseInt(document.getElementById('craftQty').value) || 1;
+function addToCraftList(category) {
+  var selId  = 'craftItemSelect_' + category.replace(/\s/g, '_');
+  var qtyId  = 'craftQty_' + category.replace(/\s/g, '_');
+  var item   = document.getElementById(selId) ? document.getElementById(selId).value : '';
+  var qty    = parseInt(document.getElementById(qtyId) ? document.getElementById(qtyId).value : 1) || 1;
   if (!item) { showToast('Select an item first.', true); return; }
   var ex = null;
   for (var i = 0; i < craftList.length; i++) {
@@ -46,14 +48,56 @@ function renderCraftList() {
   }).join('');
 }
 
-function updateItemSelect() {
-  var sel   = document.getElementById('craftItemSelect');
-  var cur   = sel.value;
-  var names = Object.keys(recipes).sort();
-  sel.innerHTML = '<option value="">— Select An Item —</option>' +
-    names.map(function(n) {
-      return '<option value="' + n + '"' + (n === cur ? ' selected' : '') + '>' + n + '</option>';
-    }).join('');
+// ── ITEM SELECT DROPDOWNS ─────────────────────────
+function updateItemSelects() {
+  // Collect all known categories dynamically
+  var allCats = Object.keys(recipeCategories);
+
+  // Also rebuild the category dropdown in the add-recipe form
+  var catSel = document.getElementById('recipeCategory');
+  if (catSel) {
+    var currentVal = catSel.value;
+    catSel.innerHTML = allCats.map(function(c) {
+      return '<option value="' + c + '"' + (c === currentVal ? ' selected' : '') + '>' + c + '</option>';
+    }).join('') + '<option value="__new__"' + (currentVal === '__new__' ? ' selected' : '') + '>＋ New category…</option>';
+  }
+
+  // Update each known dropdown; for dynamic new categories, add a row if needed
+  allCats.forEach(function(cat) {
+    var safeId = 'craftItemSelect_' + cat.replace(/\s/g, '_');
+    var sel    = document.getElementById(safeId);
+
+    // If this category has no dropdown yet, create one
+    if (!sel) {
+      _createCategoryRow(cat);
+      sel = document.getElementById(safeId);
+    }
+    if (!sel) return;
+
+    var cur   = sel.value;
+    var names = Object.keys(recipeCategories[cat] || {}).sort();
+    sel.innerHTML = '<option value="">— Select an item —</option>' +
+      names.map(function(n) {
+        if (!recipes[n]) return '';
+        return '<option value="' + n + '"' + (n === cur ? ' selected' : '') + '>' + n + '</option>';
+      }).join('');
+  });
+}
+
+function _createCategoryRow(cat) {
+  var container = document.querySelector('.category-selects');
+  if (!container) return;
+  var safeId  = cat.replace(/\s/g, '_');
+  var row     = document.createElement('div');
+  row.className = 'category-row';
+  row.innerHTML =
+    '<span class="category-label">' + cat + '</span>' +
+    '<div class="calc-row">' +
+      '<select id="craftItemSelect_' + safeId + '"><option value="">— Select an item —</option></select>' +
+      '<input type="number" class="craft-qty-input" id="craftQty_' + safeId + '" min="1" value="1" />' +
+      '<button class="btn btn-primary btn-sm" onclick="addToCraftList(\'' + cat.replace(/'/g, "\\'") + '\')">+ Add</button>' +
+    '</div>';
+  container.appendChild(row);
 }
 
 // ── CALCULATION ENGINE ────────────────────────────
@@ -104,5 +148,11 @@ function netCalc() {
   var base = {}, inter = {}, inv = {};
   for (var k in inventory) inv[k] = inventory[k];
   for (var i = 0; i < craftList.length; i++) expandNet(craftList[i].item, craftList[i].qty, base, inter, inv, {});
+  return { base: base, inter: inter };
+}
+
+function itemBaseCalc(itemName, qty) {
+  var base = {}, inter = {};
+  _expandForItem(itemName, qty, base, inter, {});
   return { base: base, inter: inter };
 }
