@@ -89,68 +89,94 @@ var recipeCategories = {
 };
 
 // ── CATEGORY METADATA ─────────────────────────────
-// Tracks which category each recipe belongs to (including user-added ones)
-var recipeCategory = {}; // { "Item Name": "Act 1", ... }
-
-// Build the flat defaultRecipesRaw and recipeCategory from all categories
+var recipeCategory = {};
 var defaultRecipesRaw = {};
-for (var _cat in recipeCategories) {
-  for (var _item in recipeCategories[_cat]) {
-    defaultRecipesRaw[_item] = recipeCategories[_cat][_item];
-    recipeCategory[_item]    = _cat;
+
+for (var cat in recipeCategories) {
+  var items = recipeCategories[cat];
+  for (var name in items) {
+    defaultRecipesRaw[name] = items[name];
+    recipeCategory[name] = cat;
   }
 }
 
-// ── CATEGORY PERSISTENCE KEY ──────────────────────
-var LS_CATEGORY = 'ic-category-v1';
-
 function normalizeRecipes(raw) {
   var out = {};
-  for (var k in raw) {
+  var keys = Object.keys(raw);
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
     var v = raw[k];
     out[k] = {
       yields: v.yields,
-      ingredients: v.ingredients.map(function(i) {
-        return { name: i.name, qty: i.qty };
+      ingredients: v.ingredients.map(function(ingr) {
+        return { name: ingr.name, qty: ingr.qty };
       })
     };
   }
   return out;
 }
 
+function updateDatalist() {
+  var dl = document.getElementById('itemsDatalist');
+  if (!dl) return;
+  var names = Object.keys(recipes).sort();
+  var html = '';
+  for (var i = 0; i < names.length; i++) {
+    html += '<option value="' + names[i] + '">';
+  }
+  dl.innerHTML = html;
+}
+
 // ── RECIPE CRUD ───────────────────────────────────
 function renderRecipeList() {
-  var list  = document.getElementById('recipeList');
+  var list = document.getElementById('recipeList');
+  if (!list) return;
+  
   var names = Object.keys(recipes).sort();
   if (!names.length) {
     list.innerHTML = '<div class="empty-state">No recipes yet.</div>';
     return;
   }
-  list.innerHTML = names.map(function(name) {
-    var r      = recipes[name];
-    var ingStr = r.ingredients.map(function(i) { return i.qty + '× ' + i.name; }).join(', ');
-    var yNote  = r.yields > 1 ? ' <span style="color:var(--text-muted)">(yields ' + r.yields + ')</span>' : '';
-    var cat    = recipeCategory[name] || '';
-    var catNote = cat ? ' <span style="color:var(--text-muted);font-size:0.7rem;">[' + cat + ']</span>' : '';
-    var safe   = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-    return '<div class="recipe-item">' +
-      '<div>' +
-        '<div class="recipe-item-name">' + name + yNote + catNote + '</div>' +
-        '<div class="recipe-item-ingr">' + ingStr + '</div>' +
-      '</div>' +
-      '<button class="btn btn-danger" onclick="deleteRecipe(\'' + safe + '\')">✕</button>' +
-    '</div>';
-  }).join('');
+  
+  var html = '';
+  for (var i = 0; i < names.length; i++) {
+    var name = names[i];
+    var r = recipes[name];
+    var ings = [];
+    for (var j = 0; j < r.ingredients.length; j++) {
+      ings.push(r.ingredients[j].qty + '× ' + r.ingredients[j].name);
+    }
+    var ingStr = ings.join(', ');
+    var yNote = r.yields > 1 ? ' <span style="opacity:0.6">(yields ' + r.yields + ')</span>' : '';
+    var cat = recipeCategory[name] || 'Unknown';
+    var safe = name.replace(/'/g, "\\'");
+    
+    html +=
+      '<div class="recipe-item">' +
+        '<div style="flex:1">' +
+          '<div class="recipe-item-name">' +
+            name + yNote +
+            ' <span style="font-size:0.65rem; font-weight:700; background:hsla(var(--p-hue),70%,65%,0.15); color:var(--primary); padding:1px 6px; border-radius:4px; margin-left:8px; vertical-align:middle; text-transform:uppercase; letter-spacing:0.02em;">' + cat + '</span>' +
+          '</div>' +
+          '<div class="recipe-item-ingr">' + ingStr + '</div>' +
+        '</div>' +
+        '<div style="display:flex; gap:0.5rem;">' +
+          '<button class="btn btn-edit btn-sm" style="min-width:32px; height:32px; justify-content:center; padding:0; border-radius:10px;" onclick="editRecipe(\'' + safe + '\')">✎</button>' +
+          '<button class="btn btn-danger btn-sm" style="min-width:32px; height:32px; justify-content:center; padding:0; border-radius:10px;" onclick="deleteRecipe(\'' + safe + '\')">✕</button>' +
+        '</div>' +
+      '</div>';
+  }
+  list.innerHTML = html;
 }
 
-function addIngredientRow() {
-  var b   = document.getElementById('ingredientsBuilder');
+function addIngredientRow(name, qty) {
+  var b = document.getElementById('ingredientsBuilder');
   var row = document.createElement('div');
   row.className = 'ingredient-row';
   row.innerHTML =
-    '<input type="number" class="ingr-qty" min="1" placeholder="Qty" />' +
-    '<input type="text" class="ingr-name" placeholder="Ingredient" />' +
-    '<button class="btn btn-danger" onclick="removeIngredientRow(this)">✕</button>';
+    '<input type="number" class="ingr-qty" min="1" placeholder="Qty" value="' + (qty || '') + '" />' +
+    '<input type="text" class="ingr-name" placeholder="Ingredient" list="itemsDatalist" value="' + (name || '') + '" />' +
+    '<button class="btn btn-danger btn-sm" onclick="removeIngredientRow(this)">✕</button>';
   b.appendChild(row);
 }
 
@@ -159,13 +185,40 @@ function removeIngredientRow(btn) {
   if (b.children.length > 1) btn.parentElement.remove();
 }
 
+function editRecipe(name) {
+  var r = recipes[name];
+  if (!r) return;
+  
+  var body = document.getElementById('addRecipeBody');
+  if (body && body.classList.contains('collapsed')) {
+    toggleSection('addRecipeBody', 'addRecipeToggle');
+  }
+
+  document.getElementById('recipeName').value = name;
+  document.getElementById('recipeYields').value = r.yields;
+  
+  var cat = recipeCategory[name] || 'Act 1';
+  var catSel = document.getElementById('recipeCategory');
+  catSel.value = cat;
+  document.getElementById('recipeCategoryNew').style.display = 'none';
+
+  var builder = document.getElementById('ingredientsBuilder');
+  builder.innerHTML = '';
+  for (var i = 0; i < r.ingredients.length; i++) {
+    var ing = r.ingredients[i];
+    addIngredientRow(ing.name, ing.qty);
+  }
+  
+  document.getElementById('addRecipeBody').scrollIntoView({ behavior: 'smooth' });
+  showToast('Recipe loaded for editing.');
+}
+
 function saveRecipe() {
-  var name   = document.getElementById('recipeName').value.trim();
+  var name = document.getElementById('recipeName').value.trim();
   var yields = parseInt(document.getElementById('recipeYields').value) || 1;
-  var errEl  = document.getElementById('recipeError');
+  var errEl = document.getElementById('recipeError');
   if (!name) { errEl.textContent = 'Please enter an item name.'; return; }
 
-  // Resolve category
   var catSel = document.getElementById('recipeCategory').value;
   var cat;
   if (catSel === '__new__') {
@@ -175,49 +228,50 @@ function saveRecipe() {
     cat = catSel;
   }
 
-  var rows        = document.querySelectorAll('#ingredientsBuilder .ingredient-row');
+  var rows = document.querySelectorAll('#ingredientsBuilder .ingredient-row');
   var ingredients = [];
   for (var i = 0; i < rows.length; i++) {
-    var qty     = parseInt(rows[i].querySelector('.ingr-qty').value);
+    var qtyVal = rows[i].querySelector('.ingr-qty').value;
+    var qty = parseInt(qtyVal);
     var ingName = rows[i].querySelector('.ingr-name').value.trim();
-    if (!ingName || !qty || qty < 1) { errEl.textContent = 'Fill in all ingredient fields.'; return; }
-    ingredients.push({ name: ingName, qty: qty });
-  }
-  if (!ingredients.length) { errEl.textContent = 'Add at least one ingredient.'; return; }
-  for (var i = 0; i < ingredients.length; i++) {
-    if (ingredients[i].name === name) { errEl.textContent = 'An item cannot contain itself.'; return; }
+    if (ingName && qty > 0) ingredients.push({ name: ingName, qty: qty });
   }
 
-  errEl.textContent = '';
-  var isNew = !recipes[name];
+  if (!ingredients.length) { errEl.textContent = 'Add at least one ingredient.'; return; }
+  
+  var selfFound = false;
+  for (var j = 0; j < ingredients.length; j++) {
+    if (ingredients[j].name === name) { selfFound = true; break; }
+  }
+  if (selfFound) { errEl.textContent = 'An item cannot contain itself.'; return; }
+
   recipes[name] = { yields: yields, ingredients: ingredients };
   saveLS(LS_RECIPES, recipes);
 
-  // Save category mapping
   recipeCategory[name] = cat;
   saveLS(LS_CATEGORY, recipeCategory);
 
-  // If it's a new category not in recipeCategories, add it
   if (!recipeCategories[cat]) recipeCategories[cat] = {};
   recipeCategories[cat][name] = recipes[name];
 
   // Reset form
-  document.getElementById('recipeName').value   = '';
+  document.getElementById('recipeName').value = '';
   document.getElementById('recipeYields').value = '1';
-  document.getElementById('recipeCategoryNew').value  = '';
+  document.getElementById('recipeCategoryNew').value = '';
   document.getElementById('recipeCategoryNew').style.display = 'none';
   document.getElementById('recipeCategory').value = 'Act 1';
   document.getElementById('ingredientsBuilder').innerHTML =
     '<div class="ingredient-row">' +
       '<input type="number" class="ingr-qty" min="1" placeholder="Qty" />' +
-      '<input type="text" class="ingr-name" placeholder="Ingredient" />' +
-      '<button class="btn btn-danger" onclick="removeIngredientRow(this)">✕</button>' +
+      '<input type="text" class="ingr-name" placeholder="Ingredient" list="itemsDatalist" />' +
+      '<button class="btn btn-danger btn-sm" onclick="removeIngredientRow(this)">✕</button>' +
     '</div>';
 
+  updateDatalist();
   renderRecipeList();
   updateItemSelects();
   liveRecalc();
-  showToast('Recipe "' + name + '" ' + (isNew ? 'saved' : 'updated') + '! [' + cat + ']');
+  showToast('Recipe "' + name + '" saved!');
 }
 
 function deleteRecipe(name) {
@@ -226,53 +280,49 @@ function deleteRecipe(name) {
   delete recipes[name];
   delete recipeCategory[name];
   if (cat && recipeCategories[cat]) delete recipeCategories[cat][name];
+  
   saveLS(LS_RECIPES, recipes);
   saveLS(LS_CATEGORY, recipeCategory);
   renderRecipeList();
   updateItemSelects();
   liveRecalc();
-  showToast('Recipe "' + name + '" deleted.');
+  showToast('Recipe deleted.');
 }
 
 function restoreDefaults() {
-  if (!confirm('Remove all custom recipes and restore the default set?')) return;
+  if (!confirm('Restore the default recipes? Custom additions will be lost.')) return;
   recipes = normalizeRecipes(defaultRecipesRaw);
-
-  // Reset recipeCategories and recipeCategory to defaults
-  recipeCategories = {};
-  recipeCategory   = {};
-  var _defaultCats = {
-    'Act 1': ["Copper Axe","Copper Sword","Copper Bow","Copper Staff","Copper Boots","Copper Chestplate","Copper Gloves","Copper Helmet","Copper Pickaxe","Bronze Boots","Bronze Chestplate","Bronze Gloves","Bronze Helmet","Bronze Pickaxe","Bronze Axe","Goak","Essence Sword","Iron Boots","Iron Chestplate","Iron Gloves","Iron Helmet","Iron Axe","Iron Pickaxe","Steel Sword","Steel Longsword","Steel Bow","Steel Staff","Steel Belt","Repair Stone 1","Bone Dagger"],
-    'Act 2': ["Perfect Fur","Perfect Norse Essence","Artisan's Frame","Furstring","Cryolite","Repair Stone 2","Thorium Boots","Thorium Chestplate","Thorium Gloves","Thorium Helmet","Thorium Pickaxe","Thorium Axe","Thorium Sword","Thorium Longsword","Thorium Bow","Thorium Staff"],
-    'Act 3': ["Perfect Silk Fabric","Perfect Aether Crystal","Sunstone Pickaxe","Sunstone Axe","Sunstone Boots","Sunstone Gloves","Sunstone Chestplate","Sunstone Helmet","Sunstone Longsword","Sunstone Bow","Sunstone Staff","Repair Stone 3"],
-    'Hard':  ["Infinite Gloves I","Infinite Longsword I","Infinite Bow I","Infinite Staff I","Infinite Boots I","Infinite Chestplate I","Infinite Helmet I","Grassy Repair Stone I"],
-    'Smeltery': ["Copper Bar","Tin Bar","Bronze Bar","Iron Bar","Charcoal","Steel Bar","Chadcoal","Thorium Bar","Palm Face","Sunstone Bar"]
-  };
-  for (var c in _defaultCats) {
-    recipeCategories[c] = {};
-    _defaultCats[c].forEach(function(n) {
-      recipeCategories[c][n] = recipes[n];
-      recipeCategory[n]      = c;
-    });
+  recipeCategory = {};
+  
+  for (var cat in recipeCategories) {
+    var items = recipeCategories[cat];
+    for (var n in items) {
+      recipeCategory[n] = cat;
+    }
   }
 
-  saveLS(LS_RECIPES,  recipes);
+  saveLS(LS_RECIPES, recipes);
   saveLS(LS_CATEGORY, recipeCategory);
   renderRecipeList();
   updateItemSelects();
   liveRecalc();
-  showToast('Default recipes restored.');
+  showToast('Defaults restored.');
 }
 
 // ── IMPORT / EXPORT ───────────────────────────────
 function exportRecipes() {
   if (!Object.keys(recipes).length) { showToast('No recipes to export.', true); return; }
-  _downloadJSON(recipes, 'recipes.json');
-  showToast('Recipes exported.');
+  var blob = new Blob([JSON.stringify(recipes, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'recipes.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Export successful.');
 }
 
 function handleImportFile(e) {
-  var file = e.target.files[0]; if (!file) return;
+  var file = e.target.files[0];
+  if (!file) return;
   var reader = new FileReader();
   reader.onload = function(ev) { processImport(ev.target.result); e.target.value = ''; };
   reader.readAsText(file);
@@ -287,50 +337,26 @@ function importFromPaste() {
 function processImport(raw) {
   var parsed;
   try { parsed = JSON.parse(raw); } catch(ex) { showToast('Invalid JSON.', true); return; }
-  if (typeof parsed !== 'object' || Array.isArray(parsed)) { showToast('JSON must be an object.', true); return; }
-
-  var errors = [];
-  for (var n in parsed) {
-    var r = parsed[n];
-    if (typeof r.yields !== 'number' || r.yields < 1) { errors.push('"' + n + '": bad yields'); continue; }
-    if (!Array.isArray(r.ingredients) || !r.ingredients.length) { errors.push('"' + n + '": empty ingredients'); continue; }
-    for (var i = 0; i < r.ingredients.length; i++) {
-      var ingr = r.ingredients[i];
-      if (typeof ingr.name !== 'string' || typeof ingr.qty !== 'number' || ingr.qty < 1)
-        errors.push('"' + n + '": bad ingredient');
-    }
-  }
-  if (errors.length) { showToast('Import failed — see console.', true); console.error(errors); return; }
-
+  
   var norm = normalizeRecipes(parsed);
   var mode = document.querySelector('input[name="importMode"]:checked').value;
+  
   if (mode === 'replace') {
     recipes = norm;
   } else {
     for (var k in norm) recipes[k] = norm[k];
   }
 
-  // Assign imported items to a generic "Imported" category if unknown
-  for (var k in norm) {
-    if (!recipeCategory[k]) {
-      recipeCategory[k] = 'Imported';
-      if (!recipeCategories['Imported']) recipeCategories['Imported'] = {};
-      recipeCategories['Imported'][k] = norm[k];
-    }
+  var keys = Object.keys(norm);
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    if (!recipeCategory[k]) recipeCategory[k] = 'Imported';
   }
 
-  saveLS(LS_RECIPES,  recipes);
+  saveLS(LS_RECIPES, recipes);
   saveLS(LS_CATEGORY, recipeCategory);
   renderRecipeList();
   updateItemSelects();
   liveRecalc();
-  showToast(Object.keys(parsed).length + ' recipe(s) imported (' + (mode === 'replace' ? 'replaced all' : 'merged') + ').');
-}
-
-function _downloadJSON(obj, filename) {
-  var blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href = url; a.download = filename; a.click();
-  URL.revokeObjectURL(url);
+  showToast('Import successful!');
 }

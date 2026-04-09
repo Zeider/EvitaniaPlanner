@@ -30,10 +30,12 @@ function _doRender() {
 // COMBINED VIEW
 // ══════════════════════════════════════════════════
 function _renderCombined() {
-  var raw     = rawCalc();
-  var net     = netCalc();
-  var rawBase = raw.base, rawInter = raw.inter;
-  var netBase = net.base, netInter = net.inter;
+  var raw = rawCalc();
+  var net = netCalc();
+  var rawBase = raw.base;
+  var rawInter = raw.inter;
+  var netBase = net.base;
+  var netInter = net.inter;
 
   var allEntries = [];
   var k;
@@ -41,107 +43,128 @@ function _renderCombined() {
   for (k in rawInter) allEntries.push({ name: k, raw: rawInter[k], type: 'inter' });
   allEntries.sort(function(a, b) { return b.raw - a.raw; });
 
-  var total     = allEntries.length;
+  var total = allEntries.length;
   var satisfied = 0;
   for (var i = 0; i < allEntries.length; i++) {
-    var e      = allEntries[i];
+    var e = allEntries[i];
     var netAcc = e.type === 'base' ? netBase : netInter;
     if ((netAcc[e.name] || 0) <= 0) satisfied++;
   }
-  var hasAny = false;
-  for (k in inventory) { if (inventory[k] > 0) { hasAny = true; break; } }
+
+  var hasAnyInventory = false;
+  for (var invKey in inventory) { if (inventory[invKey] > 0) { hasAnyInventory = true; break; } }
 
   var html =
     '<div class="summary-row">' +
-      '<span class="summary-label">' + total + ' ingredient(s)</span>' +
-      (satisfied > 0 ? '<span class="pill-green">✓ ' + satisfied + ' covered</span>' : '') +
-      '<span class="pill-red">' + (total - satisfied) + ' still needed</span>' +
+      '<span class="summary-label">' + total + ' ingredient(s) total</span>' +
+      (satisfied > 0 ? '<span class="pill-green">✓ ' + satisfied + ' ready</span>' : '') +
+      '<span class="pill-red">' + (total - satisfied) + ' remaining</span>' +
     '</div>' +
-    '<table class="inventory-table"><thead><tr>' +
-      '<th>Item</th>' +
-      '<th style="text-align:right;">Required</th>' +
-      '<th style="text-align:right;">You Have</th>' +
-      '<th style="text-align:right;">Still Need</th>' +
-    '</tr></thead><tbody>';
+    '<div class="table-container">' +
+      '<table class="inventory-table">' +
+        '<thead>' +
+          '<tr>' +
+            '<th>Item</th>' +
+            '<th style="text-align:right;">Req</th>' +
+            '<th style="text-align:right;">Stock</th>' +
+            '<th style="text-align:right;">Need</th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody>';
 
-  for (var i = 0; i < allEntries.length; i++) {
-    var e      = allEntries[i];
-    var netAcc = e.type === 'base' ? netBase : netInter;
-    var remain = Math.max(0, netAcc[e.name] || 0);
-    var have   = inventory[e.name] || 0;
+  for (var j = 0; j < allEntries.length; j++) {
+    var ent = allEntries[j];
+    var nAcc = ent.type === 'base' ? netBase : netInter;
+    var remain = Math.max(0, nAcc[ent.name] || 0);
+    var have = inventory[ent.name] || 0;
     var remCls = remain === 0 ? 'zero' : have > 0 ? 'partial' : 'full';
-    var typeLbl = e.type === 'base'
-      ? '<span class="inv-item-type base">base</span>'
-      : '<span class="inv-item-type inter">craft</span>';
-    var safe = e.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    
+    var cat = recipeCategory[ent.name];
+    var typeLabel = ent.type === 'base' ? 'raw' : 'craft';
+    var typeCls   = ent.type === 'base' ? 'base' : 'inter';
+
+    if (ent.type !== 'base' && cat && cat.toLowerCase() === 'smeltery') {
+      typeLabel = 'smeltery';
+      typeCls   = 'smeltery';
+    }
+
+    var safe = ent.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    
     html +=
       '<tr>' +
-        '<td><span class="inv-item-name">' + e.name + '</span>' + typeLbl + '</td>' +
-        '<td style="text-align:right;"><span class="inv-required">' + e.raw.toLocaleString() + '</span></td>' +
+        '<td>' +
+          '<div class="inv-item-name">' + ent.name + '</div>' +
+          '<span class="tree-node-type ' + typeCls + '">' + typeLabel + '</span>' +
+        '</td>' +
+        '<td style="text-align:right;"><span class="inv-required">' + ent.raw.toLocaleString() + '</span></td>' +
         '<td style="text-align:right;">' +
-          '<input type="number" class="inv-input" min="0"' +
-          ' value="' + (have || '') + '" placeholder="0"' +
-          ' oninput="onInventoryInput(\'' + safe + '\', this)" />' +
+          '<input type="number" class="inv-input" min="0" value="' + (have || '') + '" placeholder="0" oninput="onInventoryInput(\'' + safe + '\', this)" />' +
         '</td>' +
         '<td style="text-align:right;">' +
-          '<span class="inv-remaining ' + remCls + '"' +
-          ' data-still-name="' + e.name + '"' +
-          ' data-still-type="' + e.type + '">' +
-          (remain === 0 ? '✓ Done' : remain.toLocaleString()) +
+          '<span class="inv-remaining ' + remCls + '" data-still-name="' + ent.name + '" data-still-type="' + ent.type + '">' +
+            (remain === 0 ? '✓' : remain.toLocaleString()) +
           '</span>' +
         '</td>' +
       '</tr>';
   }
 
-  html += '</tbody></table>' +
-    '<p class="recalc-note">💡 Inventory persists across sessions and recalculates the full crafting tree live.</p>';
+  html +=
+        '</tbody>' +
+      '</table>' +
+    '</div>' +
+    '<p class="recalc-note">✨ Changes are saved automatically and calculated in real-time.</p>';
 
   document.getElementById('resultCombined').innerHTML = html;
-  document.getElementById('clearInvBtn').style.display = hasAny ? 'inline-flex' : 'none';
+  var clearBtn = document.getElementById('clearInvBtn');
+  if (clearBtn) clearBtn.style.display = hasAnyInventory ? 'inline-flex' : 'none';
 }
 
 function _patchNetCells() {
   if (!craftList.length) return;
-  var net     = netCalc();
-  var netBase = net.base, netInter = net.inter;
-  var k;
+  var net = netCalc();
+  var netBase = net.base;
+  var netInter = net.inter;
 
   var cells = document.querySelectorAll('[data-still-name]');
   for (var i = 0; i < cells.length; i++) {
-    var cell   = cells[i];
-    var name   = cell.getAttribute('data-still-name');
-    var type   = cell.getAttribute('data-still-type');
+    var cell = cells[i];
+    var name = cell.getAttribute('data-still-name');
+    var type = cell.getAttribute('data-still-type');
     var netAcc = type === 'base' ? netBase : netInter;
     var remain = Math.max(0, netAcc[name] || 0);
-    var have   = inventory[name] || 0;
-    cell.className   = 'inv-remaining ' + (remain === 0 ? 'zero' : have > 0 ? 'partial' : 'full');
-    cell.textContent = remain === 0 ? '✓ Done' : remain.toLocaleString();
+    var have = inventory[name] || 0;
+    
+    cell.className = 'inv-remaining ' + (remain === 0 ? 'zero' : have > 0 ? 'partial' : 'full');
+    cell.textContent = remain === 0 ? '✓' : remain.toLocaleString();
   }
 
-  var raw    = rawCalc();
-  var allRaw = {}, allNet = {};
-  for (k in raw.base)  allRaw[k] = raw.base[k];
+  var raw = rawCalc();
+  var allRaw = {};
+  var k;
+  for (k in raw.base) allRaw[k] = raw.base[k];
   for (k in raw.inter) allRaw[k] = raw.inter[k];
-  for (k in netBase)   allNet[k] = netBase[k];
-  for (k in netInter)  allNet[k] = netInter[k];
 
-  var total     = Object.keys(allRaw).length;
+  var allNet = {};
+  for (k in netBase) allNet[k] = netBase[k];
+  for (k in netInter) allNet[k] = netInter[k];
+
+  var total = Object.keys(allRaw).length;
   var satisfied = 0;
-  for (k in allRaw) { if ((allNet[k] || 0) <= 0) satisfied++; }
+  for (var key in allRaw) { if ((allNet[key] || 0) <= 0) satisfied++; }
 
   var row = document.querySelector('.summary-row');
   if (row) {
     row.innerHTML =
-      '<span class="summary-label">' + total + ' ingredient(s)</span>' +
-      (satisfied > 0 ? '<span class="pill-green">✓ ' + satisfied + ' covered</span>' : '') +
-      '<span class="pill-red">' + (total - satisfied) + ' still needed</span>';
+      '<span class="summary-label">' + total + ' ingredient(s) total</span>' +
+      (satisfied > 0 ? '<span class="pill-green">✓ ' + satisfied + ' ready</span>' : '') +
+      '<span class="pill-red">' + (total - satisfied) + ' remaining</span>';
   }
 
   var hasAny = false;
-  for (k in inventory) { if (inventory[k] > 0) { hasAny = true; break; } }
-  document.getElementById('clearInvBtn').style.display = hasAny ? 'inline-flex' : 'none';
+  for (var invK in inventory) { if (inventory[invK] > 0) { hasAny = true; break; } }
+  var clearBtn = document.getElementById('clearInvBtn');
+  if (clearBtn) clearBtn.style.display = hasAny ? 'inline-flex' : 'none';
 
-  // Also refresh the by-item view since inventory changed
   _renderByItem();
 }
 
@@ -149,232 +172,204 @@ function _patchNetCells() {
 // BY ITEM VIEW
 // ══════════════════════════════════════════════════
 function _renderByItem() {
-  var container = document.getElementById('byItemContent'); // Target the new div for content
-  if (!craftList.length) { container.innerHTML = ''; return; }
+  var container = document.getElementById('byItemContent');
+  if (!container || !craftList.length) { if (container) container.innerHTML = ''; return; }
 
-  // Preserve collapsed state across re-renders
   var collapsed = {};
-  document.querySelectorAll('.by-item-block').forEach(function(block) {
-    var key  = block.getAttribute('data-item-key');
-    var body = block.querySelector('.by-item-body');
+  var blocks = document.querySelectorAll('.by-item-block');
+  for (var i = 0; i < blocks.length; i++) {
+    var key = blocks[i].getAttribute('data-item-key');
+    var body = blocks[i].querySelector('.by-item-body');
     if (key && body && body.classList.contains('collapsed')) collapsed[key] = true;
-  });
+  }
 
-  // Create individual craft items for display (always in list order now)
   var individualCrafts = [];
-  craftList.forEach(function(c, idx) {
-    for (var i = 0; i < c.qty; i++) {
-      individualCrafts.push({
-        item: c.item,
-        originalIndex: idx, // To maintain original list order
-        instanceIndex: i + 1 // For display like "Chestplate #1"
-      });
+  for (var j = 0; j < craftList.length; j++) {
+    var c = craftList[j];
+    for (var k = 0; k < c.qty; k++) {
+      individualCrafts.push({ item: c.item, originalIndex: j, instanceIndex: k + 1 });
     }
-  });
+  }
 
-  // Sort by original list order (which is the default behavior now)
-  individualCrafts.sort(function(a, b) {
-    return a.originalIndex - b.originalIndex;
-  });
-
-  // Create a mutable copy of inventory for sequential allocation
   var currentInventory = {};
-  for (var k in inventory) currentInventory[k] = inventory[k];
+  for (var invK in inventory) currentInventory[invK] = inventory[invK];
 
   var html = '';
-  individualCrafts.forEach(function(ic) {
-    var key  = ic.item + '::' + ic.originalIndex + '::' + ic.instanceIndex; // Unique key for collapsed state
-    var isCollapsed = collapsed[key] ? ' collapsed' : '';
-    var colLabel    = collapsed[key] ? '▼ Expand'   : '▲ Collapse';
+  for (var m = 0; m < individualCrafts.length; m++) {
+    var ic = individualCrafts[m];
+    var itemKey = ic.item + '::' + ic.originalIndex + '::' + ic.instanceIndex;
+    var isCollapsed = !!collapsed[itemKey];
+    
+    var invBefore = {};
+    for (var k1 in currentInventory) invBefore[k1] = currentInventory[k1];
 
-    // Snapshot inventory *before* this item consumes
-    var invBeforeThisItem = {};
-    for (var invKey in currentInventory) invBeforeThisItem[invKey] = currentInventory[invKey];
+    var baseReq = {};
+    var interReq = {};
+    _expandForItemWithAllocation(ic.item, 1, baseReq, interReq, currentInventory, {});
+    var invAfter = {};
+    for (var k2 in currentInventory) invAfter[k2] = currentInventory[k2];
 
-    // Calculate base totals for this individual item, consuming from currentInventory
-    var baseRequiredForThisItem = {}; // Tracks total base materials needed for this item
-    var interNeeded = {};
-    _expandForItemWithAllocation(ic.item, 1, baseRequiredForThisItem, interNeeded, currentInventory, {}); // currentInventory is modified here
-
-    // Snapshot inventory *after* this item consumes
-    var invAfterThisItem = {};
-    for (var invKey in currentInventory) invAfterThisItem[invKey] = currentInventory[invKey];
-
-    // Calculate progress based on what was *actually consumed* by this item
-    var totalRequiredBase = 0;
-    var totalAllocatedBase = 0;
-    for (var bn in baseRequiredForThisItem) {
-      var required = baseRequiredForThisItem[bn];
-      var availableBefore = invBeforeThisItem[bn] || 0;
-      var availableAfter = invAfterThisItem[bn] || 0;
-      var consumedByThisItem = availableBefore - availableAfter;
-
-      totalRequiredBase += required;
-      totalAllocatedBase += consumedByThisItem;
+    var totalReq = 0, totalGot = 0;
+    for (var bn in baseReq) {
+      totalReq += baseReq[bn];
+      totalGot += (invBefore[bn] || 0) - (invAfter[bn] || 0);
     }
 
-    var pct      = totalRequiredBase > 0 ? Math.round((totalAllocatedBase / totalRequiredBase) * 100) : 100;
-    var complete = pct >= 100;
-    var fillCls  = complete ? ' complete' : '';
-    var pctCls   = complete ? ' complete'  : '';
-
-    var safeKey = key.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    var pct = totalReq > 0 ? Math.round((totalGot / totalReq) * 100) : 100;
+    var isComplete = pct >= 100;
+    var safeKey = itemKey.replace(/'/g, "\\'");
 
     html +=
       '<div class="by-item-block" data-item-key="' + safeKey + '">' +
         '<div class="by-item-header" onclick="toggleByItemBlock(this)">' +
-          '<span class="by-item-name">' + ic.item + ' #' + ic.instanceIndex + '</span>' +
+          '<div class="by-item-name">' + ic.item + ' <small>#' + ic.instanceIndex + '</small></div>' +
           '<div class="by-item-progress-wrap">' +
             '<div class="progress-bar-bg">' +
-              '<div class="progress-bar-fill' + fillCls + '" style="width:' + pct + '%"></div>' +
+              '<div class="progress-bar-fill ' + (isComplete ? 'complete' : '') + '" style="width:' + pct + '%"></div>' +
             '</div>' +
-            '<span class="progress-pct' + pctCls + '">' + (complete ? '✓ 100%' : pct + '%') + '</span>' +
+            '<span class="progress-pct ' + (isComplete ? 'complete' : '') + '">' + (isComplete ? '✓' : pct + '%') + '</span>' +
           '</div>' +
-          '<button class="by-item-collapse-btn">' + colLabel + '</button>' +
+          '<button class="by-item-collapse-btn">' + (isCollapsed ? '▼' : '▲') + '</button>' +
         '</div>' +
-        '<div class="by-item-body' + isCollapsed + '">' +
+        '<div class="by-item-body ' + (isCollapsed ? 'collapsed' : '') + '">' +
           '<div class="tree-root">' +
-            _renderTree(ic.item, 1, 0, {}, invBeforeThisItem, invAfterThisItem) + // Pass both inventories
+            _renderTree(ic.item, 1, 0, {}, invBefore, invAfter) +
           '</div>' +
         '</div>' +
       '</div>';
-  });
+  }
 
   container.innerHTML = html;
 }
 
 function toggleByItemBlock(header) {
   var body = header.nextElementSibling;
-  var btn  = header.querySelector('.by-item-collapse-btn');
-  var col  = body.classList.toggle('collapsed');
-  btn.textContent = col ? '▼ Expand' : '▲ Collapse';
+  var btn = header.querySelector('.by-item-collapse-btn');
+  var isCollapsed = body.classList.toggle('collapsed');
+  btn.textContent = isCollapsed ? '▼' : '▲';
 }
 
-// ── PER-ITEM EXPAND (for progress calculation - NO ALLOCATION) ────
-// This version is used for the initial 'closest first' sorting,
-// it calculates what *could* be covered without actually consuming inventory.
-// This function is no longer strictly needed for sorting, but kept for potential future use
-// or if itemBaseCalc is used elsewhere.
-function _expandForItem(itemName, qty, baseAcc, interAcc, stack) {
+function _expandForItemWithAllocation(itemName, qty, baseAcc, interAcc, mutableInv, stack) {
   if (!stack) stack = {};
+  
+  // 1. Consume what we already have (even if it's a craftable item)
+  var have = mutableInv[itemName] || 0;
+  var consume = Math.min(have, qty);
+  mutableInv[itemName] = have - consume;
+  
+  var remaining = qty - consume;
+  
+  // 2. If satisfied, just update baseAcc (used for summary) and return
+  if (remaining <= 0) {
+    baseAcc[itemName] = (baseAcc[itemName] || 0) + qty;
+    return;
+  }
+
   var recipe = recipes[itemName];
+  // 3. If no recipe or circular, it's a base ingredient (or handled as such)
   if (!recipe || stack[itemName]) {
     baseAcc[itemName] = (baseAcc[itemName] || 0) + qty;
     return;
   }
-  var times = Math.ceil(qty / recipe.yields);
-  if (Object.keys(stack).length > 0) {
-    interAcc[itemName] = (interAcc[itemName] || 0) + times * recipe.yields;
-  }
-  var ns = {}; for (var k in stack) ns[k] = true; ns[itemName] = true;
-  for (var j = 0; j < recipe.ingredients.length; j++) {
-    var ingr = recipe.ingredients[j];
-    _expandForItem(ingr.name, ingr.qty * times, baseAcc, interAcc, ns);
+
+  // 4. Expand recipe for the REMAINING quantity
+  var effYield = getEffectiveYield(itemName, recipe);
+  var times = Math.ceil(remaining / effYield);
+  if (Object.keys(stack).length > 0) interAcc[itemName] = (interAcc[itemName] || 0) + remaining;
+  
+  var nextStack = {};
+  for (var k in stack) nextStack[k] = true;
+  nextStack[itemName] = true;
+
+  for (var i = 0; i < recipe.ingredients.length; i++) {
+    var ingr = recipe.ingredients[i];
+    _expandForItemWithAllocation(ingr.name, ingr.qty * times, baseAcc, interAcc, mutableInv, nextStack);
   }
 }
 
-// ── PER-ITEM EXPAND (for progress calculation - WITH ALLOCATION) ────
-// This version consumes from the provided mutable inventory.
-function _expandForItemWithAllocation(itemName, qty, baseAcc, interAcc, mutableInv, stack) {
+function toggleTreeBranch(btn) {
+  var row = btn.parentElement;
+  var node = row.parentElement;
+  var branch = node.querySelector('.tree-branch-content');
+  if (branch) {
+    var isCollapsed = branch.classList.toggle('collapsed');
+    btn.classList.toggle('collapsed', isCollapsed);
+  }
+}
+
+function _renderTree(itemName, qty, depth, stack, invBefore, invAfter) {
   if (!stack) stack = {};
   var recipe = recipes[itemName];
-  if (!recipe || stack[itemName]) {
-    var have = mutableInv[itemName] || 0;
-    var consume = Math.min(have, qty);
-    mutableInv[itemName] = have - consume;
-    baseAcc[itemName] = (baseAcc[itemName] || 0) + qty; // baseAcc tracks *total required* for this item
-    return;
+  var isBase = !recipe || !!stack[itemName];
+  
+  var consumed = (invBefore[itemName] || 0) - (invAfter[itemName] || 0);
+  var got = Math.min(qty, consumed);
+  
+  var pct = qty > 0 ? Math.floor((got / qty) * 100) : 100;
+  var isDone = got >= qty;
+  var needCls = isDone ? 'zero' : got > 0 ? 'partial' : 'full';
+
+  var cat = recipeCategory[itemName];
+  var typeLabel = isBase ? 'raw' : 'craft';
+  var typeCls   = isBase ? 'base' : 'inter';
+
+  if (!isBase && cat && cat.toLowerCase() === 'smeltery') {
+    typeLabel = 'smeltery';
+    typeCls   = 'smeltery';
   }
-  var times = Math.ceil(qty / recipe.yields);
-  if (Object.keys(stack).length > 0) {
-    interAcc[itemName] = (interAcc[itemName] || 0) + times * recipe.yields;
-  }
-  var ns = {}; for (var k in stack) ns[k] = true; ns[itemName] = true;
-  for (var j = 0; j < recipe.ingredients.length; j++) {
-    var ingr = recipe.ingredients[j];
-    _expandForItemWithAllocation(ingr.name, ingr.qty * times, baseAcc, interAcc, mutableInv, ns);
-  }
-}
-
-
-// ── TREE RENDERER ─────────────────────────────────
-// Now takes two inventory parameters: invBeforeThisItem (for 'have' display) and invAfterThisItem (for 'need' calculation)
-function _renderTree(itemName, qty, depth, stack, invBeforeThisItem, invAfterThisItem) {
-  if (!stack) stack = {};
-  var recipe  = recipes[itemName];
-  var isBase  = !recipe || !!stack[itemName];
-  var isInter = !isBase && depth > 0;
-  var isRoot  = depth === 0;
-
-  // Inventory numbers
-  var required = isRoot ? qty : qty;
-
-  // 'have' is what was available in the shared pool *before* this item consumed it
-  var haveAvailableBefore = invBeforeThisItem[itemName] || 0;
-
-  // 'need' is what's still needed *after* this item has consumed from its allocated share.
-  // This is calculated by taking the original requirement and subtracting what was *actually consumed* by this item.
-  var consumedByThisItem = (invBeforeThisItem[itemName] || 0) - (invAfterThisItem[itemName] || 0);
-  var effectiveHaveForThisItem = Math.min(required, consumedByThisItem); // How much of *this item's* requirement was met
-  var need     = Math.max(0, required - effectiveHaveForThisItem);
-
-  var needCls  = need === 0 ? 'zero' : effectiveHaveForThisItem > 0 ? 'partial' : 'full';
 
   var indent = '';
   for (var d = 0; d < depth; d++) {
     indent += '<div class="tree-indent-line"></div>';
   }
-  var indentHtml = depth > 0
-    ? '<div class="tree-indent">' + indent + '</div>'
-    : '';
 
-  var typeLabel = isBase
-    ? '<span class="tree-node-type base">base</span>'
-    : '<span class="tree-node-type inter">craft</span>';
+  var html =
+    '<div class="tree-node">' +
+      '<div class="tree-node-row">' +
+        (depth > 0 ? '<div class="tree-indent">' + indent + '</div>' : '') +
+        (!isBase ? '<button class="tree-branch-toggle" onclick="toggleTreeBranch(this)">▼</button>' : '<div class="tree-branch-spacer"></div>') +
+        '<span class="tree-node-type ' + typeCls + '">' + typeLabel + '</span>' +
+        '<span class="tree-node-name ' + (!isBase && depth > 0 ? 'is-inter' : '') + '">' + itemName + '</span>' +
+        '<div style="flex:1"></div>' +
+        '<div class="tree-node-nums">' +
+          '<span class="tree-progress ' + needCls + '">' +
+            got.toLocaleString() + ' / ' + qty.toLocaleString() +
+            ' <small>(' + pct + '%)</small>' +
+          '</span>' +
+          (isDone ? '<span class="pill-done">DONE</span>' : '') +
+        '</div>' +
+      '</div>';
 
-  var numsHtml =
-    '<span class="tree-node-nums">' +
-      '<span class="tree-num-req">' + required.toLocaleString() + ' req</span>' +
-      (effectiveHaveForThisItem > 0 ? '<span class="tree-num-have">· ' + effectiveHaveForThisItem.toLocaleString() + ' have</span>' : '') +
-      '<span class="tree-num-need ' + needCls + '">' +
-        (need === 0 ? '✓ Done' : need.toLocaleString() + ' needed') +
-      '</span>' +
-    '</span>';
+  if (!isBase) {
+    var nextStack = {};
+    for (var k in stack) nextStack[k] = true;
+    nextStack[itemName] = true;
 
-  var nameClass = isInter ? ' is-inter' : '';
-  var rowHtml =
-    '<div class="tree-node-row">' +
-      indentHtml +
-      '<span class="tree-node-name' + nameClass + '">' + itemName + '</span>' +
-      typeLabel +
-      numsHtml +
-    '</div>';
-
-  if (isBase) return '<div class="tree-node">' + rowHtml + '</div>';
-
-  // Recurse into children
-  var childrenHtml = '';
-  var ns = {}; for (var k in stack) ns[k] = true; ns[itemName] = true;
-
-  // Times to craft = based on how many we still need (not counting what we have)
-  var timesForChildren = Math.ceil(need / recipe.yields);
-
-  for (var j = 0; j < recipe.ingredients.length; j++) {
-    var ingr    = recipe.ingredients[j];
-    var childQty = ingr.qty * timesForChildren;
-    if (childQty > 0) {
-      childrenHtml += _renderTree(ingr.name, childQty, depth + 1, ns, invBeforeThisItem, invAfterThisItem); // Pass both inventories
+    var branchNeed = Math.max(0, qty - got);
+    var times = Math.ceil(branchNeed / recipe.yields);
+    
+    var grouped = {};
+    for (var i = 0; i < recipe.ingredients.length; i++) {
+      var ing = recipe.ingredients[i];
+      grouped[ing.name] = (grouped[ing.name] || 0) + (ing.qty * times);
+    }
+    
+    var children = '';
+    var ingNames = Object.keys(grouped).sort();
+    for (var j = 0; j < ingNames.length; j++) {
+      var ingName = ingNames[j];
+      var cQty = grouped[ingName];
+      if (cQty > 0) children += _renderTree(ingName, cQty, depth + 1, nextStack, invBefore, invAfter);
+    }
+    if (children) {
+      html += '<div class="tree-branch-content">' + children + '</div>';
     }
   }
-
-  return '<div class="tree-node">' + rowHtml +
-    (childrenHtml ? '<div class="tree-children">' + childrenHtml + '</div>' : '') +
-    '</div>';
+  
+  html += '</div>';
+  return html;
 }
 
-// ══════════════════════════════════════════════════
-// INVENTORY INPUT / CLEAR / COPY
-// ══════════════════════════════════════════════════
 function onInventoryInput(name, input) {
   var val = parseInt(input.value) || 0;
   if (val <= 0) delete inventory[name]; else inventory[name] = val;
@@ -395,16 +390,30 @@ function clearInventory() {
 
 function copyNeededToClipboard() {
   if (!craftList.length) { showToast('Nothing to copy yet.', true); return; }
-  var net       = netCalc();
-  var baseLines = [], interLines = [], k;
-  for (k in net.base)  { if (net.base[k]  > 0) baseLines.push(net.base[k].toLocaleString()  + 'x ' + k); }
-  for (k in net.inter) { if (net.inter[k] > 0) interLines.push(net.inter[k].toLocaleString() + 'x ' + k); }
-  baseLines.sort(); interLines.sort();
-  if (!baseLines.length && !interLines.length) { showToast('You already have everything!'); return; }
+  var net = netCalc();
+  
+  var format = function(obj) {
+    var res = [];
+    for (var n in obj) {
+      if (obj[n] > 0) res.push(obj[n].toLocaleString() + 'x ' + n);
+    }
+    res.sort();
+    return res.join('\n');
+  };
+
+  var baseText = format(net.base);
+  var interText = format(net.inter);
+  
+  if (!baseText && !interText) { showToast('You already have everything!'); return; }
+  
   var text = '';
-  if (baseLines.length)  text += 'Base Ingredients Needed:\n' + baseLines.join('\n');
-  if (interLines.length) text += (text ? '\n\n' : '') + 'Intermediate Items To Craft:\n' + interLines.join('\n');
+  if (baseText) text += 'Needed:\n' + baseText;
+  if (interText) text += (text ? '\n\n' : '') + 'To Craft:\n' + interText;
+  
   try {
-    navigator.clipboard.writeText(text.trim()).then(function() { showToast('Copied to clipboard!'); });
-  } catch(ex) { showToast('Could not access clipboard.', true); }
+    navigator.clipboard.writeText(text.trim());
+    showToast('Requirements copied!');
+  } catch (ex) {
+    showToast('Copy failed.', true);
+  }
 }

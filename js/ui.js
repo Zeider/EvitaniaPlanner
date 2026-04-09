@@ -1,66 +1,86 @@
-// ── THEME TOGGLE ──────────────────────────────────
-function applyTheme(theme) {
-  document.body.setAttribute('data-theme', theme);
-  var icon = document.getElementById('themeIcon');
-  var label = document.getElementById('themeLabel');
-  if (theme === 'dark') {
-    icon.textContent = '☀️';
-    label.textContent = 'Light Mode';
-  } else {
-    icon.textContent = '🌙';
-    label.textContent = 'Dark Mode';
+// ── UI CONTROLLER ────────────────────────────────
+var AppUI = {
+  _toastTimeout: null,
+
+  init: function() {
+    this.refreshTheme();
+    this.refreshMulticraft();
+  },
+
+  refreshTheme: function() {
+    var theme = localStorage.getItem(THEME_KEY) || 'dark';
+    document.body.classList.toggle('light-theme', theme === 'light');
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+    // If we're light, show 'Dark Mode' (moon). If we're dark, show 'Light Mode' (sun).
+    if (icon) icon.textContent = theme === 'light' ? '🌙' : '☀️';
+    if (label) label.textContent = theme === 'light' ? 'Dark Mode' : 'Light Mode';
+  },
+
+  refreshMulticraft: function() {
+    var stored = localStorage.getItem(LS_MULTICRAFT);
+    multicraftLevel = stored ? parseInt(stored) : 0;
+    
+    // Update UI buttons
+    [0, 2, 4].forEach(function(lvl) {
+      var btn = document.getElementById('mc_' + lvl);
+      if (btn) btn.classList.toggle('active', multicraftLevel === lvl);
+    });
+  },
+
+  setMulticraft: function(lvl) {
+    multicraftLevel = lvl;
+    localStorage.setItem(LS_MULTICRAFT, lvl);
+    this.refreshMulticraft();
+    liveRecalc();
+    this.showToast('Multicraft Level ' + lvl + ' active');
+  },
+
+  toggleTheme: function() {
+    var isLight = document.body.classList.contains('light-theme');
+    var newTheme = isLight ? 'dark' : 'light';
+    localStorage.setItem(THEME_KEY, newTheme);
+    this.refreshTheme();
+  },
+
+  showToast: function(message, isError) {
+    var toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.className = 'toast show' + (isError ? ' error' : '');
+    
+    clearTimeout(this._toastTimeout);
+    this._toastTimeout = setTimeout(function() {
+      toast.className = 'toast';
+    }, 3000);
+  },
+
+  switchTab: function(name) {
+    var panels = document.querySelectorAll('.tab-panel');
+    for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+    
+    var btns = document.querySelectorAll('.tab-btn');
+    for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+    
+    var panel = document.getElementById(name + 'Tab');
+    var btn = document.getElementById('tabBtn' + name.charAt(0).toUpperCase() + name.slice(1));
+    
+    if (panel) panel.classList.add('active');
+    if (btn) btn.classList.add('active');
+  },
+
+  toggleSection: function(bodyId, toggleId) {
+    var body = document.getElementById(bodyId);
+    var tog = document.getElementById(toggleId);
+    if (!body || !tog) return;
+    
+    var isCollapsed = body.classList.toggle('collapsed');
+    tog.textContent = isCollapsed ? '▼ Expand' : '▲ Collapse';
   }
-  try { localStorage.setItem(THEME_KEY, theme); } catch(e) {}
-}
+};
 
-function toggleTheme() {
-  var currentTheme = document.body.getAttribute('data-theme');
-  var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  applyTheme(newTheme);
-}
-
-// ── TOAST NOTIFICATIONS ───────────────────────────
-var _toastTimeout;
-function showToast(message, isError) {
-  var toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.classList.remove('error');
-  if (isError) toast.classList.add('error');
-  toast.classList.add('show');
-
-  clearTimeout(_toastTimeout);
-  _toastTimeout = setTimeout(function() {
-    toast.classList.remove('show');
-  }, 3000);
-}
-
-// ── TAB SWITCHING ─────────────────────────────────
-function switchTab(name) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) {
-    p.classList.remove('active');
-  });
-  document.querySelectorAll('.tab-btn').forEach(function(b) {
-    b.classList.remove('active');
-  });
-  document.getElementById(name + 'Tab').classList.add('active');
-  document.getElementById('tabBtn' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
-}
-
-// ── COLLAPSIBLE ───────────────────────────────────
-function toggleSection(bodyId, toggleId) {
-  var body = document.getElementById(bodyId);
-  var tog  = document.getElementById(toggleId);
-  var col  = body.classList.toggle('collapsed');
-  tog.textContent = col ? '▼ Expand' : '▲ Collapse';
-}
-
-// ── ITEM SELECT DROPDOWN ──────────────────────────
-function updateItemSelect() {
-  var sel   = document.getElementById('craftItemSelect');
-  var cur   = sel.value;
-  var names = Object.keys(recipes).sort();
-  sel.innerHTML = '<option value="">— Select An Item —</option>' +
-    names.map(function(n) {
-      return '<option value="' + n + '"' + (n === cur ? ' selected' : '') + '>' + n + '</option>';
-    }).join('');
-}
+// Global aliases for legacy HTML onclicks
+window.toggleTheme = function() { AppUI.toggleTheme(); };
+window.switchTab = function(name) { AppUI.switchTab(name); };
+window.toggleSection = function(b, t) { AppUI.toggleSection(b, t); };
+window.showToast = function(m, e) { AppUI.showToast(m, e); };
