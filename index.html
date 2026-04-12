@@ -3,35 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Evitania Calc — Premium Item Planner</title>
+    <title>Evitania Farming Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/theme-boushoku.css" />
+    <link rel="stylesheet" href="css/theme-yama.css" />
   </head>
-  <body>
+  <body data-ui-style="boushoku">
     <div class="app-shell">
       <header class="app-header">
         <div class="header-top">
           <div class="title-block">
-            <h1>⚔️ Item Calculator</h1>
+            <h1>⚔️ Evitania Farming Tracker</h1>
             <small>Plan your farming and track ingredients.</small>
           </div>
           <div class="header-right">
-            <button class="theme-toggle" onclick="toggleTheme()">
-              <span id="themeIcon">☀️</span
-              ><span id="themeLabel">Light Mode</span>
-            </button>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="themeIcon">☀️</span
+                ><span id="themeLabel">Light Mode</span>
+              </button>
+              <button class="theme-toggle" id="uiStyleToggle" onclick="toggleUIStyle()">
+                <span id="uiStyleLabel">Boushoku UI</span>
+              </button>
+            </div>
             <div class="meta-block">
               <div class="header-version">
                 <a
                   href="https://github.com/FYamauti/EvitaniaCalc"
                   target="_blank"
                   class="version-link"
-                  >v 1.0.0</a
+                  >v 1.1.0</a
                 >
                 <div class="header-links">
                   <a
@@ -77,6 +84,9 @@
           </button>
           <button class="tab-btn" id="tabBtnSetup" onclick="switchTab('setup')">
             ⚙️ Setup
+          </button>
+          <button class="tab-btn" id="tabBtnRunes" onclick="switchTab('runes')">
+            🔮 Rune Farming
           </button>
         </nav>
       </header>
@@ -533,6 +543,45 @@
             </div>
           </div>
         </section>
+
+        <!-- ══════ RUNE FARMING TAB ══════ -->
+        <section class="tab-panel" id="runesTab">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">🔮 Rune Word Planner</div>
+                <div class="card-subtitle">
+                  Select a combo, enter your current rune stock, and see what to farm.
+                </div>
+              </div>
+            </div>
+            <div class="rune-combo-row">
+              <label class="rune-combo-label">Rune Combo</label>
+              <select id="runeComboSelect"></select>
+            </div>
+            <div class="rune-effect-line" id="runeEffect"></div>
+          </div>
+
+          <div class="card" id="runeInventoryCard" style="display:none">
+            <div class="card-header">
+              <div>
+                <div class="card-title">📦 Your Inventory</div>
+                <div class="card-subtitle">Enter how many runes of each tier you already have.</div>
+              </div>
+            </div>
+            <div id="runeInventoryBody" style="margin-top:0.75rem"></div>
+          </div>
+
+          <div class="card" id="runeResultCard" style="display:none">
+            <div class="card-header">
+              <div>
+                <div class="card-title">🌾 What to Farm</div>
+                <div class="card-subtitle">How many T1 runes you still need per family.</div>
+              </div>
+            </div>
+            <div id="runeResultBody" style="margin-top:0.5rem"></div>
+          </div>
+        </section>
       </main>
     </div>
 
@@ -545,5 +594,6 @@
     <script src="js/inventory.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/runes.js"></script>
   </body>
 </html>

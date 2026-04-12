@@ -1,5 +1,9 @@
 var App = {
   init: function() {
+    // 0. Initialize UI Style (Boushoku/Yama)
+    var savedUIStyle = localStorage.getItem('ui-style') || 'boushoku';
+    document.body.dataset.uiStyle = savedUIStyle;
+
     // 1. Initialize UI (Theme, etc)
     AppUI.init();
 

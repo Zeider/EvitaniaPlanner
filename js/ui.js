@@ -4,6 +4,7 @@ var AppUI = {
 
   init: function() {
     this.refreshTheme();
+    this.refreshUIStyleLabel();
     this.refreshMulticraft();
   },
 
@@ -41,6 +42,23 @@ var AppUI = {
     var newTheme = isLight ? 'dark' : 'light';
     localStorage.setItem(THEME_KEY, newTheme);
     this.refreshTheme();
+  },
+
+  toggleUIStyle: function() {
+    var currentStyle = localStorage.getItem('ui-style') || 'boushoku';
+    var newStyle = currentStyle === 'boushoku' ? 'yama' : 'boushoku';
+    document.body.dataset.uiStyle = newStyle;
+    localStorage.setItem('ui-style', newStyle);
+    this.refreshUIStyleLabel();
+    this.showToast('Switched to ' + (newStyle === 'boushoku' ? 'Boushoku' : 'Yama') + ' UI');
+  },
+
+  refreshUIStyleLabel: function() {
+    var currentStyle = document.body.dataset.uiStyle || 'boushoku';
+    var label = document.getElementById('uiStyleLabel');
+    if (label) {
+      label.textContent = currentStyle === 'boushoku' ? 'Switch to Yama UI' : 'Switch to Boushoku UI';
+    }
   },
 
   showToast: function(message, isError) {
@@ -81,6 +99,7 @@ var AppUI = {
 
 // Global aliases for legacy HTML onclicks
 window.toggleTheme = function() { AppUI.toggleTheme(); };
+window.toggleUIStyle = function() { AppUI.toggleUIStyle(); };
 window.switchTab = function(name) { AppUI.switchTab(name); };
 window.toggleSection = function(b, t) { AppUI.toggleSection(b, t); };
 window.showToast = function(m, e) { AppUI.showToast(m, e); };
