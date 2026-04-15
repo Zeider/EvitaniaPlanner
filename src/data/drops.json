@@ -1,0 +1,469 @@
+{
+  "zones": {
+    "1.0": {
+      "mob": "Boar",
+      "drops": [
+        { "item": "Boar Meat", "rate": 4, "type": "material" },
+        { "item": "Boar Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.1": {
+      "mob": "Wasp",
+      "drops": [
+        { "item": "Honeycomb", "rate": 4, "type": "material" },
+        { "item": "Wasp Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.2": {
+      "mob": "Pebble",
+      "drops": [
+        { "item": "Stoney McStoneface", "rate": 4, "type": "material" },
+        { "item": "Solid Fuel", "rate": 4, "type": "material" },
+        { "item": "Pebble Card", "rate": 5000, "type": "card" }
+      ]
+    },
+    "1.3": {
+      "mob": "Stump",
+      "drops": [
+        { "item": "Leaf", "rate": 4, "type": "material" },
+        { "item": "Stump Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.4": {
+      "mob": "Plant",
+      "drops": [
+        { "item": "Mini Plant", "rate": 4, "type": "material" },
+        { "item": "Plant Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.5": {
+      "mob": "Wolf",
+      "drops": [
+        { "item": "Wolf Fang", "rate": 4, "type": "material" },
+        { "item": "Blue Essence", "rate": 200, "type": "material" },
+        { "item": "Yellow Feather", "rate": 1000, "type": "material" },
+        { "item": "Wolf Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.6": {
+      "mob": "Gnoll",
+      "drops": [
+        { "item": "Fruit", "rate": 4, "type": "material" },
+        { "item": "Red Essence", "rate": 200, "type": "material" },
+        { "item": "Yellow Feather", "rate": 1000, "type": "material" },
+        { "item": "Gnoll Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.7": {
+      "mob": "Animated Armor",
+      "drops": [
+        { "item": "Ectoplasm", "rate": 4, "type": "material" },
+        { "item": "Pink Essence", "rate": 200, "type": "material" },
+        { "item": "Yellow Feather", "rate": 1000, "type": "material" },
+        { "item": "Animated Armor Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.8": {
+      "mob": "Crab",
+      "drops": [
+        { "item": "Crab Claw", "rate": 4, "type": "material" },
+        { "item": "Black Essence", "rate": 200, "type": "material" },
+        { "item": "Yellow Feather", "rate": 1000, "type": "material" },
+        { "item": "Solid Fuel", "rate": 10000, "type": "material" },
+        { "item": "Crab Card", "rate": 5000000, "type": "card" }
+      ]
+    },
+    "1.9": {
+      "mob": "Bat",
+      "drops": [
+        { "item": "Bat Dust", "rate": 4, "type": "material" },
+        { "item": "Bat Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.10": {
+      "mob": "Kobold",
+      "drops": [
+        { "item": "Candle", "rate": 4, "type": "material" },
+        { "item": "Kobold Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.11": {
+      "mob": "Weird Book",
+      "drops": [
+        { "item": "Weird Page", "rate": 4, "type": "material" },
+        { "item": "Weird Book Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.12": {
+      "mob": "Slime Cube",
+      "drops": [
+        { "item": "D20 Dice", "rate": 4, "type": "material" },
+        { "item": "Slime Cube Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "1.13": {
+      "mob": "Fire Elemental",
+      "drops": [
+        { "item": "Fire Essence", "rate": 4, "type": "material" },
+        { "item": "Fire Elemental Card", "rate": 10000, "type": "card" }
+      ]
+    },
+    "2.1": {
+      "mob": "Iceboar",
+      "drops": [
+        { "item": "Icy Needle", "rate": 4, "type": "material" },
+        { "item": "Furry Fur", "rate": 200, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: NIL", "rate": 300000, "type": "rune" },
+        { "item": "Iceboar Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.2": {
+      "mob": "Helmet",
+      "drops": [
+        { "item": "Helmet", "rate": 4, "type": "material" },
+        { "item": "Furry Fur", "rate": 200, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: NIL", "rate": 300000, "type": "rune" },
+        { "item": "Helmet Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.3": {
+      "mob": "Ghost",
+      "drops": [
+        { "item": "Iceghost Doll", "rate": 4, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: NIL", "rate": 300000, "type": "rune" },
+        { "item": "Ghost Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.4": {
+      "mob": "Yeti",
+      "drops": [
+        { "item": "Distinguished Glasses", "rate": 4, "type": "material" },
+        { "item": "Furry Fur", "rate": 200, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: NIL", "rate": 300000, "type": "rune" },
+        { "item": "Yeti Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.5": {
+      "mob": "Ratatoskr",
+      "drops": [
+        { "item": "Nut", "rate": 4, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: FUS", "rate": 300000, "type": "rune" },
+        { "item": "Ratatoskr Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.6": {
+      "mob": "Watches",
+      "drops": [
+        { "item": "Pocketwatch", "rate": 4, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: FUS", "rate": 300000, "type": "rune" },
+        { "item": "Watches Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.7": {
+      "mob": "Snowman",
+      "drops": [
+        { "item": "Carrot", "rate": 4, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: FUS", "rate": 300000, "type": "rune" },
+        { "item": "Snowman Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.8": {
+      "mob": "Troll",
+      "drops": [
+        { "item": "Troll Idol", "rate": 4, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: FUS", "rate": 300000, "type": "rune" },
+        { "item": "Troll Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.9": {
+      "mob": "Penguin",
+      "drops": [
+        { "item": "Monocle", "rate": 4, "type": "material" },
+        { "item": "Cryolite Ore", "rate": 2000, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: MU", "rate": 30000, "type": "rune" },
+        { "item": "Penguin Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.10": {
+      "mob": "Glass",
+      "drops": [
+        { "item": "Slightly Damaged Glass", "rate": 4, "type": "material" },
+        { "item": "Cryolite Ore", "rate": 2000, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: MU", "rate": 300000, "type": "rune" },
+        { "item": "Glass Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.11": {
+      "mob": "Matryoshka",
+      "drops": [
+        { "item": "Matryoshka Doll", "rate": 4, "type": "material" },
+        { "item": "Cryolite Ore", "rate": 2000, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: MU", "rate": 30000, "type": "rune" },
+        { "item": "Matryoshka Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "2.12": {
+      "mob": "Draugr",
+      "drops": [
+        { "item": "Spearhead", "rate": 4, "type": "material" },
+        { "item": "Cryolite Ore", "rate": 2000, "type": "material" },
+        { "item": "Norse Essence", "rate": 10000, "type": "material" },
+        { "item": "RUNE: MU", "rate": 300000, "type": "rune" },
+        { "item": "Draugr Card", "rate": 25000, "type": "card" }
+      ]
+    },
+    "3.1": {
+      "mob": "Sun Boy",
+      "drops": [
+        { "item": "Sun Essence", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "RUNE: GOR", "rate": 3000, "type": "rune" },
+        { "item": "Sun Boy Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.2": {
+      "mob": "Dung Beetle",
+      "drops": [
+        { "item": "Poop Ball", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "RUNE: GOR", "rate": 3000, "type": "rune" },
+        { "item": "Dung Beetle Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.3": {
+      "mob": "Cactus Mommy",
+      "drops": [
+        { "item": "Cactus", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "RUNE: GOR", "rate": 3000, "type": "rune" },
+        { "item": "Cactus Mommy Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.4": {
+      "mob": "Kangaroo",
+      "drops": [
+        { "item": "Kangaroo Boomerang", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Aether Crystal Shards", "rate": 125000, "type": "material" },
+        { "item": "RUNE: GOR", "rate": 3000, "type": "rune" },
+        { "item": "Kangaroo Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.5": {
+      "mob": "Fez",
+      "drops": [
+        { "item": "Fez Fez", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "Fez Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.6": {
+      "mob": "Winged Serpent",
+      "drops": [
+        { "item": "Serpent Feather", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "RUNE: GOR", "rate": 3000, "type": "rune" },
+        { "item": "Winged Serpent Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.7": {
+      "mob": "Bandiff",
+      "drops": [
+        { "item": "Bandiff Star", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "RUNE: GOR", "rate": 30000, "type": "rune" },
+        { "item": "Bandiff Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.8": {
+      "mob": "Beetleman",
+      "drops": [
+        { "item": "Beetleman Sting", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Aether Crystal Shards", "rate": 125000, "type": "material" },
+        { "item": "RUNE: GOR", "rate": 30000, "type": "rune" },
+        { "item": "Beetleman Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.9": {
+      "mob": "Ciphered Building",
+      "drops": [
+        { "item": "Bow Tie", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "Ciphered Building Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.10": {
+      "mob": "Mummy",
+      "drops": [
+        { "item": "Mummy Wraps", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "Mummy Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.11": {
+      "mob": "Djinn",
+      "drops": [
+        { "item": "Djinn Lamp", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "Djinn Card", "rate": 50000, "type": "card" }
+      ]
+    },
+    "3.12": {
+      "mob": "Horus",
+      "drops": [
+        { "item": "Horus Idol", "rate": 4, "type": "material" },
+        { "item": "Orange Chromo", "rate": 25000, "type": "material" },
+        { "item": "Aether Crystal Shards", "rate": 125000, "type": "material" },
+        { "item": "Horus Card", "rate": 50000, "type": "card" }
+      ]
+    }
+  },
+  "bosses": {
+    "boss:bringer": {
+      "mob": "Bringer of Death",
+      "drops": [
+        { "item": "Death's Eye", "rate": 1, "type": "material" },
+        { "item": "Boss Amulet", "rate": 6, "type": "gear" },
+        { "item": "Enhance Stone I", "rate": 10, "type": "material" },
+        { "item": "Bringer of Death Card", "rate": 2, "type": "card" }
+      ]
+    },
+    "boss:crab": {
+      "mob": "The Crab",
+      "drops": [
+        { "item": "The Crab's Pickaxe", "rate": 1, "type": "gear" },
+        { "item": "Enhance Stone I", "rate": 10, "type": "material" },
+        { "item": "The Crab Card", "rate": 2, "type": "card" }
+      ]
+    },
+    "boss:yrsainir": {
+      "mob": "Yrsainir",
+      "drops": [
+        { "item": "Dragon Tooth", "rate": 1, "type": "material" },
+        { "item": "Dragon Soul", "rate": 1, "type": "material" },
+        { "item": "Enhance Stone I", "rate": 10, "type": "material" },
+        { "item": "Yrsainir Card", "rate": 2, "type": "card" }
+      ]
+    },
+    "boss:mammoth": {
+      "mob": "Ice Mammoth",
+      "drops": [
+        { "item": "Mammoth Soul", "rate": 1, "type": "material" },
+        { "item": "Mammoth Tusk", "rate": 1, "type": "material" },
+        { "item": "Mammoth Ring", "rate": 10, "type": "gear" },
+        { "item": "Norse Essence", "rate": 10, "type": "material" },
+        { "item": "Enhance Stone 2", "rate": 10, "type": "material" },
+        { "item": "Ice Mammoth Card", "rate": 2, "type": "card" },
+        { "item": "Rune: HAS", "rate": 10, "type": "rune" }
+      ]
+    },
+    "boss:jotunn": {
+      "mob": "Jotunn",
+      "drops": [
+        { "item": "Jötunn Soul", "rate": 1, "type": "material" },
+        { "item": "Jötunn Eye", "rate": 1, "type": "material" },
+        { "item": "Nordic Amulet", "rate": 20, "type": "gear" },
+        { "item": "Norse Essence", "rate": 10, "type": "material" },
+        { "item": "Enhance Stone 2", "rate": 10, "type": "material" },
+        { "item": "Jötunn Card", "rate": 2, "type": "card" }
+      ]
+    },
+    "boss:maevath": {
+      "mob": "Maevath",
+      "drops": [
+        { "item": "Maevath's Horn", "rate": 1, "type": "material" },
+        { "item": "Ghostly Pet", "rate": 100, "type": "pet" },
+        { "item": "Enhance Stone 2", "rate": 10, "type": "material" },
+        { "item": "Maevath Card", "rate": 2, "type": "card" },
+        { "item": "Rune: HAS", "rate": 10, "type": "rune" }
+      ]
+    },
+    "boss:kangaroo": {
+      "mob": "Zhai Halud",
+      "drops": [
+        { "item": "Gate Building Blocks", "rate": 1, "type": "material" },
+        { "item": "Enhance Stone 3", "rate": 10, "type": "material" },
+        { "item": "Zhai Halud Card", "rate": 2, "type": "card" }
+      ]
+    }
+  },
+  "professions": {
+    "mining": {
+      "Copper Ore": { "zone": "1.2", "minLevel": 1 },
+      "Iron Ore": { "zone": "1.10", "minLevel": 10 },
+      "Thorium Ore": { "zone": "2.5", "minLevel": 20 },
+      "Sunstone Ore": { "zone": "3.5", "minLevel": 30 }
+    },
+    "woodcutting": {
+      "Ash Log": { "zone": "1.3", "minLevel": 1 },
+      "Pyrewood Log": { "zone": "1.11", "minLevel": 10 },
+      "Ironwood Log": { "zone": "2.1", "minLevel": 20 },
+      "Palm Tree Log": { "zone": "3.3", "minLevel": 30 }
+    }
+  },
+  "resources": {
+    "Boar Meat": { "zone": "1.0", "rate": 4 },
+    "Honeycomb": { "zone": "1.1", "rate": 4 },
+    "Stoney McStoneface": { "zone": "1.2", "rate": 4 },
+    "Leaf": { "zone": "1.3", "rate": 4 },
+    "Mini Plant": { "zone": "1.4", "rate": 4 },
+    "Wolf Fang": { "zone": "1.5", "rate": 4 },
+    "Fruit": { "zone": "1.6", "rate": 4 },
+    "Ectoplasm": { "zone": "1.7", "rate": 4 },
+    "Crab Claw": { "zone": "1.8", "rate": 4 },
+    "Bat Dust": { "zone": "1.9", "rate": 4 },
+    "Candle": { "zone": "1.10", "rate": 4 },
+    "Weird Page": { "zone": "1.11", "rate": 4 },
+    "D20 Dice": { "zone": "1.12", "rate": 4 },
+    "Fire Essence": { "zone": "1.13", "rate": 4 },
+    "Coin": { "zone": "any", "rate": 1, "note": "gold drops" },
+    "Steel Ingot": { "craft": true, "note": "smelted from Iron Ore" },
+    "Copper Ore": { "activity": "mining", "minLevel": 1 },
+    "Iron Ore": { "activity": "mining", "minLevel": 10 },
+    "Pyrewood Logs": { "activity": "woodcutting", "minLevel": 10 },
+    "Ash Logs": { "activity": "woodcutting", "minLevel": 1 },
+    "Icy Needle": { "zone": "2.1", "rate": 4 },
+    "Helmet": { "zone": "2.2", "rate": 4 },
+    "Iceghost Doll": { "zone": "2.3", "rate": 4 },
+    "Distinguished Glasses": { "zone": "2.4", "rate": 4 },
+    "Nut": { "zone": "2.5", "rate": 4 },
+    "Pocketwatch": { "zone": "2.6", "rate": 4 },
+    "Carrot": { "zone": "2.7", "rate": 4 },
+    "Troll Idol": { "zone": "2.8", "rate": 4 },
+    "Monocle": { "zone": "2.9", "rate": 4 },
+    "Slightly Damaged Glass": { "zone": "2.10", "rate": 4 },
+    "Matryoshka Doll": { "zone": "2.11", "rate": 4 },
+    "Spearhead": { "zone": "2.12", "rate": 4 },
+    "Ironwood Logs": { "activity": "woodcutting", "minLevel": 20 },
+    "Thorium Ore": { "activity": "mining", "minLevel": 20 },
+    "Mammoth Soul": { "boss": "boss:mammoth", "rate": 1 },
+    "Jötunn Soul": { "boss": "boss:jotunn", "rate": 1 },
+    "Maevath's Horn": { "boss": "boss:maevath", "rate": 1 },
+    "Death's Eye": { "boss": "boss:bringer", "rate": 1 },
+    "Dragon Tooth": { "boss": "boss:yrsainir", "rate": 1 },
+    "Mammoth Tusk": { "boss": "boss:mammoth", "rate": 1 },
+    "Jötunn Eye": { "boss": "boss:jotunn", "rate": 1 },
+    "Norse Essence": { "zone": "2.1", "rate": 10000 }
+  }
+}
