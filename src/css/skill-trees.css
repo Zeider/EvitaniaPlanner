@@ -1,0 +1,512 @@
+/* ══════════════════════════════════════════════════
+   SKILL TREES TAB — Three-panel horizontal layout
+   ══════════════════════════════════════════════════ */
+
+.skill-trees {
+  display: flex;
+  gap: 0;
+  min-height: 520px;
+  max-height: 700px;
+  overflow: hidden;
+}
+
+/* ── Left Sidebar (140px fixed) ─────────────────── */
+
+.skill-trees__left {
+  width: 140px;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-y: auto;
+}
+
+.skill-trees__tree-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tree-tabs__section-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #666;
+  padding: 4px 0 2px;
+}
+
+.tree-tabs__divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 6px 0;
+}
+
+.tree-tab-btn {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tree-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ddd;
+}
+
+.tree-tab-btn--active {
+  background: rgba(100, 150, 255, 0.15);
+  border-color: rgba(100, 150, 255, 0.4);
+  color: #8af;
+  font-weight: 600;
+}
+
+/* ── Build Mode Buttons ─────────────────────────── */
+
+.skill-trees__build-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.build-mode-btn {
+  display: block;
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.build-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.build-mode-btn--active {
+  background: rgba(100, 200, 100, 0.12);
+  border-color: rgba(100, 200, 100, 0.35);
+  color: #8f8;
+  font-weight: 600;
+}
+
+/* ── Points Counter ─────────────────────────────── */
+
+.skill-trees__points {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.points-counter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.points-counter__label {
+  color: #777;
+}
+
+.points-counter__value {
+  font-weight: 600;
+  color: #ccc;
+}
+
+.points-counter__value--free {
+  color: #8f8;
+}
+
+/* ── Center Panel (scrollable, flex-grow) ────────── */
+
+.skill-trees__center {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 16px;
+  position: relative;
+}
+
+.tree-graph {
+  position: relative;
+  min-width: max-content;
+}
+
+.tree-svg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tree-tiers {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.tree-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+}
+
+.tree-tier__label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.tree-tier__nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Tree Node ──────────────────────────────────── */
+
+.tree-node {
+  width: 100px;
+  min-height: 64px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.tree-node__name {
+  font-size: 9px;
+  font-weight: 600;
+  color: #ccc;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 90px;
+}
+
+.tree-node__stat {
+  font-size: 10px;
+  color: #999;
+}
+
+.tree-node__points {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ddd;
+}
+
+/* ── Node Visual States ─────────────────────────── */
+
+/* 1. Maxed — green solid border */
+.tree-node--maxed {
+  background: rgba(100, 255, 100, 0.08);
+  border: 2px solid rgba(100, 255, 100, 0.5);
+}
+.tree-node--maxed .tree-node__name { color: #8f8; }
+.tree-node--maxed .tree-node__points { color: #8f8; }
+
+/* 2. Partial — amber solid border */
+.tree-node--partial {
+  background: rgba(255, 200, 50, 0.08);
+  border: 2px solid rgba(255, 200, 50, 0.5);
+}
+.tree-node--partial .tree-node__name { color: #fda; }
+.tree-node--partial .tree-node__points { color: #fda; }
+
+/* 3. Available — blue dashed border */
+.tree-node--available {
+  background: rgba(100, 150, 255, 0.06);
+  border: 2px dashed rgba(100, 150, 255, 0.4);
+}
+.tree-node--available:hover {
+  background: rgba(100, 150, 255, 0.12);
+  border-color: rgba(100, 150, 255, 0.6);
+}
+
+/* 4. Locked — faded */
+.tree-node--locked {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 5. Class Unlock — special gradient, larger */
+.tree-node--classUnlock {
+  width: 110px;
+  min-height: 72px;
+  background: linear-gradient(135deg, rgba(200, 100, 255, 0.15), rgba(100, 150, 255, 0.15));
+  border: 2px solid rgba(200, 100, 255, 0.5);
+}
+.tree-node--classUnlock .tree-node__name {
+  font-size: 11px;
+  color: #daf;
+}
+
+/* 6. Recommended — purple glow */
+.tree-node--recommended {
+  box-shadow: 0 0 12px rgba(200, 100, 255, 0.5), 0 0 24px rgba(200, 100, 255, 0.2);
+}
+
+/* Selected state */
+.tree-node--selected {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+/* ── Right Sidebar (220px fixed) ────────────────── */
+
+.skill-trees__right {
+  width: 220px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-y: auto;
+}
+
+/* ── Node Detail Panel ──────────────────────────── */
+
+.node-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.node-detail--empty {
+  color: #666;
+  font-size: 12px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.node-detail__name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #eee;
+}
+
+.node-detail__desc {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.4;
+}
+
+.node-detail__progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8af, #8f8);
+  border-radius: 3px;
+  transition: width 0.2s ease;
+}
+
+.node-detail__pts {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ccc;
+  white-space: nowrap;
+}
+
+/* ── Action Buttons ─────────────────────────────── */
+
+.node-detail__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.node-action-btn {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid;
+}
+
+.node-action-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.node-action-btn--add {
+  background: rgba(100, 200, 100, 0.12);
+  border-color: rgba(100, 200, 100, 0.35);
+  color: #8f8;
+}
+
+.node-action-btn--add:hover:not(:disabled) {
+  background: rgba(100, 200, 100, 0.2);
+}
+
+.node-action-btn--remove {
+  background: rgba(255, 100, 100, 0.1);
+  border-color: rgba(255, 100, 100, 0.3);
+  color: #f88;
+}
+
+.node-action-btn--remove:hover:not(:disabled) {
+  background: rgba(255, 100, 100, 0.18);
+}
+
+/* ── DPS Impact Panel ───────────────────────────── */
+
+.node-detail__impact {
+  background: rgba(100, 200, 100, 0.06);
+  border: 1px solid rgba(100, 200, 100, 0.15);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.impact-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8f8;
+  margin-bottom: 6px;
+}
+
+.impact-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 3px;
+}
+
+.impact-row--diff {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 4px;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.impact-positive {
+  color: #8f8;
+}
+
+.impact-negative {
+  color: #f88;
+}
+
+/* ── Tree Stats Panel ───────────────────────────── */
+
+.tree-stats {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 10px;
+}
+
+.tree-stats__title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.tree-stats__empty {
+  font-size: 11px;
+  color: #555;
+}
+
+.tree-stats__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.tree-stats__label {
+  color: #999;
+}
+
+.tree-stats__value {
+  font-weight: 600;
+  color: #8f8;
+}
+
+/* ── Responsive tweaks ──────────────────────────── */
+
+@media (max-width: 768px) {
+  .skill-trees {
+    flex-direction: column;
+    max-height: none;
+  }
+
+  .skill-trees__left {
+    width: 100%;
+    min-width: unset;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .skill-trees__right {
+    width: 100%;
+    min-width: unset;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .skill-trees__tree-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .skill-trees__build-modes {
+    flex-direction: row;
+    gap: 4px;
+  }
+}

@@ -6,5 +6,6 @@ import './css/dashboard.css';
 import './css/dps-sim.css';
 import './css/gear-planner.css';
 import './css/upgrade-advisor.css';
+import './css/skill-trees.css';
 
 render(<App />, document.getElementById('app'));
