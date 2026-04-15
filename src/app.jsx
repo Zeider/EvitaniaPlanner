@@ -2,6 +2,7 @@ import { TopBar } from './components/TopBar.jsx';
 import { TabNav } from './components/TabNav.jsx';
 import { GearStrip } from './components/GearStrip.jsx';
 import { Dashboard } from './tabs/Dashboard.jsx';
+import { DpsSimulator } from './tabs/DpsSimulator.jsx';
 import { activeTab, theme, lightMode } from './state/store.js';
 
 export function App() {
@@ -11,7 +12,8 @@ export function App() {
       <TabNav />
       <main class="tab-content">
         {activeTab.value === 'dashboard' && <Dashboard />}
-        {activeTab.value !== 'dashboard' && (
+        {activeTab.value === 'dps-simulator' && <DpsSimulator />}
+        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps-simulator' && (
           <div class="placeholder-tab"><p>{activeTab.value} — coming soon</p></div>
         )}
       </main>
