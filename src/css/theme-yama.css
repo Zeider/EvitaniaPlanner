@@ -4,7 +4,7 @@
 */
 
 /* Default = DARK mode (consistent with EvitaniaCalc default) */
-body[data-ui-style="yama"] {
+.theme-yama {
   --bg-page: #020617;
   --bg-shell: #0b1020;
   --shadow-shell: 0 24px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(15,23,42,0.9);
@@ -72,7 +72,7 @@ body[data-ui-style="yama"] {
 }
 
 /* Light mode override — triggered by .light-theme class */
-body[data-ui-style="yama"].light-theme {
+.theme-yama.light-theme {
   --bg-page: radial-gradient(circle at top, #1f2933 0, #020617 60%);
   --bg-shell: #f8fafc;
   --shadow-shell: 0 20px 45px rgba(15,23,42,0.55), 0 0 0 1px rgba(15,23,42,0.3);
@@ -135,19 +135,19 @@ body[data-ui-style="yama"].light-theme {
   --divider-color: #e2e8f0;
 }
 
-body[data-ui-style="yama"] .app-shell {
+.theme-yama .app-shell {
   max-width: 900px;
   background: var(--bg-shell);
   border-radius: 18px;
   box-shadow: var(--shadow-shell);
 }
 
-body[data-ui-style="yama"] .app-header {
+.theme-yama .app-header {
   background: var(--header-gradient);
   padding: 1rem 2rem 0;
 }
 
-body[data-ui-style="yama"] .title-block h1 {
+.theme-yama .title-block h1 {
   font-size: 1.45rem;
   font-weight: 700;
   color: #e5e7eb;
@@ -158,11 +158,11 @@ body[data-ui-style="yama"] .title-block h1 {
   -webkit-text-fill-color: unset;
 }
 
-body[data-ui-style="yama"] .title-block small {
+.theme-yama .title-block small {
   color: rgba(229,231,235,0.8);
 }
 
-body[data-ui-style="yama"] .theme-toggle {
+.theme-yama .theme-toggle {
   padding: 0.2rem 0.65rem;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.35);
@@ -171,23 +171,23 @@ body[data-ui-style="yama"] .theme-toggle {
   font-size: 0.74rem;
 }
 
-body[data-ui-style="yama"] .theme-toggle:hover {
+.theme-yama .theme-toggle:hover {
   background: rgba(15,23,42,0.6);
   border-color: #e5e7eb;
 }
 
-body[data-ui-style="yama"] .theme-toggle:active {
+.theme-yama .theme-toggle:active {
   transform: translateY(1px);
 }
 
-body[data-ui-style="yama"] .header-version {
+.theme-yama .header-version {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   margin-bottom: 0.2rem;
 }
 
-body[data-ui-style="yama"] .version-link {
+.theme-yama .version-link {
   display: inline-block;
   background: rgba(15,23,42,0.25);
   color: var(--header-subtext);
@@ -201,12 +201,12 @@ body[data-ui-style="yama"] .version-link {
   text-decoration: none;
 }
 
-body[data-ui-style="yama"] .version-link:hover {
+.theme-yama .version-link:hover {
   color: #fff;
   border-color: rgba(255,255,255,0.6);
 }
 
-body[data-ui-style="yama"] .header-links {
+.theme-yama .header-links {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -214,33 +214,33 @@ body[data-ui-style="yama"] .header-links {
   padding-left: 0.5rem;
 }
 
-body[data-ui-style="yama"] .github-link,
-body[data-ui-style="yama"] .discord-link {
+.theme-yama .github-link,
+.theme-yama .discord-link {
   color: rgba(255,255,255,0.65);
 }
 
-body[data-ui-style="yama"] .github-link:hover,
-body[data-ui-style="yama"] .discord-link:hover {
+.theme-yama .github-link:hover,
+.theme-yama .discord-link:hover {
   color: #fff;
 }
 
-body[data-ui-style="yama"] .header-author {
+.theme-yama .header-author {
   color: rgba(229,231,235,0.75);
   font-size: 0.72rem;
 }
 
-body[data-ui-style="yama"] .header-author a {
+.theme-yama .header-author a {
   color: var(--header-subtext);
   font-weight: 500;
 }
 
-body[data-ui-style="yama"] .tab-bar {
+.theme-yama .tab-bar {
   display: flex;
   gap: 0.25rem;
   padding: 0 0.5rem;
 }
 
-body[data-ui-style="yama"] .tab-btn {
+.theme-yama .tab-btn {
   padding: 0.55rem 1.5rem;
   border-radius: 10px 10px 0 0;
   border: none;
@@ -253,26 +253,26 @@ body[data-ui-style="yama"] .tab-btn {
   position: static;
 }
 
-body[data-ui-style="yama"] .tab-btn.active {
+.theme-yama .tab-btn.active {
   background: var(--tab-active);
   color: var(--text-main);
 }
 
-body[data-ui-style="yama"] .tab-btn:hover:not(.active) {
+.theme-yama .tab-btn:hover:not(.active) {
   background: rgba(255,255,255,0.2);
   color: #fff;
 }
 
-body[data-ui-style="yama"] .tab-btn::after {
+.theme-yama .tab-btn::after {
   display: none;
 }
 
-body[data-ui-style="yama"] .app-body {
+.theme-yama .app-body {
   padding: 1.5rem 2rem 2rem;
   background: var(--body-bg);
 }
 
-body[data-ui-style="yama"] .card {
+.theme-yama .card {
   background: var(--card-bg);
   border-radius: 14px;
   border: 1px solid var(--card-border);
@@ -281,7 +281,7 @@ body[data-ui-style="yama"] .card {
   transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
 }
 
-body[data-ui-style="yama"] .card-title {
+.theme-yama .card-title {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.11em;
@@ -289,19 +289,19 @@ body[data-ui-style="yama"] .card-title {
   font-weight: 700;
 }
 
-body[data-ui-style="yama"] .btn-primary {
+.theme-yama .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
   box-shadow: none;
 }
 
-body[data-ui-style="yama"] .btn-primary:hover {
+.theme-yama .btn-primary:hover {
   background: var(--btn-primary-hover);
   filter: none;
   box-shadow: none;
 }
 
-body[data-ui-style="yama"] .craft-item {
+.theme-yama .craft-item {
   padding: 0.38rem 0.85rem;
   border-radius: 999px;
   background: var(--craft-bg);
@@ -309,17 +309,17 @@ body[data-ui-style="yama"] .craft-item {
   font-size: 0.82rem;
 }
 
-body[data-ui-style="yama"] .craft-item-qty {
+.theme-yama .craft-item-qty {
   color: var(--text-soft);
 }
 
-body[data-ui-style="yama"] .inventory-table {
+.theme-yama .inventory-table {
   border-collapse: collapse;
   font-size: 0.82rem;
   margin-top: 0.25rem;
 }
 
-body[data-ui-style="yama"] .inventory-table th {
+.theme-yama .inventory-table th {
   text-align: left;
   color: var(--text-soft);
   font-weight: 600;
@@ -330,20 +330,20 @@ body[data-ui-style="yama"] .inventory-table th {
   letter-spacing: 0.07em;
 }
 
-body[data-ui-style="yama"] .inventory-table td {
+.theme-yama .inventory-table td {
   padding: 0.32rem 0.6rem;
   vertical-align: middle;
 }
 
-body[data-ui-style="yama"] .inventory-table tr:not(:last-child) td {
+.theme-yama .inventory-table tr:not(:last-child) td {
   border-bottom: 1px solid rgba(148,163,184,0.08);
 }
 
-body[data-ui-style="yama"] .inventory-table tr:hover td {
+.theme-yama .inventory-table tr:hover td {
   background: var(--table-hover);
 }
 
-body[data-ui-style="yama"] .inv-input {
+.theme-yama .inv-input {
   width: 120px;
   min-width: 120px;
   border-radius: 8px;
@@ -354,14 +354,14 @@ body[data-ui-style="yama"] .inv-input {
   font-size: 0.82rem;
 }
 
-body[data-ui-style="yama"] .by-item-block {
+.theme-yama .by-item-block {
   border: 1px solid var(--card-border);
   border-radius: 12px;
   margin-bottom: 0.85rem;
   overflow: hidden;
 }
 
-body[data-ui-style="yama"] .by-item-header {
+.theme-yama .by-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -373,22 +373,22 @@ body[data-ui-style="yama"] .by-item-header {
   user-select: none;
 }
 
-body[data-ui-style="yama"] .by-item-header:hover {
+.theme-yama .by-item-header:hover {
   background: var(--table-hover);
 }
 
-body[data-ui-style="yama"] .by-item-name {
+.theme-yama .by-item-name {
   font-weight: 700;
   font-size: 0.85rem;
   color: var(--text-main);
   flex: 1;
 }
 
-body[data-ui-style="yama"] .progress-bar-fill {
+.theme-yama .progress-bar-fill {
   background: var(--btn-primary-bg);
 }
 
-body[data-ui-style="yama"] .toast {
+.theme-yama .toast {
   position: fixed;
   bottom: 1.25rem;
   right: 1.25rem;
@@ -406,12 +406,12 @@ body[data-ui-style="yama"] .toast {
   z-index: 999;
 }
 
-body[data-ui-style="yama"] .toast.show {
+.theme-yama .toast.show {
   opacity: 1;
   transform: translateY(0);
 }
 
-body[data-ui-style="yama"] .recipe-list {
+.theme-yama .recipe-list {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -423,7 +423,7 @@ body[data-ui-style="yama"] .recipe-list {
   border: none;
 }
 
-body[data-ui-style="yama"] .recipe-item {
+.theme-yama .recipe-item {
   border-radius: 10px;
   border: 1px solid var(--recipe-border);
   background: var(--recipe-bg);
@@ -435,7 +435,7 @@ body[data-ui-style="yama"] .recipe-item {
   font-size: 0.8rem;
 }
 
-body[data-ui-style="yama"] .view-toggle {
+.theme-yama .view-toggle {
   display: inline-flex;
   border: 1px solid var(--btn-outline-border);
   border-radius: 999px;
@@ -443,7 +443,7 @@ body[data-ui-style="yama"] .view-toggle {
   font-size: 0.74rem;
 }
 
-body[data-ui-style="yama"] .view-btn {
+.theme-yama .view-btn {
   background: transparent;
   border: none;
   padding: 0.25rem 0.85rem;
@@ -454,12 +454,12 @@ body[data-ui-style="yama"] .view-btn {
   transition: background 0.15s, color 0.15s;
 }
 
-body[data-ui-style="yama"] .view-btn.active {
+.theme-yama .view-btn.active {
   background: var(--btn-primary-bg);
   color: #fff;
 }
 
-body[data-ui-style="yama"] .view-btn:hover:not(.active) {
+.theme-yama .view-btn:hover:not(.active) {
   background: rgba(148,163,184,0.1);
   color: var(--text-main);
 }

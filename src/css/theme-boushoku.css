@@ -3,7 +3,7 @@
   Modern glassmorphism design with HSL color harmony
 */
 
-body[data-ui-style="boushoku"] {
+.theme-boushoku {
   /* Color Palette - HSL based for harmony */
   --p-hue: 245; /* Purple/Indigo hue */
   --s-hue: 200; /* Sky/Blue hue */
@@ -42,7 +42,7 @@ body[data-ui-style="boushoku"] {
   --body-bg: var(--card-bg);
 }
 
-body[data-ui-style="boushoku"].light-theme {
+.theme-boushoku.light-theme {
   --bg-page: radial-gradient(circle at 50% 0%, #f7fafc 0%, #edf2f7 100%);
   --bg-shell: rgba(255, 255, 255, 0.95);
   --glass-bg: rgba(255, 255, 255, 0.6);
@@ -67,7 +67,7 @@ body[data-ui-style="boushoku"].light-theme {
   --primary-hover: #4c51bf;
 }
 
-body[data-ui-style="boushoku"] .app-shell {
+.theme-boushoku .app-shell {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 28px;
@@ -75,32 +75,32 @@ body[data-ui-style="boushoku"] .app-shell {
   box-shadow: var(--card-shadow), inset 0 1px 1px hsla(0,0%,100%,0.05);
 }
 
-body[data-ui-style="boushoku"] .app-header {
+.theme-boushoku .app-header {
   background: linear-gradient(to bottom, hsla(var(--p-hue), 50%, 20%, 0.2), transparent);
 }
 
-body[data-ui-style="boushoku"] .title-block h1 {
+.theme-boushoku .title-block h1 {
   background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-body[data-ui-style="boushoku"] .theme-toggle {
+.theme-boushoku .theme-toggle {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   padding: 0.5rem 1rem;
   color: var(--text-main);
 }
 
-body[data-ui-style="boushoku"] .theme-toggle:hover {
+.theme-boushoku .theme-toggle:hover {
   background: var(--primary);
   color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px hsla(var(--p-hue), 70%, 50%, 0.3);
 }
 
-body[data-ui-style="boushoku"] .header-version {
+.theme-boushoku .header-version {
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
@@ -112,24 +112,24 @@ body[data-ui-style="boushoku"] .header-version {
   white-space: nowrap;
 }
 
-body[data-ui-style="boushoku"] .header-links {
+.theme-boushoku .header-links {
   border-left: 1px solid var(--glass-border);
   padding-left: 0.5rem;
 }
 
-body[data-ui-style="boushoku"] .tab-btn {
+.theme-boushoku .tab-btn {
   position: relative;
 }
 
-body[data-ui-style="boushoku"] .tab-btn.active {
+.theme-boushoku .tab-btn.active {
   background: var(--card-bg);
 }
 
-body[data-ui-style="boushoku"] .app-body {
+.theme-boushoku .app-body {
   background: var(--card-bg);
 }
 
-body[data-ui-style="boushoku"] .card {
+.theme-boushoku .card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 20px;
