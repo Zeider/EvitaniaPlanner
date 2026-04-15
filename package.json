@@ -1,0 +1,35 @@
+{
+  "name": "evitaniacalc",
+  "version": "1.0.0",
+  "description": "Item requirement calculator for the game Evitania Online",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zeider/EvitaniaCalc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zeider/EvitaniaCalc/issues"
+  },
+  "homepage": "https://github.com/Zeider/EvitaniaCalc#readme",
+  "dependencies": {
+    "@preact/signals": "^2.9.0",
+    "preact": "^10.29.1"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.5",
+    "vite": "^7.3.2",
+    "vitest": "^3.2.4"
+  }
+}
