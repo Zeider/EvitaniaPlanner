@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { activeTab, theme, lightMode } from './state/store.js';
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -11,10 +11,8 @@ const TABS = [
 ];
 
 export function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-
   return (
-    <div class="app">
+    <div class={`app theme-${theme.value} ${lightMode.value ? 'light-theme' : ''}`}>
       <header class="top-bar">
         <div class="top-bar-left">
           <h1 class="top-bar-title">EvitaniaCalc</h1>
@@ -31,8 +29,8 @@ export function App() {
         {TABS.map((tab) => (
           <button
             key={tab.id}
-            class={`tab-btn${activeTab === tab.id ? ' active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
+            class={`tab-btn${activeTab.value === tab.id ? ' active' : ''}`}
+            onClick={() => activeTab.value = tab.id}
           >
             {tab.label}
           </button>
@@ -41,7 +39,7 @@ export function App() {
 
       <main class="tab-content">
         <div class="placeholder-tab">
-          <h2>{TABS.find((t) => t.id === activeTab)?.label}</h2>
+          <h2>{TABS.find((t) => t.id === activeTab.value)?.label}</h2>
           <p>This tab is under construction.</p>
         </div>
       </main>
