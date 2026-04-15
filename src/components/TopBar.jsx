@@ -38,7 +38,7 @@ export function TopBar() {
   return (
     <header class="top-bar">
       <div class="top-bar-left">
-        <h1 class="top-bar-title">EvitaniaCalc</h1>
+        <h1 class="top-bar-title">EvitaniaPlanner</h1>
         <span class="top-bar-version">v2.0.0</span>
       </div>
       <div class="top-bar-right">

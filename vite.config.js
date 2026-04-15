@@ -5,7 +5,7 @@ const preactPlugins = preact().filter(p => p.name !== 'preact:transform-hook-nam
 
 export default defineConfig({
   plugins: preactPlugins,
-  base: '/EvitaniaCalc/',
+  base: '/EvitaniaPlanner/',
   test: {
     environment: 'jsdom',
   },

@@ -1,7 +1,7 @@
 {
-  "name": "evitaniacalc",
-  "version": "1.0.0",
-  "description": "Item requirement calculator for the game Evitania Online",
+  "name": "evitania-planner",
+  "version": "2.0.0",
+  "description": "All-in-one character planning suite for Evitania Online: Idle RPG",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -14,15 +14,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zeider/EvitaniaCalc.git"
+    "url": "git+https://github.com/Zeider/EvitaniaPlanner.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["evitania", "idle-rpg", "character-planner", "dps-calculator"],
+  "author": "Zeider",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Zeider/EvitaniaCalc/issues"
+    "url": "https://github.com/Zeider/EvitaniaPlanner/issues"
   },
-  "homepage": "https://github.com/Zeider/EvitaniaCalc#readme",
+  "homepage": "https://github.com/Zeider/EvitaniaPlanner#readme",
   "dependencies": {
     "@preact/signals": "^2.9.0",
     "preact": "^10.29.1"
