@@ -8,22 +8,28 @@ import { UpgradeAdvisor } from './tabs/UpgradeAdvisor.jsx';
 import { SkillTrees } from './tabs/SkillTrees.jsx';
 import { Crafting } from './tabs/Crafting.jsx';
 import { RunePlanner } from './tabs/RunePlanner.jsx';
+import { useEffect } from 'preact/hooks';
 import { activeTab, theme, lightMode } from './state/store.js';
 
 export function App() {
+  // Sync theme class onto body so CSS custom properties cascade to body's background
+  useEffect(() => {
+    document.body.className = `theme-${theme.value} ${lightMode.value ? 'light-theme' : ''}`;
+  }, [theme.value, lightMode.value]);
+
   return (
     <div class={`app theme-${theme.value} ${lightMode.value ? 'light-theme' : ''}`}>
       <TopBar />
       <TabNav />
       <main class="tab-content">
         {activeTab.value === 'dashboard' && <Dashboard />}
-        {activeTab.value === 'dps-simulator' && <DpsSimulator />}
+        {activeTab.value === 'dps' && <DpsSimulator />}
         {activeTab.value === 'gear' && <GearPlanner />}
         {activeTab.value === 'advisor' && <UpgradeAdvisor />}
         {activeTab.value === 'skills' && <SkillTrees />}
         {activeTab.value === 'crafting' && <Crafting />}
         {activeTab.value === 'runes' && <RunePlanner />}
-        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps-simulator' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && activeTab.value !== 'skills' && activeTab.value !== 'crafting' && activeTab.value !== 'runes' && (
+        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && activeTab.value !== 'skills' && activeTab.value !== 'crafting' && activeTab.value !== 'runes' && (
           <div class="placeholder-tab"><p>{activeTab.value} — coming soon</p></div>
         )}
       </main>

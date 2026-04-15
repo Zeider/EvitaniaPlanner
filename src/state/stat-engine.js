@@ -181,7 +181,8 @@ export function computeEffectiveDPS(stats, enemy) {
 
   const baseDPS = totalAtk * (1 + atkSpeed / 100);
   const critMultiplier = 1 + (critChance / 100) * (critDmg / 100);
-  const hitRate = Math.min(1.0, accuracy / (accuracy + enemyEvasion));
+  const denom = accuracy + enemyEvasion;
+  const hitRate = denom > 0 ? Math.min(1.0, accuracy / denom) : (accuracy > 0 ? 1.0 : 0);
 
   return baseDPS * critMultiplier * hitRate;
 }
@@ -194,8 +195,10 @@ export function computeEffectiveHP(stats, enemy) {
   const enemyAtk = enemy.atk || 0;
   const totalHP = stats.hp || 0;
 
-  const damageReduction = physDef / (physDef + enemyAtk);
-  return totalHP / (1 - damageReduction);
+  const denom = physDef + enemyAtk;
+  const damageReduction = denom > 0 ? physDef / denom : 0;
+  const divisor = 1 - damageReduction;
+  return divisor > 0 ? totalHP / divisor : totalHP;
 }
 
 /**
@@ -207,9 +210,12 @@ export function computeTimeToDie(stats, enemy) {
   const hp = stats.hp || 0;
   const hpRegen = stats.hpRegen || 0;
 
-  const damageReduction = def / (def + enemyAtk);
+  const denom = def + enemyAtk;
+  const damageReduction = denom > 0 ? def / denom : 0;
   const incomingDPS = enemyAtk * (1 - damageReduction);
-  return hp / Math.max(0.01, incomingDPS - hpRegen);
+  const netDamage = incomingDPS - hpRegen;
+  if (netDamage <= 0) return Infinity; // out-healing the damage
+  return hp / netDamage;
 }
 
 /**

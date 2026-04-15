@@ -7,12 +7,10 @@
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg-page);
-  color: var(--text-main);
+  background: var(--bg-page, #0a0a14);
+  color: var(--text-main, #e0e0ff);
   min-height: 100vh;
-  padding: 2rem 1rem;
-  display: flex; justify-content: center; align-items: flex-start;
-  transition: background var(--transition-normal);
+  padding: 0;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
