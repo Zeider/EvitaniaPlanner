@@ -5,5 +5,6 @@ import './css/components.css';
 import './css/dashboard.css';
 import './css/dps-sim.css';
 import './css/gear-planner.css';
+import './css/upgrade-advisor.css';
 
 render(<App />, document.getElementById('app'));

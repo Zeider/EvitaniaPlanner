@@ -4,6 +4,7 @@ import { GearStrip } from './components/GearStrip.jsx';
 import { Dashboard } from './tabs/Dashboard.jsx';
 import { DpsSimulator } from './tabs/DpsSimulator.jsx';
 import { GearPlanner } from './tabs/GearPlanner.jsx';
+import { UpgradeAdvisor } from './tabs/UpgradeAdvisor.jsx';
 import { activeTab, theme, lightMode } from './state/store.js';
 
 export function App() {
@@ -15,7 +16,8 @@ export function App() {
         {activeTab.value === 'dashboard' && <Dashboard />}
         {activeTab.value === 'dps-simulator' && <DpsSimulator />}
         {activeTab.value === 'gear' && <GearPlanner />}
-        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps-simulator' && activeTab.value !== 'gear' && (
+        {activeTab.value === 'advisor' && <UpgradeAdvisor />}
+        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps-simulator' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && (
           <div class="placeholder-tab"><p>{activeTab.value} — coming soon</p></div>
         )}
       </main>
