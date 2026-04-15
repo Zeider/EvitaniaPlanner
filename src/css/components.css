@@ -27,6 +27,8 @@
 
 /* TopBar additions */
 .btn-import { background: rgba(100,200,100,0.15); border: 1px solid rgba(100,200,100,0.3); color: #8f8; }
+.btn-path { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); color: #666; font-size: 10px; }
+.btn-path:hover { color: #aaa; background: rgba(255,255,255,0.06); }
 .btn-share { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #888; }
 .btn-theme { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #888; }
 .btn-support { background: rgba(255,100,100,0.1); border: 1px solid rgba(255,100,100,0.25); color: #f99; text-decoration: none; display: inline-flex; align-items: center; }
