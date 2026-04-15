@@ -8,6 +8,7 @@ const TABS = [
   { id: 'dps', label: 'DPS Simulator' },
   { id: 'crafting', label: 'Crafting' },
   { id: 'runes', label: 'Rune Planner' },
+  { id: 'alt-advisor', label: 'Alt Advisor' },
 ];
 
 export function TabNav() {
