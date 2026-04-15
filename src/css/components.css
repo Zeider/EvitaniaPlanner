@@ -29,4 +29,6 @@
 .btn-import { background: rgba(100,200,100,0.15); border: 1px solid rgba(100,200,100,0.3); color: #8f8; }
 .btn-share { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #888; }
 .btn-theme { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #888; }
+.btn-support { background: rgba(255,100,100,0.1); border: 1px solid rgba(255,100,100,0.25); color: #f99; text-decoration: none; display: inline-flex; align-items: center; }
+.btn-support:hover { background: rgba(255,100,100,0.2); color: #fbb; }
 .profile-select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc; border-radius: 4px; padding: 4px 8px; font-size: 12px; }

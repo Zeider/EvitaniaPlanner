@@ -63,6 +63,14 @@ export function TopBar() {
         <button class="btn btn-sm btn-theme" onClick={handleThemeToggle}>
           {lightMode.value ? '🌙' : '☀️'}
         </button>
+        <a
+          href="https://ko-fi.com/zeider"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-sm btn-support"
+        >
+          Support
+        </a>
       </div>
     </header>
   );

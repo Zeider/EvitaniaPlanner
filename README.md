@@ -30,6 +30,13 @@ Open `http://localhost:5173/EvitaniaPlanner/` and click **Import Save** to load 
 
 Save file location: `%AppData%/../LocalLow/Fireblast Studios/Evitania Online - Idle RPG/data.sav`
 
+## Support
+
+If this tool saves you time, consider supporting development:
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support-ff5f5f?logo=ko-fi&logoColor=white)](https://ko-fi.com/zeider)
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github-sponsors&logoColor=white)](https://github.com/sponsors/Zeider)
+
 ## Credits
 
 Built on [EvitaniaCalc](https://github.com/FYamauti/EvitaniaCalc) by FYamauti -- the original crafting ingredient calculator for Evitania Online. Game data sourced from the community spreadsheet maintained by DragoHorse, Zerozapper, Rogue, Sakori, and the Evitania Discord community.
