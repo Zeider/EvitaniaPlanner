@@ -7,6 +7,7 @@ import { GearPlanner } from './tabs/GearPlanner.jsx';
 import { UpgradeAdvisor } from './tabs/UpgradeAdvisor.jsx';
 import { SkillTrees } from './tabs/SkillTrees.jsx';
 import { Crafting } from './tabs/Crafting.jsx';
+import { RunePlanner } from './tabs/RunePlanner.jsx';
 import { activeTab, theme, lightMode } from './state/store.js';
 
 export function App() {
@@ -21,7 +22,8 @@ export function App() {
         {activeTab.value === 'advisor' && <UpgradeAdvisor />}
         {activeTab.value === 'skills' && <SkillTrees />}
         {activeTab.value === 'crafting' && <Crafting />}
-        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps-simulator' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && activeTab.value !== 'skills' && activeTab.value !== 'crafting' && (
+        {activeTab.value === 'runes' && <RunePlanner />}
+        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps-simulator' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && activeTab.value !== 'skills' && activeTab.value !== 'crafting' && activeTab.value !== 'runes' && (
           <div class="placeholder-tab"><p>{activeTab.value} — coming soon</p></div>
         )}
       </main>

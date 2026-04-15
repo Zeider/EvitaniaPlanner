@@ -8,5 +8,6 @@ import './css/gear-planner.css';
 import './css/upgrade-advisor.css';
 import './css/skill-trees.css';
 import './css/crafting.css';
+import './css/rune-planner.css';
 
 render(<App />, document.getElementById('app'));
