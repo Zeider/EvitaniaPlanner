@@ -1,3 +1,8 @@
 node_modules/
 dist/
 .superpowers/
+docs/superpowers/
+*.log
+.env
+.DS_Store
+Thumbs.db
