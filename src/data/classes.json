@@ -1,0 +1,70 @@
+{
+  "starter": {
+    "name": "Starter",
+    "primaryStat": null,
+    "stats": {
+      "hp": 5,
+      "def": 1,
+      "atk": 4,
+      "atkPercent": 0,
+      "atkSpeed": 0,
+      "critChance": 0,
+      "critDamage": 0,
+      "mana": 0,
+      "manaRegen": 0,
+      "magicFind": 5,
+      "bonusXp": 5
+    }
+  },
+  "warrior": {
+    "name": "Warrior",
+    "primaryStat": "str",
+    "stats": {
+      "hp": 45,
+      "def": 38,
+      "atk": 10,
+      "atkPercent": 10,
+      "atkSpeed": 15,
+      "critChance": 15,
+      "critDamage": 30,
+      "mana": 25,
+      "manaRegen": 5,
+      "magicFind": 15,
+      "bonusXp": 50
+    }
+  },
+  "rogue": {
+    "name": "Rogue",
+    "primaryStat": "dex",
+    "stats": {
+      "hp": 35,
+      "def": 25,
+      "atk": 14,
+      "atkPercent": 15,
+      "atkSpeed": 20,
+      "critChance": 20,
+      "critDamage": 40,
+      "mana": 25,
+      "manaRegen": 5,
+      "magicFind": 20,
+      "bonusXp": 0
+    }
+  },
+  "mage": {
+    "name": "Mage",
+    "primaryStat": "int",
+    "stats": {
+      "hp": 25,
+      "def": 17,
+      "atk": 12,
+      "atkPercent": 10,
+      "atkSpeed": 10,
+      "critChance": 10,
+      "critDamage": 20,
+      "mana": 75,
+      "manaRegen": 14,
+      "magicFind": 30,
+      "bonusXp": 75
+    }
+  }
+}

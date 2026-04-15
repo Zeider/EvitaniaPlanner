@@ -1,0 +1,17 @@
+[
+  { "id": "act-2-sacrifice-0", "name": "Cutting Edge Technology", "soul": "Mammoth", "costItem": "Icy Needle", "stat": "wcPower", "perRank": 0.14, "maxRank": 30, "maxTotal": 4.20, "isMultiplier": true },
+  { "id": "act-2-sacrifice-1", "name": "Attack Wish", "soul": "Mammoth", "costItem": "Helmet", "stat": "atk", "perRank": 0.09, "maxRank": 30, "maxTotal": 2.70, "isMultiplier": true },
+  { "id": "act-2-sacrifice-2", "name": "Wish for Luck", "soul": "Mammoth", "costItem": "Iceghost Doll", "stat": "critChance", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },
+  { "id": "act-2-sacrifice-3", "name": "Food Donation", "soul": "Mammoth", "costItem": "Distinguished Glasses", "stat": "hp", "perRank": 0.08, "maxRank": 30, "maxTotal": 2.40, "isMultiplier": true },
+  { "id": "act-2-sacrifice-4", "name": "Wish for Fuel", "soul": "Mammoth", "costItem": "Ironwood Logs", "stat": "wcMultiloot", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },
+  { "id": "act-2-sacrifice-5", "name": "Mining Edge Technology", "soul": "Jotunn", "costItem": "Nut", "stat": "miningPower", "perRank": 0.14, "maxRank": 30, "maxTotal": 4.20, "isMultiplier": true },
+  { "id": "act-2-sacrifice-6", "name": "Wish for Knowledge", "soul": "Jotunn", "costItem": "Pocketwatch", "stat": "xp", "perRank": 0.07, "maxRank": 30, "maxTotal": 2.10, "isMultiplier": true },
+  { "id": "act-2-sacrifice-7", "name": "Wish for Hardness", "soul": "Jotunn", "costItem": "Carrot", "stat": "def", "perRank": 0.09, "maxRank": 30, "maxTotal": 2.70, "isMultiplier": true },
+  { "id": "act-2-sacrifice-8", "name": "Wish for Speed", "soul": "Jotunn", "costItem": "Troll Idol", "stat": "atkSpeed", "perRank": 1, "maxRank": 30, "maxTotal": 10, "isMultiplier": false },
+  { "id": "act-2-sacrifice-9", "name": "Wish for Stones", "soul": "Jotunn", "costItem": "Thorium Ore", "stat": "miningMultiloot", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },
+  { "id": "act-2-sacrifice-10", "name": "Wish for Bars", "soul": "Maevath", "costItem": "Monocle", "stat": "smelterySpeed", "perRank": 5, "maxRank": 30, "maxTotal": 150, "isMultiplier": false },
+  { "id": "act-2-sacrifice-11", "name": "Pray for Luck", "soul": "Maevath", "costItem": "Slightly Damaged Glass", "stat": "critDamage", "perRank": 3, "maxRank": 30, "maxTotal": 90, "isMultiplier": false },
+  { "id": "act-2-sacrifice-12", "name": "Wish for Wisdom", "soul": "Maevath", "costItem": "Matryoshka Doll", "stat": "xpMulti", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },
+  { "id": "act-2-sacrifice-13", "name": "Wish for Riches", "soul": "Maevath", "costItem": "Spearhead", "stat": "magicFind", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },
+  { "id": "act-2-sacrifice-14", "name": "Wish for Gold", "soul": "Maevath", "costItem": "Yellow Substance", "stat": "goldMulti", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false }
+]

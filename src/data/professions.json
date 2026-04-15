@@ -1,0 +1,50 @@
+{
+  "mining": {
+    "description": "Mining profession talent tree",
+    "nodes": [
+      { "id": "profession_mining_0_0", "name": "Mining Power I", "stat": "miningPower", "perPoint": 1, "maxPoints": 3, "row": 0, "col": 0 },
+      { "id": "profession_mining_0_1", "name": "Mining Power II", "stat": "miningPower", "perPoint": 2, "maxPoints": 2, "row": 0, "col": 1 },
+      { "id": "profession_mining_1_0", "name": "Mining Power III", "stat": "miningPower", "perPoint": 5, "maxPoints": 5, "row": 1, "col": 0 },
+      { "id": "profession_mining_1_1", "name": "Mining Power +10%", "stat": "miningPowerPercent", "perPoint": 10, "maxPoints": 3, "row": 1, "col": 1 },
+      { "id": "profession_mining_1_2", "name": "Mining Power +10% II", "stat": "miningPowerPercent", "perPoint": 10, "maxPoints": 4, "row": 1, "col": 2 },
+      { "id": "profession_mining_2_0", "name": "Mining Proficiency I", "stat": "miningProficiency", "perPoint": 1, "maxPoints": 2, "row": 2, "col": 0 },
+      { "id": "profession_mining_2_1", "name": "Mining Proficiency II", "stat": "miningProficiency", "perPoint": 1, "maxPoints": 5, "row": 2, "col": 1 },
+      { "id": "profession_mining_3_0", "name": "Mining Multiloot I", "stat": "miningMultiloot", "perPoint": 10, "maxPoints": 2, "row": 3, "col": 0 },
+      { "id": "profession_mining_3_1", "name": "Mining Multiloot II", "stat": "miningMultiloot", "perPoint": 10, "maxPoints": 5, "row": 3, "col": 1 },
+      { "id": "profession_mining_4_0", "name": "Mining Crit Chance I", "stat": "miningCritChance", "perPoint": 4, "maxPoints": 3, "row": 4, "col": 0 },
+      { "id": "profession_mining_4_1", "name": "Mining Crit Chance II", "stat": "miningCritChance", "perPoint": 6, "maxPoints": 4, "row": 4, "col": 1 },
+      { "id": "profession_mining_5_0", "name": "Mining Crit Damage I", "stat": "miningCritDamage", "perPoint": 4, "maxPoints": 4, "row": 5, "col": 0 },
+      { "id": "profession_mining_5_1", "name": "Mining Crit Damage II", "stat": "miningCritDamage", "perPoint": 12, "maxPoints": 5, "row": 5, "col": 1 },
+      { "id": "profession_mining_6_0", "name": "Mining Speed I", "stat": "miningSpeed", "perPoint": 2, "maxPoints": 4, "row": 6, "col": 0 },
+      { "id": "profession_mining_6_1", "name": "Mining Speed II", "stat": "miningSpeed", "perPoint": 4, "maxPoints": 5, "row": 6, "col": 1 },
+      { "id": "profession_mining_7_0", "name": "Mining XP I", "stat": "miningXp", "perPoint": 10, "maxPoints": 4, "row": 7, "col": 0 },
+      { "id": "profession_mining_7_1", "name": "Mining XP II", "stat": "miningXp", "perPoint": 20, "maxPoints": 8, "row": 7, "col": 1 },
+      { "id": "profession_mining_8_0", "name": "Mining Damage I", "stat": "miningDamagePerLevel", "perPoint": 0.15, "maxPoints": 2, "row": 8, "col": 0 },
+      { "id": "profession_mining_8_1", "name": "Mining Damage II", "stat": "miningDamagePerLevel", "perPoint": 0.2, "maxPoints": 5, "row": 8, "col": 1 }
+    ]
+  },
+  "woodcutting": {
+    "description": "Woodcutting profession talent tree",
+    "nodes": [
+      { "id": "profession_woodcutting_0_0", "name": "WC Power I", "stat": "wcPower", "perPoint": 1, "maxPoints": 3, "row": 0, "col": 0 },
+      { "id": "profession_woodcutting_0_1", "name": "WC Power II", "stat": "wcPower", "perPoint": 2, "maxPoints": 2, "row": 0, "col": 1 },
+      { "id": "profession_woodcutting_1_0", "name": "WC Power III", "stat": "wcPower", "perPoint": 5, "maxPoints": 5, "row": 1, "col": 0 },
+      { "id": "profession_woodcutting_1_1", "name": "WC Power +10%", "stat": "wcPowerPercent", "perPoint": 10, "maxPoints": 3, "row": 1, "col": 1 },
+      { "id": "profession_woodcutting_1_2", "name": "WC Power +10% II", "stat": "wcPowerPercent", "perPoint": 10, "maxPoints": 4, "row": 1, "col": 2 },
+      { "id": "profession_woodcutting_2_0", "name": "WC Proficiency I", "stat": "wcProficiency", "perPoint": 1, "maxPoints": 2, "row": 2, "col": 0 },
+      { "id": "profession_woodcutting_2_1", "name": "WC Proficiency II", "stat": "wcProficiency", "perPoint": 1, "maxPoints": 5, "row": 2, "col": 1 },
+      { "id": "profession_woodcutting_3_0", "name": "WC Multiloot I", "stat": "wcMultiloot", "perPoint": 10, "maxPoints": 2, "row": 3, "col": 0 },
+      { "id": "profession_woodcutting_3_1", "name": "WC Multiloot II", "stat": "wcMultiloot", "perPoint": 10, "maxPoints": 5, "row": 3, "col": 1 },
+      { "id": "profession_woodcutting_4_0", "name": "WC Crit Chance I", "stat": "wcCritChance", "perPoint": 4, "maxPoints": 3, "row": 4, "col": 0 },
+      { "id": "profession_woodcutting_4_1", "name": "WC Crit Chance II", "stat": "wcCritChance", "perPoint": 6, "maxPoints": 4, "row": 4, "col": 1 },
+      { "id": "profession_woodcutting_5_0", "name": "WC Crit Damage I", "stat": "wcCritDamage", "perPoint": 4, "maxPoints": 4, "row": 5, "col": 0 },
+      { "id": "profession_woodcutting_5_1", "name": "WC Crit Damage II", "stat": "wcCritDamage", "perPoint": 12, "maxPoints": 5, "row": 5, "col": 1 },
+      { "id": "profession_woodcutting_6_0", "name": "WC Speed I", "stat": "wcSpeed", "perPoint": 2, "maxPoints": 4, "row": 6, "col": 0 },
+      { "id": "profession_woodcutting_6_1", "name": "WC Speed II", "stat": "wcSpeed", "perPoint": 4, "maxPoints": 5, "row": 6, "col": 1 },
+      { "id": "profession_woodcutting_7_0", "name": "WC XP I", "stat": "wcXp", "perPoint": 10, "maxPoints": 4, "row": 7, "col": 0 },
+      { "id": "profession_woodcutting_7_1", "name": "WC XP II", "stat": "wcXp", "perPoint": 20, "maxPoints": 8, "row": 7, "col": 1 },
+      { "id": "profession_woodcutting_8_0", "name": "WC Damage I", "stat": "wcDamagePerLevel", "perPoint": 0.15, "maxPoints": 2, "row": 8, "col": 0 },
+      { "id": "profession_woodcutting_8_1", "name": "WC Damage II", "stat": "wcDamagePerLevel", "perPoint": 0.2, "maxPoints": 5, "row": 8, "col": 1 }
+    ]
+  }
+}

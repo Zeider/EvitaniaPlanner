@@ -1,0 +1,150 @@
+{
+  "families": [
+    {
+      "name": "Iceboar-Yeti",
+      "source": "Act 2 zones 2.1-2.6",
+      "stat": "wcPower",
+      "statLabel": "WC Power",
+      "tiers": {
+        "t1": { "rune": "NIL", "value": 10 },
+        "t2": { "rune": "DOT", "value": 18 },
+        "t3": { "rune": "WIR", "value": 24 },
+        "t4": { "rune": "GRO", "value": 30 }
+      }
+    },
+    {
+      "name": "Ratatoskr-Troll",
+      "source": "Act 2 zones 2.7-2.8",
+      "stat": "miningPower",
+      "statLabel": "Mining Power",
+      "tiers": {
+        "t1": { "rune": "FUS", "value": 10 },
+        "t2": { "rune": "YIT", "value": 18 },
+        "t3": { "rune": "SKO", "value": 24 },
+        "t4": { "rune": "MIN", "value": 30 }
+      }
+    },
+    {
+      "name": "Penguin-Draugr",
+      "source": "Act 2 zones 2.9-2.12",
+      "stat": "goldMulti",
+      "statLabel": "Gold Multi",
+      "tiers": {
+        "t1": { "rune": "MU", "value": 1 },
+        "t2": { "rune": "RO", "value": 2 },
+        "t3": { "rune": "FON", "value": 4 },
+        "t4": { "rune": "FAL", "value": 5 }
+      }
+    },
+    {
+      "name": "Act 2 Bosses",
+      "source": "Act 2 boss drops",
+      "stat": "allExp",
+      "statLabel": "All EXP",
+      "tiers": {
+        "t1": { "rune": "HAS", "value": 1 },
+        "t2": { "rune": "OLU", "value": 2 },
+        "t3": { "rune": "SUR", "value": 4 },
+        "t4": { "rune": "TYR", "value": 5 }
+      }
+    },
+    {
+      "name": "Sunboy-Kangaroo",
+      "source": "Act 3 zones 3.1-3.4",
+      "stat": "hp",
+      "statLabel": "HP",
+      "tiers": {
+        "t1": { "rune": "GOR", "value": 22 },
+        "t2": { "rune": "BOL", "value": 44 },
+        "t3": { "rune": "TES", "value": 88 },
+        "t4": { "rune": "WAR", "value": 110 }
+      }
+    },
+    {
+      "name": "Ironwood",
+      "source": "Ironwood tree drops",
+      "stat": "atk",
+      "statLabel": "Attack",
+      "tiers": {
+        "t1": { "rune": "RYS", "value": 15 },
+        "t2": { "rune": "LUM", "value": 27 },
+        "t3": { "rune": "ORT", "value": 36 },
+        "t4": { "rune": "VEX", "value": 45 }
+      }
+    },
+    {
+      "name": "Thorium Ore",
+      "source": "Thorium ore drops",
+      "stat": "critDamage",
+      "statLabel": "Crit Damage",
+      "tiers": {
+        "t1": { "rune": "WOM", "value": 5 },
+        "t2": { "rune": "SIRC", "value": 9 },
+        "t3": { "rune": "APEX", "value": 12 },
+        "t4": { "rune": "BEB", "value": 15 }
+      }
+    },
+    {
+      "name": "Act 1 Hard",
+      "source": "Act 1 Hard mode drops",
+      "stat": "physDef",
+      "statLabel": "Phys DEF",
+      "tiers": {
+        "t1": { "rune": "KI", "value": 4 },
+        "t2": { "rune": "WER", "value": 8 },
+        "t3": { "rune": "ANG", "value": 16 },
+        "t4": { "rune": "YUR", "value": 20 }
+      }
+    },
+    {
+      "name": "Shop",
+      "source": "Shop purchase",
+      "stat": "special",
+      "statLabel": "MF +2, Offline +2%, ATK +30",
+      "tiers": {
+        "t1": { "rune": "PRE", "value": null }
+      }
+    }
+  ],
+  "mergeRatios": {
+    "t1ToT2": { "required": 6, "chance": 100 },
+    "t2ToT3": { "required": 9, "chance": 100 },
+    "t3ToT4": { "required": 9, "chance": 100 }
+  },
+  "t1Equivalents": {
+    "t1": 1,
+    "t2": 6,
+    "t3": 54,
+    "t4": 486
+  },
+  "runeWords": [
+    {
+      "runes": ["GOR", "MU", "HAS"],
+      "bonuses": { "hp": 200, "allExp": 10, "portalKills": 2 }
+    },
+    {
+      "runes": ["APEX", "SIRC", "WER"],
+      "bonuses": { "critChance": 10, "critDamage": 60, "magicFind": 5 }
+    },
+    {
+      "runes": ["TYR", "SUR", "VEX", "LUM"],
+      "bonuses": { "allXp": 50, "atk": 300, "offline": 5 }
+    },
+    {
+      "runes": ["FAL", "FAL", "TES", "WAR"],
+      "bonuses": { "goldMulti": 50, "hp": 400, "magicFind": 10 }
+    },
+    {
+      "runes": ["DOT", "WIR", "YUR", "SKO"],
+      "bonuses": { "miningPower": 100, "wcPower": 100, "multiloot": 40 }
+    },
+    {
+      "runes": ["WAR", "YUR", "GRO", "MIN", "TYR", "FAL"],
+      "bonuses": { "offline": 10, "atkMulti": 1.5, "magicFind": 20 }
+    },
+    {
+      "runes": ["PRE", "PRE", "PRE", "PRE", "PRE", "PRE"],
+      "bonuses": { "magicFind": 20, "offline": 20, "atk": 200, "portalKills": 2 }
+    }
+  ]
+}

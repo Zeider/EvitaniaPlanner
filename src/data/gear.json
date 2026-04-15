@@ -1,0 +1,580 @@
+{
+  "weapons": {
+    "swords": [
+      {
+        "name": "Wooden Sword",
+        "slot": "weapon",
+        "subtype": "sword",
+        "atk": 15,
+        "stats": { "str": 2, "atkSpeed": 2 },
+        "source": "Starter",
+        "obtainable": true
+      },
+      {
+        "name": "Copper Sword",
+        "slot": "weapon",
+        "subtype": "sword",
+        "atk": 30,
+        "stats": { "str": 4, "atkSpeed": 4, "accuracy": 12, "critDamage": 15 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Sword"
+      },
+      {
+        "name": "Essence Sword",
+        "slot": "weapon",
+        "subtype": "sword",
+        "atk": 45,
+        "stats": { "str": 10, "atkSpeed": 10, "accuracy": 30, "critChance": 5 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Essence Sword"
+      },
+      {
+        "name": "Steel Sword",
+        "slot": "weapon",
+        "subtype": "sword",
+        "atk": 70,
+        "stats": { "str": 14, "atkSpeed": 14, "accuracy": 49, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Sword"
+      },
+      {
+        "name": "Thorium Sword",
+        "slot": "weapon",
+        "subtype": "sword",
+        "atk": 140,
+        "stats": { "str": 44, "atkSpeed": 24, "accuracy": 80, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Sword"
+      },
+      {
+        "name": "Infinite Sword I",
+        "slot": "weapon",
+        "subtype": "sword",
+        "atk": 161,
+        "stats": { "str": 66, "atkSpeed": 30, "critDamage": 35, "magicFind": 15 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true
+      }
+    ],
+    "longswords": [
+      {
+        "name": "Steel Longsword",
+        "slot": "weapon",
+        "subtype": "longsword",
+        "atk": 60,
+        "stats": { "str": 25, "atkSpeed": 10, "accuracy": 49, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Longsword"
+      },
+      {
+        "name": "Thorium Longsword",
+        "slot": "weapon",
+        "subtype": "longsword",
+        "atk": 107,
+        "stats": { "str": 55, "atkSpeed": 30, "accuracy": 80, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Longsword"
+      },
+      {
+        "name": "Infinite Longsword I",
+        "slot": "weapon",
+        "subtype": "longsword",
+        "atk": 161,
+        "stats": { "str": 66, "atkSpeed": 30, "critDamage": 35, "magicFind": 15 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true,
+        "recipe": "Infinite Longsword I"
+      },
+      {
+        "name": "Sunstone Longsword",
+        "slot": "weapon",
+        "subtype": "longsword",
+        "atk": 221,
+        "stats": { "str": 77, "atkSpeed": 30, "accuracy": 80, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Longsword"
+      }
+    ],
+    "bows": [
+      {
+        "name": "Copper Bow",
+        "slot": "weapon",
+        "subtype": "bow",
+        "atk": 25,
+        "stats": { "dex": 9, "atkSpeed": 10, "accuracy": 20, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Bow"
+      },
+      {
+        "name": "Steel Bow",
+        "slot": "weapon",
+        "subtype": "bow",
+        "atk": 62,
+        "stats": { "dex": 21, "atkSpeed": 20, "accuracy": 49, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Bow"
+      },
+      {
+        "name": "Thorium Bow",
+        "slot": "weapon",
+        "subtype": "bow",
+        "atk": 114,
+        "stats": { "dex": 41, "atkSpeed": 41, "accuracy": 80, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Bow"
+      },
+      {
+        "name": "Infinite Bow I",
+        "slot": "weapon",
+        "subtype": "bow",
+        "atk": 171,
+        "stats": { "dex": 50, "atkSpeed": 40, "critDamage": 35, "magicFind": 15 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true,
+        "recipe": "Infinite Bow I"
+      },
+      {
+        "name": "Sunstone Bow",
+        "slot": "weapon",
+        "subtype": "bow",
+        "atk": 225,
+        "stats": { "dex": 62, "atkSpeed": 40, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Bow"
+      }
+    ],
+    "staffs": [
+      {
+        "name": "Copper Staff",
+        "slot": "weapon",
+        "subtype": "staff",
+        "atk": 30,
+        "stats": { "int": 6, "men": 6, "accuracy": 20, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Staff"
+      },
+      {
+        "name": "Steel Staff",
+        "slot": "weapon",
+        "subtype": "staff",
+        "atk": 70,
+        "stats": { "int": 14, "men": 14, "accuracy": 49, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Staff"
+      },
+      {
+        "name": "Thorium Staff",
+        "slot": "weapon",
+        "subtype": "staff",
+        "atk": 140,
+        "stats": { "int": 45, "men": 70, "accuracy": 80, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Staff"
+      },
+      {
+        "name": "Infinite Staff I",
+        "slot": "weapon",
+        "subtype": "staff",
+        "atk": 210,
+        "stats": { "int": 54, "men": 70, "critDamage": 35, "magicFind": 15 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true,
+        "recipe": "Infinite Staff I"
+      },
+      {
+        "name": "Sunstone Staff",
+        "slot": "weapon",
+        "subtype": "staff",
+        "atk": 275,
+        "stats": { "int": 65, "men": 100, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Staff"
+      }
+    ]
+  },
+  "armor": {
+    "helmets": [
+      {
+        "name": "Copper Helmet",
+        "slot": "helmet",
+        "def": 17,
+        "stats": { "str": 4, "dex": 4, "int": 4, "con": 4, "men": 4, "accuracy": 40 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Helmet"
+      },
+      {
+        "name": "Bronze Helmet",
+        "slot": "helmet",
+        "def": 25,
+        "stats": { "str": 15, "dex": 15, "int": 15, "con": 25, "men": 15, "accuracy": 65 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Bronze Helmet"
+      },
+      {
+        "name": "Iron Helmet",
+        "slot": "helmet",
+        "def": 36,
+        "stats": { "str": 25, "dex": 25, "int": 25, "con": 45, "men": 25, "accuracy": 90 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Helmet"
+      },
+      {
+        "name": "Thorium Helmet",
+        "slot": "helmet",
+        "def": 50,
+        "stats": { "str": 30, "dex": 30, "int": 30, "con": 30, "men": 30, "accuracy": 120 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Helmet"
+      },
+      {
+        "name": "Infinite Helmet I",
+        "slot": "helmet",
+        "def": 100,
+        "stats": { "str": 40, "dex": 40, "int": 40, "con": 40, "men": 40, "magicFind": 10 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true,
+        "recipe": "Infinite Helmet I"
+      },
+      {
+        "name": "Sunstone Helmet",
+        "slot": "helmet",
+        "def": 100,
+        "stats": { "str": 50, "dex": 50, "int": 50, "con": 50, "men": 50 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Helmet"
+      }
+    ],
+    "chestplates": [
+      {
+        "name": "Copper Chestplate",
+        "slot": "chest",
+        "def": 17,
+        "stats": { "str": 4, "dex": 4, "int": 4, "con": 4, "men": 4, "hp": 25 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Chestplate"
+      },
+      {
+        "name": "Bronze Chestplate",
+        "slot": "chest",
+        "def": 25,
+        "stats": { "str": 15, "dex": 15, "int": 15, "con": 25, "men": 15, "hp": 120 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Bronze Chestplate"
+      },
+      {
+        "name": "Iron Chestplate",
+        "slot": "chest",
+        "def": 36,
+        "stats": { "str": 25, "dex": 25, "int": 25, "con": 45, "men": 25, "hp": 240 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Chestplate"
+      },
+      {
+        "name": "Thorium Chestplate",
+        "slot": "chest",
+        "def": 50,
+        "stats": { "str": 30, "dex": 30, "int": 30, "con": 30, "men": 30, "hp": 400 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Chestplate"
+      },
+      {
+        "name": "Infinite Chestplate I",
+        "slot": "chest",
+        "def": 80,
+        "stats": { "str": 40, "dex": 40, "int": 40, "con": 40, "men": 40, "hp": 700, "magicFind": 5 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true,
+        "recipe": "Infinite Chestplate I"
+      },
+      {
+        "name": "Sunstone Chestplate",
+        "slot": "chest",
+        "def": 100,
+        "stats": { "str": 50, "dex": 50, "int": 50, "con": 50, "men": 50, "hp": 800 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Chestplate"
+      }
+    ],
+    "gloves": [
+      {
+        "name": "Copper Gloves",
+        "slot": "gloves",
+        "def": 12,
+        "stats": { "str": 3, "dex": 3, "int": 3, "men": 6, "con": 7, "hp": 15 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Gloves"
+      },
+      {
+        "name": "Bronze Gloves",
+        "slot": "gloves",
+        "def": 25,
+        "stats": { "str": 15, "dex": 15, "int": 15, "con": 25, "men": 15, "accuracy": 30 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Bronze Gloves"
+      },
+      {
+        "name": "Iron Gloves",
+        "slot": "gloves",
+        "def": 36,
+        "stats": { "str": 25, "dex": 25, "int": 25, "con": 45, "men": 25, "accuracy": 60 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Gloves"
+      },
+      {
+        "name": "Thorium Gloves",
+        "slot": "gloves",
+        "def": 50,
+        "stats": { "str": 30, "dex": 30, "int": 30, "con": 30, "men": 30, "accuracy": 90 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Gloves"
+      },
+      {
+        "name": "Infinite Gloves I",
+        "slot": "gloves",
+        "def": 70,
+        "stats": { "str": 40, "dex": 40, "int": 40, "con": 40, "men": 40, "magicFind": 5 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true,
+        "recipe": "Infinite Gloves I"
+      },
+      {
+        "name": "Sunstone Gloves",
+        "slot": "gloves",
+        "def": 100,
+        "stats": { "str": 50, "dex": 50, "int": 50, "con": 50, "men": 50 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Gloves"
+      }
+    ],
+    "boots": [
+      {
+        "name": "Copper Boots",
+        "slot": "boots",
+        "def": 17,
+        "stats": { "str": 5, "dex": 5, "int": 5, "con": 5, "men": 5, "accuracy": 15, "moveSpeed": 4 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Boots"
+      },
+      {
+        "name": "Bronze Boots",
+        "slot": "boots",
+        "def": 25,
+        "stats": { "str": 15, "dex": 15, "int": 15, "con": 15, "men": 15, "moveSpeed": 8 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Bronze Boots"
+      },
+      {
+        "name": "Iron Boots",
+        "slot": "boots",
+        "def": 36,
+        "stats": { "str": 25, "dex": 25, "int": 25, "con": 25, "men": 25, "moveSpeed": 9 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Boots"
+      },
+      {
+        "name": "Thorium Boots",
+        "slot": "boots",
+        "def": 50,
+        "stats": { "str": 30, "dex": 30, "int": 30, "con": 30, "men": 30, "moveSpeed": 50 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Boots"
+      },
+      {
+        "name": "Infinite Boots I",
+        "slot": "boots",
+        "def": 70,
+        "stats": { "str": 40, "dex": 40, "int": 40, "con": 40, "men": 40, "moveSpeed": 15, "magicFind": 5 },
+        "source": "Hard Mode Crafted",
+        "obtainable": true,
+        "recipe": "Infinite Boots I"
+      },
+      {
+        "name": "Sunstone Boots",
+        "slot": "boots",
+        "def": 100,
+        "stats": { "str": 50, "dex": 50, "int": 50, "con": 50, "men": 50, "moveSpeed": 10 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Boots"
+      }
+    ]
+  },
+  "accessories": {
+    "rings": [
+      {
+        "name": "Tower Ring",
+        "slot": "ring",
+        "stats": { "magicDef": 10, "physDef": 10, "critChance": 2, "critDamage": 20 },
+        "source": "Act 1 Boss Drop",
+        "obtainable": true
+      },
+      {
+        "name": "Mammoth Ring",
+        "slot": "ring",
+        "stats": { "atk": 30, "magicDef": 10, "atkSpeed": 10, "critDamage": 30 },
+        "source": "Ice Mammoth Drop",
+        "obtainable": true
+      },
+      {
+        "name": "Ashen Ring",
+        "slot": "ring",
+        "stats": { "atk": 50, "atkSpeed": 12, "offline": 3 },
+        "source": "Ash Shop",
+        "obtainable": true
+      },
+      {
+        "name": "Steam Ring",
+        "slot": "ring",
+        "stats": { "atk": 50, "offline": 3, "allXp": 10 },
+        "source": "Steam Shop",
+        "obtainable": true
+      }
+    ],
+    "amulets": [
+      {
+        "name": "Boss Amulet",
+        "slot": "amulet",
+        "stats": { "atk": 50, "physDef": 10, "accuracy": 10, "men": 10, "critDamage": 30 },
+        "source": "Boss Drop",
+        "obtainable": true
+      },
+      {
+        "name": "Nordic Amulet",
+        "slot": "amulet",
+        "stats": { "atk": 40, "magicDef": 70, "accuracy": 30, "moveSpeed": 5, "critChance": 7 },
+        "source": "Act 2 Drop",
+        "obtainable": true
+      }
+    ],
+    "belts": [
+      {
+        "name": "Steel Belt",
+        "slot": "belt",
+        "stats": { "mobSpawn": -5, "accuracy": 60, "hpRegen": 1, "magicFind": 10 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Belt"
+      }
+    ]
+  },
+  "tools": {
+    "pickaxes": [
+      {
+        "name": "Copper Pickaxe",
+        "slot": "pickaxe",
+        "stats": { "miningPower": 3 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Pickaxe"
+      },
+      {
+        "name": "Bronze Pickaxe",
+        "slot": "pickaxe",
+        "stats": { "miningPower": 10 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Bronze Pickaxe"
+      },
+      {
+        "name": "Iron Pickaxe",
+        "slot": "pickaxe",
+        "stats": { "miningPower": 60, "atk": 1 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Pickaxe"
+      },
+      {
+        "name": "Thorium Pickaxe",
+        "slot": "pickaxe",
+        "stats": { "miningPower": 80, "atk": 5 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Pickaxe"
+      },
+      {
+        "name": "Sunstone Pickaxe",
+        "slot": "pickaxe",
+        "stats": { "miningPower": 177, "miningPowerPercent": 30 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Pickaxe"
+      }
+    ],
+    "axes": [
+      {
+        "name": "Copper Axe",
+        "slot": "axe",
+        "stats": { "wcPower": 3 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Copper Axe"
+      },
+      {
+        "name": "Bronze Axe",
+        "slot": "axe",
+        "stats": { "wcPower": 8 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Bronze Axe"
+      },
+      {
+        "name": "Iron Axe",
+        "slot": "axe",
+        "stats": { "wcPower": 63, "con": 1 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Axe"
+      },
+      {
+        "name": "Thorium Axe",
+        "slot": "axe",
+        "stats": { "wcPower": 90, "con": 5 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Thorium Axe"
+      },
+      {
+        "name": "Sunstone Axe",
+        "slot": "axe",
+        "stats": { "wcPower": 182, "wcPowerPercent": 30 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Sunstone Axe"
+      }
+    ]
+  }
+}
