@@ -1,0 +1,346 @@
+/*
+  GEAR PLANNER TAB
+  Slot selector row + three-column comparison layout
+*/
+
+.gear-planner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* ── Slot Selector Row ───────────────────────────── */
+.gp-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.gp-slots__btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s);
+}
+
+.gp-slots__btn:hover {
+  border-color: var(--primary, #6366f1);
+  color: var(--text-main);
+}
+
+.gp-slots__btn--active {
+  background: var(--primary, #6366f1);
+  border-color: var(--primary, #6366f1);
+  color: #fff;
+  box-shadow: 0 0 12px hsla(var(--p-hue, 240), 70%, 65%, 0.35);
+}
+
+/* ── Three-Column Comparison ─────────────────────── */
+.gp-compare {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.gp-col {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  min-height: 200px;
+}
+
+.gp-col__title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* ── Item Info Card ──────────────────────────────── */
+.gp-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gp-item-info__name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.gp-item-info__source {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.gp-item-info__subtype {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.gp-item-info__primary {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary, #6366f1);
+}
+
+.gp-item-info__enhance {
+  display: inline-block;
+  background: var(--primary, #6366f1);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+/* ── Stat List ───────────────────────────────────── */
+.gp-stat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.gp-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  transition: background var(--transition-fast, 0.15s);
+}
+
+.gp-stat-row:hover {
+  background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+}
+
+.gp-stat-row__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.gp-stat-row__value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  color: var(--text-main);
+}
+
+/* ── Diff Column ─────────────────────────────────── */
+.gp-col--diff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 200px;
+}
+
+/* eDPS Badge */
+.gp-edps-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+  border: 2px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  text-align: center;
+  transition: border-color var(--transition-fast, 0.15s);
+}
+
+.gp-edps-badge__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.gp-edps-badge__value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.gp-edps-badge--up {
+  border-color: #22c55e;
+}
+
+.gp-edps-badge--up .gp-edps-badge__value {
+  color: #22c55e;
+}
+
+.gp-edps-badge--down {
+  border-color: #ef4444;
+}
+
+.gp-edps-badge--down .gp-edps-badge__value {
+  color: #ef4444;
+}
+
+/* Diff List */
+.gp-diff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.gp-diff-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+}
+
+.gp-diff-row__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.gp-diff-row__value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+}
+
+.gp-diff-row--up .gp-diff-row__value {
+  color: #22c55e;
+}
+
+.gp-diff-row--down .gp-diff-row__value {
+  color: #ef4444;
+}
+
+/* Craft info */
+.gp-craft-info {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 0.5rem;
+  border-top: 1px solid var(--card-border);
+  width: 100%;
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+.gp-craft-info__label {
+  font-weight: 700;
+}
+
+/* ── Select Dropdown ─────────────────────────────── */
+.gp-select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--card-border);
+  border-radius: 10px;
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: border-color var(--transition-fast, 0.15s);
+}
+
+.gp-select:focus {
+  outline: none;
+  border-color: var(--primary, #6366f1);
+}
+
+/* ── Buttons ─────────────────────────────────────── */
+.gp-btn {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s);
+  margin-top: 0.5rem;
+}
+
+.gp-btn--equip {
+  background: #22c55e;
+  color: #fff;
+  width: 100%;
+}
+
+.gp-btn--equip:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+.gp-btn--unequip {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+}
+
+.gp-btn--unequip:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* ── Empty State ─────────────────────────────────── */
+.gp-empty {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 2rem 0;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 900px) {
+  .gp-compare {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .gp-col--diff {
+    min-width: unset;
+  }
+}
+
+@media (max-width: 600px) {
+  .gp-slots {
+    gap: 0.35rem;
+  }
+
+  .gp-slots__btn {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.75rem;
+  }
+
+  .gp-edps-badge__value {
+    font-size: 1.3rem;
+  }
+}

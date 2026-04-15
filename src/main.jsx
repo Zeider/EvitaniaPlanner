@@ -4,5 +4,6 @@ import './css/base.css';
 import './css/components.css';
 import './css/dashboard.css';
 import './css/dps-sim.css';
+import './css/gear-planner.css';
 
 render(<App />, document.getElementById('app'));
