@@ -1,0 +1,9 @@
+.dashboard { padding: 0; }
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .dashboard__grid { grid-template-columns: 1fr; }
+}

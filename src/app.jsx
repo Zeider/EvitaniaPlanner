@@ -1,6 +1,7 @@
 import { TopBar } from './components/TopBar.jsx';
 import { TabNav } from './components/TabNav.jsx';
 import { GearStrip } from './components/GearStrip.jsx';
+import { Dashboard } from './tabs/Dashboard.jsx';
 import { activeTab, theme, lightMode } from './state/store.js';
 
 export function App() {
@@ -9,9 +10,10 @@ export function App() {
       <TopBar />
       <TabNav />
       <main class="tab-content">
-        <div class="placeholder-tab">
-          <p>{activeTab.value} — coming soon</p>
-        </div>
+        {activeTab.value === 'dashboard' && <Dashboard />}
+        {activeTab.value !== 'dashboard' && (
+          <div class="placeholder-tab"><p>{activeTab.value} — coming soon</p></div>
+        )}
       </main>
       <GearStrip />
     </div>
