@@ -1,0 +1,193 @@
+/* ── RUNE PLANNER TAB ────────────────────────────── */
+.rune-planner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rune-planner__card {
+  background: var(--card-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--card-border, rgba(255,255,255,0.08));
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.rune-planner__card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* ── Combo selector ── */
+.rune-combo-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--card-border, rgba(255,255,255,0.12));
+  background: var(--input-bg, rgba(255,255,255,0.06));
+  color: inherit;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.rune-effect {
+  font-size: 0.9rem;
+  color: var(--accent, #60a5fa);
+  font-weight: 600;
+}
+
+/* ── Family block ── */
+.rune-family-block {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--card-border, rgba(255,255,255,0.06));
+}
+
+.rune-family-block:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rune-family-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.rune-farm-loc {
+  font-size: 0.8rem;
+  opacity: 0.65;
+  margin-bottom: 0.75rem;
+}
+
+.rune-tier-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.rune-tier-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 80px;
+  flex: 1;
+}
+
+.rune-tier-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.rune-tier-label--0 { color: var(--text-muted, #9ca3af); }
+.rune-tier-label--1 { color: var(--accent, #60a5fa); }
+.rune-tier-label--2 { color: #c084fc; }
+.rune-tier-label--3 { color: var(--warning, #fbbf24); }
+
+.rune-tier-rune-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.rune-tier-cell input[type="number"] {
+  width: 100%;
+  max-width: 80px;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border, rgba(255,255,255,0.12));
+  background: var(--input-bg, rgba(255,255,255,0.06));
+  color: inherit;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ── Result rows ── */
+.rune-result-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 2fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--card-border, rgba(255,255,255,0.04));
+}
+
+.rune-result-row:last-child {
+  border-bottom: none;
+}
+
+.rune-result-family {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.rune-result-farm {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.rune-progress-wrap {
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rune-progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.rune-progress-bar.done {
+  background: var(--success, #34d399);
+}
+
+.rune-progress-bar.partial {
+  background: var(--accent, #60a5fa);
+}
+
+.rune-need-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rune-need-label.done {
+  color: var(--success, #34d399);
+}
+
+.rune-need-label.partial {
+  color: var(--warning, #fbbf24);
+}
+
+.rune-combo-complete {
+  text-align: center;
+  padding: 1rem;
+  color: var(--success, #34d399);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .rune-result-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .rune-result-farm {
+    grid-column: 1 / -1;
+  }
+
+  .rune-progress-wrap {
+    grid-column: 1 / -1;
+  }
+
+  .rune-tier-cell {
+    min-width: 60px;
+  }
+}

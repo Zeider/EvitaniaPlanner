@@ -1,0 +1,36 @@
+{
+  "name": "evitania-planner",
+  "version": "2.0.0",
+  "description": "All-in-one character planning suite for Evitania Online: Idle RPG",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zeider/EvitaniaPlanner.git"
+  },
+  "keywords": ["evitania", "idle-rpg", "character-planner", "dps-calculator"],
+  "author": "Zeider",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zeider/EvitaniaPlanner/issues"
+  },
+  "homepage": "https://github.com/Zeider/EvitaniaPlanner#readme",
+  "dependencies": {
+    "@preact/signals": "^2.9.0",
+    "preact": "^10.29.1"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.5",
+    "jsdom": "^27.0.1",
+    "vite": "^7.3.2",
+    "vitest": "^3.2.4"
+  }
+}

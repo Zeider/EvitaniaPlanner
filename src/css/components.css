@@ -1,0 +1,34 @@
+/* StatCard */
+.stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; }
+.stat-card--red { border-color: rgba(255,100,100,0.2); }
+.stat-card--blue { border-color: rgba(100,150,255,0.2); }
+.stat-card--green { border-color: rgba(100,255,100,0.2); }
+.stat-card--purple { border-color: rgba(200,100,255,0.2); }
+.stat-card--yellow { border-color: rgba(255,255,100,0.2); }
+.stat-card__title { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.stat-card__row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.stat-card__label { font-size: 12px; color: #aaa; }
+.stat-card__value { font-size: 14px; font-weight: 700; }
+.stat-card__value--red { color: #f88; }
+.stat-card__value--blue { color: #8af; }
+.stat-card__value--green { color: #8f8; }
+.stat-card__value--yellow { color: #ff8; }
+.stat-card__value--orange { color: #fa8; }
+
+/* GearStrip */
+.gear-strip { padding: 12px 20px; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05); }
+.gear-strip__label { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.gear-strip__slots { display: flex; gap: 8px; overflow-x: auto; }
+.gear-slot { width: 56px; height: 56px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; text-align: center; }
+.gear-slot--equipped { background: rgba(100,100,255,0.1); border: 1px solid rgba(100,100,255,0.3); color: #aaf; }
+.gear-slot--empty { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #666; }
+.gear-slot__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 48px; }
+.gear-slot__badge { font-size: 8px; font-weight: 700; color: #8f8; margin-top: 2px; }
+
+/* TopBar additions */
+.btn-import { background: rgba(100,200,100,0.15); border: 1px solid rgba(100,200,100,0.3); color: #8f8; }
+.btn-share { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #888; }
+.btn-theme { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #888; }
+.btn-support { background: rgba(255,100,100,0.1); border: 1px solid rgba(255,100,100,0.25); color: #f99; text-decoration: none; display: inline-flex; align-items: center; }
+.btn-support:hover { background: rgba(255,100,100,0.2); color: #fbb; }
+.profile-select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc; border-radius: 4px; padding: 4px 8px; font-size: 12px; }

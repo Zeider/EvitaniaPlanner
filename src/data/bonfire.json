@@ -1,0 +1,12 @@
+[
+  { "heatRequired": 100, "bonus": "Ash Creation", "effect": "Enables ash creation from the bonfire" },
+  { "heatRequired": 300, "bonus": "Basic Heat", "effect": "Removes Chilled debuff levels 1-4" },
+  { "heatRequired": 700, "bonus": "Overheat", "effect": "+1 HP Regen" },
+  { "heatRequired": 900, "bonus": "Woodcutting +100% Power", "effect": "+100% Woodcutting Power" },
+  { "heatRequired": 1100, "bonus": "Advanced Heat", "effect": "Removes Chilled debuff levels 5-8" },
+  { "heatRequired": 1400, "bonus": "Mining +100% Power", "effect": "+100% Mining Power" },
+  { "heatRequired": 1800, "bonus": "Monster Bait", "effect": "-20% monster respawn time" },
+  { "heatRequired": 2100, "bonus": "Expert Heat", "effect": "Removes Chilled debuff levels 9-12" },
+  { "heatRequired": 2500, "bonus": "Owl Wisdom", "effect": "+50% XP" },
+  { "heatRequired": 3100, "bonus": "Fiery Weapons", "effect": "+50% ATK" }
+]
