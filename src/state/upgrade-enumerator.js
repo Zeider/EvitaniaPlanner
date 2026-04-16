@@ -117,8 +117,12 @@ function enumerateAshUpgrades(profile) {
 
 function enumerateSacrificeUpgrades(profile) {
   const upgrades = [];
+  // Only show sacrifices for bosses the player has defeated
+  const defeated = profile.defeatedBosses || [];
   for (const sac of sacrificesData) {
+    // Skip sacrifices whose boss hasn't been defeated (unless they already have ranks)
     const currentRank = (profile.sacrificeUpgrades && profile.sacrificeUpgrades[sac.id]) || 0;
+    if (currentRank === 0 && defeated.length > 0 && !defeated.includes(sac.soul)) continue;
     if (currentRank >= sac.maxRank) continue;
     const nextRank = currentRank + 1;
     upgrades.push({

@@ -117,6 +117,18 @@ export function extractProfiles(saveData) {
         const pet = petSaveData.find(p => p.characterId === heroIndex && p.petSlot === 0);
         return pet ? { name: pet.petName, level: pet.level, tier: pet.tier } : null;
       })(),
+      // Determine which sacrifice bosses have been defeated
+      defeatedBosses: (() => {
+        const visited = hero.Progress?.visitedScenes ?? [];
+        const bosses = [];
+        // 2.boss-1 = Mammoth (Ice Mammoth), unlocks sacrifices 0-4
+        if (visited.includes('2.boss-1')) bosses.push('Mammoth');
+        // 2.boss-2 = Jotunn, unlocks sacrifices 5-9
+        if (visited.includes('2.boss-2')) bosses.push('Jotunn');
+        // 2.boss-3 = Maevath, unlocks sacrifices 10-14
+        if (visited.includes('2.boss-3')) bosses.push('Maevath');
+        return bosses;
+      })(),
       // Derive max unlocked zone from visitedScenes — find highest combat zone
       maxUnlockedZone: (() => {
         const visited = hero.Progress?.visitedScenes ?? [];
