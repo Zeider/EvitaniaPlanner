@@ -2,19 +2,19 @@
   "novice": {
     "description": "Shared novice talent tree available to all classes. 3-column layout, single nodes centered.",
     "nodes": [
-      { "id": "novice_0_0", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 0, "col": 1 },
-      { "id": "novice_1_0", "name": "More HP", "stat": "hp", "perPoint": 5, "maxPoints": 1, "row": 1, "col": 0 },
-      { "id": "novice_1_1", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 1, "col": 1 },
-      { "id": "novice_1_2", "name": "More Defence", "stat": "def", "perPoint": 1, "maxPoints": 1, "row": 1, "col": 2 },
-      { "id": "novice_2_0", "name": "More Levels", "stat": "bonusXp", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 0 },
-      { "id": "novice_2_1", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 2, "col": 1 },
-      { "id": "novice_2_2", "name": "More Loot", "stat": "magicFind", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 2 },
-      { "id": "novice_3_0", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 1 }
+      { "id": "novice_0_0_patk", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 0, "col": 1 },
+      { "id": "novice_1_0_hp", "name": "More HP", "stat": "hp", "perPoint": 5, "maxPoints": 1, "row": 1, "col": 0 },
+      { "id": "novice_1_1_patk", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 1, "col": 1 },
+      { "id": "novice_1_2_pdef", "name": "More Defence", "stat": "def", "perPoint": 1, "maxPoints": 1, "row": 1, "col": 2 },
+      { "id": "novice_2_0_exp", "name": "More Levels", "stat": "bonusXp", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 0 },
+      { "id": "novice_2_1_patk", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 2, "col": 1 },
+      { "id": "novice_2_2_mf", "name": "More Loot", "stat": "magicFind", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 2 },
+      { "id": "novice_3_0_patk", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 1 }
     ],
     "connections": [
-      ["novice_0_0", "novice_1_0"], ["novice_0_0", "novice_1_1"], ["novice_0_0", "novice_1_2"],
-      ["novice_1_0", "novice_2_0"], ["novice_1_1", "novice_2_1"], ["novice_1_2", "novice_2_2"],
-      ["novice_2_0", "novice_3_0"], ["novice_2_1", "novice_3_0"], ["novice_2_2", "novice_3_0"]
+      ["novice_0_0_patk", "novice_1_0_hp"], ["novice_0_0_patk", "novice_1_1_patk"], ["novice_0_0_patk", "novice_1_2_pdef"],
+      ["novice_1_0_hp", "novice_2_0_exp"], ["novice_1_1_patk", "novice_2_1_patk"], ["novice_1_2_pdef", "novice_2_2_mf"],
+      ["novice_2_0_exp", "novice_3_0_patk"], ["novice_2_1_patk", "novice_3_0_patk"], ["novice_2_2_mf", "novice_3_0_patk"]
     ]
   },
   "rogue": {
