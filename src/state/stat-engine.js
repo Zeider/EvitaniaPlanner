@@ -2,6 +2,13 @@ import classData from '../data/classes.json';
 import hunterUpgradesData from '../data/hunter-upgrades.json';
 import talentsData from '../data/talents.json';
 import gearData from '../data/gear.json';
+import sacrificesData from '../data/sacrifices.json';
+import bonfireData from '../data/bonfire.json';
+import ashUpgradesData from '../data/ash-upgrades.json';
+import cardsData from '../data/cards.json';
+import runesData from '../data/runes.json';
+import petsData from '../data/pets.json';
+import curiosData from '../data/curios.json';
 
 /**
  * Build a flat lookup of all gear items by name.
@@ -77,6 +84,111 @@ function addStat(stats, statName, value) {
 }
 
 /**
+ * Build a flat list of all card definitions with their threshold arrays.
+ */
+function buildCardList() {
+  const list = [];
+  const addCards = (cards, thresholds) => {
+    for (const card of cards) {
+      list.push({ ...card, thresholds });
+    }
+  };
+  addCards(cardsData.act1Cards || [], cardsData.tierThresholds.act1);
+  addCards(cardsData.act2Cards || [], cardsData.tierThresholds.act2);
+  addCards(cardsData.act3Cards || [], cardsData.tierThresholds.act3);
+  return list;
+}
+
+const allCards = buildCardList();
+
+/**
+ * Determine the tier (0-based index) a card has reached given the count.
+ * Returns -1 if not even tier 1.
+ */
+function getCardTier(count, thresholds) {
+  let tier = -1;
+  for (let i = 0; i < thresholds.length; i++) {
+    if (count >= thresholds[i]) tier = i;
+    else break;
+  }
+  return tier;
+}
+
+/**
+ * Build a lookup of rune name -> family/tier info for equipped rune stat calculation.
+ */
+function buildRuneLookup() {
+  const lookup = {};
+  for (const family of runesData.families) {
+    for (const [tierKey, tierData] of Object.entries(family.tiers)) {
+      if (tierData.rune) {
+        lookup[tierData.rune] = {
+          family: family.name,
+          stat: family.stat,
+          value: tierData.value,
+          tier: tierKey,
+        };
+      }
+    }
+  }
+  return lookup;
+}
+
+const runeLookup = buildRuneLookup();
+
+/**
+ * Build a lookup of pet name -> pet data.
+ */
+function buildPetLookup() {
+  const lookup = {};
+  for (const pet of petsData) {
+    lookup[pet.name] = pet;
+  }
+  return lookup;
+}
+
+const petLookup = buildPetLookup();
+
+/**
+ * Build a lookup of curio name -> curio data.
+ */
+function buildCurioLookup() {
+  const lookup = {};
+  for (const curio of curiosData.curios) {
+    lookup[curio.name] = curio;
+  }
+  return lookup;
+}
+
+const curioLookup = buildCurioLookup();
+
+/**
+ * Check if the equipped runes contain all runes needed for a rune word.
+ * Handles duplicate runes (e.g., FAL, FAL requires 2x FAL equipped).
+ */
+function isRuneWordActive(equipped, required) {
+  const available = [...equipped];
+  for (const rune of required) {
+    const idx = available.indexOf(rune);
+    if (idx === -1) return false;
+    available.splice(idx, 1);
+  }
+  return true;
+}
+
+/**
+ * Map sacrifice stat names to canonical stat keys.
+ */
+function sacStatToKey(stat) {
+  const map = {
+    atk: 'atk', hp: 'hp', def: 'def',
+    wcPower: 'woodcuttingPower', miningPower: 'miningPower',
+    xp: 'xpMulti',
+  };
+  return map[stat] || stat;
+}
+
+/**
  * Takes a character profile, returns aggregated stats object.
  * Three-layer computation: base class -> flat additions -> multipliers.
  */
@@ -93,12 +205,17 @@ export function computeStats(profile) {
 
   // --- Layer 2: Flat additions ---
 
-  // Hunter Upgrades
+  // Hunter Upgrades (flat additions in Layer 2, multiplicative deferred to Layer 3)
+  const hunterMultipliers = [];
   if (profile.hunterUpgrades) {
     for (const upgrade of hunterUpgradesData) {
       const rank = profile.hunterUpgrades[upgrade.id] || 0;
       if (rank > 0) {
-        addStat(stats, upgrade.stat, upgrade.perRank * rank);
+        if (upgrade.isMultiplier) {
+          hunterMultipliers.push({ stat: upgrade.stat, perRank: upgrade.perRank, rank });
+        } else {
+          addStat(stats, upgrade.stat, upgrade.perRank * rank);
+        }
       }
     }
   }
@@ -124,22 +241,109 @@ export function computeStats(profile) {
       const item = gearLookup[slotData.name];
       if (!item) continue;
 
-      // Weapons: add atk from the weapon's atk field
+      const enhLevel = slotData.enhancementLevel || 0;
+
+      // Weapons: ATK scales at 27.5% per enhancement level
       if (item.slot === 'weapon' && item.atk) {
-        stats.atk += item.atk;
+        stats.atk += Math.round(item.atk * (1 + enhLevel * 0.275) * 10) / 10;
       }
 
-      // Armor: add def from the armor's def field
+      // Armor: DEF scales at 5% per enhancement level
       if (item.def && item.slot !== 'weapon') {
-        stats.def += item.def;
+        stats.def += Math.round(item.def * (1 + enhLevel * 0.05) * 10) / 10;
       }
 
-      // Apply all bonus stats from the item
+      // Bonus stats from the item (these do NOT scale with enhancement)
       if (item.stats) {
         for (const [key, value] of Object.entries(item.stats)) {
           addStat(stats, key, value);
         }
       }
+    }
+  }
+
+  // Card bonuses (flat cards in Layer 2, multiplier cards deferred to Layer 3)
+  const cardMultipliers = [];
+  if (profile.cards) {
+    for (const card of allCards) {
+      const count = profile.cards[card.enemy] || 0;
+      if (count <= 0) continue;
+      const tier = getCardTier(count, card.thresholds);
+      if (tier < 0) continue;
+      const value = card.tierValues[tier];
+      if (value == null) continue;
+
+      if (card.isMultiplier) {
+        cardMultipliers.push({ stat: card.stat, value });
+      } else {
+        addStat(stats, card.stat, value);
+      }
+    }
+  }
+
+  // Rune bonuses (flat stats from equipped runes + rune word bonuses)
+  if (profile.equippedRunes && Array.isArray(profile.equippedRunes)) {
+    // Individual rune stats
+    for (const runeName of profile.equippedRunes) {
+      const info = runeLookup[runeName];
+      if (info && info.value != null) {
+        addStat(stats, info.stat, info.value);
+      }
+    }
+
+    // Rune word detection and bonuses
+    for (const word of runesData.runeWords) {
+      if (isRuneWordActive(profile.equippedRunes, word.runes)) {
+        for (const [stat, value] of Object.entries(word.bonuses)) {
+          if (stat === 'atkMulti') {
+            // atkMulti is a multiplier, defer to Layer 3
+            cardMultipliers.push({ stat: 'atk', value });
+          } else {
+            addStat(stats, stat, value);
+          }
+        }
+      }
+    }
+  }
+
+  // Active pet global bonus: linear scaling = level50 * (0.189 + 0.0162 * level)
+  if (profile.activePet) {
+    const petName = typeof profile.activePet === 'string' ? profile.activePet : profile.activePet.name;
+    const petLevel = typeof profile.activePet === 'object' ? (profile.activePet.level || 1) : 1;
+    const pet = petLookup[petName];
+    if (pet && pet.globalBonus && pet.globalBonus.level50) {
+      const value = pet.globalBonus.level50 * (0.189 + 0.0162 * petLevel);
+      const stat = pet.globalBonus.stat;
+      // Percentage-based bonuses map to their percent stat (e.g., atk -> atkPercent)
+      if (pet.globalBonus.isPercent) {
+        const percentKey = stat + 'Percent';
+        if (percentKey in stats) {
+          stats[percentKey] += value;
+        } else {
+          // Fallback: some percent stats use different names
+          addStat(stats, stat, value);
+        }
+      } else {
+        addStat(stats, stat, value);
+      }
+    }
+  }
+
+  // Flat sacrifice bonuses (Layer 2 — flat additions)
+  if (profile.sacrificeUpgrades) {
+    for (const sac of sacrificesData) {
+      const rank = profile.sacrificeUpgrades[sac.id] || 0;
+      if (rank <= 0 || sac.isMultiplier) continue;
+      addStat(stats, sac.stat, sac.perRank * rank);
+    }
+  }
+
+  // Ash upgrades (flat combat stats)
+  if (profile.ashUpgrades) {
+    for (const au of ashUpgradesData) {
+      const rank = profile.ashUpgrades[au.id] || 0;
+      if (rank <= 0) continue;
+      addStat(stats, au.perRank.stat, au.perRank.value * rank);
     }
   }
 
@@ -153,6 +357,93 @@ export function computeStats(profile) {
     stats.atk += stats.dex * 0.10 * stats.atk;
   } else if (primaryStat === 'int') {
     stats.atk += stats.int * 0.10 * stats.atk;
+  }
+
+  // Hunter multiplicative upgrades (e.g., More Damage Training x1.01 per rank)
+  for (const hm of hunterMultipliers) {
+    const multiplier = Math.pow(1 + hm.perRank, hm.rank);
+    if (hm.stat in stats) {
+      stats[hm.stat] *= multiplier;
+    }
+  }
+
+  // Multiplier sacrifice bonuses (applied after flat additions)
+  if (profile.sacrificeUpgrades) {
+    for (const sac of sacrificesData) {
+      const rank = profile.sacrificeUpgrades[sac.id] || 0;
+      if (rank <= 0 || !sac.isMultiplier) continue;
+      const multiplier = 1 + sac.perRank * rank;
+      const key = sacStatToKey(sac.stat);
+      if (key && key in stats) {
+        stats[key] *= multiplier;
+      }
+    }
+  }
+
+  // Card multiplier bonuses (e.g., Snowman Card ATK x1.12)
+  for (const cm of cardMultipliers) {
+    const key = cm.stat === 'atk' ? 'atk' : (sacStatToKey(cm.stat) || cm.stat);
+    if (key in stats) {
+      if (typeof cm.value === 'number' && cm.value > 0 && cm.value < 10) {
+        // Values like 1.12 are direct multipliers
+        stats[key] *= cm.value;
+      }
+    }
+  }
+
+  // Bonfire buffs (applied if profile has sufficient heat)
+  const heat = profile.bonfireHeat || 0;
+  if (heat > 0) {
+    for (const buff of bonfireData) {
+      if (heat < buff.heatRequired || !buff.stat) continue;
+      // Bonfire buffs are percentage-based additions
+      if (buff.stat === 'atkPercent') {
+        stats.atkPercent += buff.value;
+      } else if (buff.stat === 'xpMulti') {
+        stats.xpMulti += buff.value;
+      } else if (buff.stat === 'mobSpawnReduction') {
+        stats.mobSpawnReduction += buff.value;
+      } else {
+        addStat(stats, buff.stat, buff.value);
+      }
+    }
+  }
+
+  // Curio multipliers (primary stat is a multiplier, ATK bonus by rarity/level)
+  if (profile.equippedCurios && Array.isArray(profile.equippedCurios)) {
+    for (const curioEntry of profile.equippedCurios) {
+      const curio = curioLookup[curioEntry.name];
+      if (!curio) continue;
+
+      // Primary stat multiplier (e.g., miningPower x1.42)
+      if (curio.isMultiplier && curio.primaryValue) {
+        const key = sacStatToKey(curio.primaryStat);
+        if (key in stats) {
+          stats[key] *= curio.primaryValue;
+        }
+      } else if (curio.primaryValue) {
+        // Percentage-based primary (e.g., goldMulti 25%)
+        addStat(stats, curio.primaryStat, curio.primaryValue);
+      }
+
+      // ATK multiplier by rarity
+      const atkData = curiosData.atkBonusByRarity[curio.rarity];
+      if (atkData) {
+        const atkMulti = atkData.level1 || 1;
+        stats.atk *= atkMulti;
+      }
+
+      // Tier bonuses (t3, t7, t9 unlocked by curio tier/level)
+      const curioTier = curioEntry.tier || 0;
+      if (curio.tierBonuses) {
+        for (const [tierKey, bonus] of Object.entries(curio.tierBonuses)) {
+          const tierNum = parseInt(tierKey.replace('t', ''), 10);
+          if (curioTier >= tierNum) {
+            addStat(stats, bonus.stat, bonus.value);
+          }
+        }
+      }
+    }
   }
 
   // ATK% multiplier

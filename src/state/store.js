@@ -20,7 +20,9 @@ export function createDefaultProfile() {
     miningLevel: 1, woodcuttingLevel: 1,
     gear: {}, talents: {}, professionSkills: {},
     hunterUpgrades: {}, ashUpgrades: {}, sacrificeUpgrades: {},
-    cards: {},
+    cards: {}, bonfireHeat: 0, equippedRunes: [],
+    activePet: null, petLevel: 1, equippedCurios: [],
+    maxUnlockedZone: '',
     farmingRates: { killsPerHour: 0, xpPerHour: 0, goldPerHour: 0 },
     currentZone: '1.0',
   };

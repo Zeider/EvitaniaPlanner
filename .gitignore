@@ -6,3 +6,5 @@ docs/superpowers/
 .env
 .DS_Store
 Thumbs.db
+data.sav
+.vite/

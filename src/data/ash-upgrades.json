@@ -9,8 +9,8 @@
   { "id": "ash_3_0", "name": "Attack Increase", "effect": "+30% all atk", "maxRank": 1, "perRank": { "stat": "atkPercent", "value": 30 } },
   { "id": "ash_3_1", "name": "Auto Runes", "effect": "Runes auto-enter inventory", "maxRank": 1, "perRank": { "stat": "autoRunes", "value": 1 } },
   { "id": "ash_3_2", "name": "Rune Overload", "effect": "Runes stack in inventory", "maxRank": 1, "perRank": { "stat": "runeOverload", "value": 1 } },
-  { "id": "ash_4_0", "name": "Smeltery Speed", "effect": "+7-10% per rank", "maxRank": 3, "perRank": { "stat": "smelterySpeed", "value": 7 } },
+  { "id": "ash_4_0", "name": "Smeltery Speed", "effect": "+7% per rank", "maxRank": 4, "perRank": { "stat": "smelterySpeed", "value": 7 } },
   { "id": "ash_4_1", "name": "Fiery Defence", "effect": "+5 phys def per rank", "maxRank": 4, "perRank": { "stat": "physDef", "value": 5 } },
-  { "id": "ash_4_2", "name": "Hunter Cost Reduction", "effect": "-50% hunter costs", "maxRank": 5, "perRank": { "stat": "hunterCostReduction", "value": 10 } },
+  { "id": "ash_4_2", "name": "Hunter Cost Reduction", "effect": "-50% hunter costs per rank", "maxRank": 5, "perRank": { "stat": "hunterCostReduction", "value": 50 } },
   { "id": "ash_5_0", "name": "Movespeed", "effect": "+5% per rank", "maxRank": 2, "perRank": { "stat": "moveSpeed", "value": 5 } }
 ]

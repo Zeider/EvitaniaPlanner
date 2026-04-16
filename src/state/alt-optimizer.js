@@ -68,29 +68,57 @@ export function buildCapabilityMatrix(profile) {
   const allZoneIds = getAllZoneIds();
 
   const eligibleZones = [];
+  const maxUnlocked = profile.maxUnlockedZone || null;
+
+  // If the profile has game-provided offline rates, use those as anchor
+  // and scale for other zones by relative enemy HP
+  const gameKillsPerHour = profile.farmingRates?.killsPerHour || 0;
+  const gameCurrentZone = profile.currentZone || '';
+  const currentZoneEnemy = allEnemies.find(e => e.zone === gameCurrentZone);
+  const anchorHP = currentZoneEnemy?.hp || 0;
 
   for (const enemy of allEnemies) {
-    const eDPS = computeEffectiveDPS(stats, enemy);
-    const timeToDie = computeTimeToDie(stats, enemy);
+    // Skip zones beyond the player's unlocked progression
+    if (maxUnlocked && compareZones(enemy.zone, maxUnlocked) > 0) continue;
 
-    if (timeToDie >= SURVIVAL_THRESHOLD && eDPS > 0) {
-      const rates = computeFarmingRates(eDPS, enemy, stats);
+    if (maxUnlocked && gameKillsPerHour > 0 && anchorHP > 0) {
+      // Scale game's real rate by relative enemy HP
+      // Weaker mobs (lower HP) = proportionally more kills/hr
+      const scaledKillsPerHour = gameKillsPerHour * (anchorHP / Math.max(enemy.hp, 1));
+      const xpPerHour = scaledKillsPerHour * (enemy.xp || 0);
       eligibleZones.push({
         zone: enemy.zone,
         mob: enemy.name,
-        killsPerHour: rates.killsPerHour,
-        survivalTime: timeToDie,
-        xpPerHour: rates.xpPerHour,
+        killsPerHour: scaledKillsPerHour,
+        survivalTime: Infinity,
+        xpPerHour,
+        estimated: enemy.zone !== gameCurrentZone,
       });
+    } else {
+      const eDPS = computeEffectiveDPS(stats, enemy);
+      const timeToDie = computeTimeToDie(stats, enemy);
+
+      if (maxUnlocked || (timeToDie >= SURVIVAL_THRESHOLD && eDPS > 0)) {
+        const rates = computeFarmingRates(Math.max(eDPS, 1), enemy, stats);
+        eligibleZones.push({
+          zone: enemy.zone,
+          mob: enemy.name,
+          killsPerHour: rates.killsPerHour,
+          survivalTime: timeToDie,
+          xpPerHour: rates.xpPerHour,
+          estimated: eDPS <= 0,
+        });
+      }
     }
   }
 
   // Sort by zone progression
   eligibleZones.sort((a, b) => compareZones(a.zone, b.zone));
 
-  const maxZone = eligibleZones.length > 0
+  // maxZone = user-set limit if available, otherwise stat-based highest
+  const maxZone = maxUnlocked || (eligibleZones.length > 0
     ? eligibleZones[eligibleZones.length - 1].zone
-    : null;
+    : null);
 
   let canPushTo = null;
   if (maxZone) {
@@ -140,7 +168,12 @@ export function assignAlts(bottlenecks, matrices) {
         const zoneData = m.zones.find(z => z.zone === bn.zone);
         if (!zoneData) continue;
 
-        const itemsPerHour = zoneData.killsPerHour / (bn.dropRate || 1);
+        // Use game's offline rate if alt is currently parked at this zone
+        let killsPerHour = zoneData.killsPerHour;
+        if (m.currentZone === bn.zone && m.offlineRates && m.offlineRates.killsPerHour > 0) {
+          killsPerHour = m.offlineRates.killsPerHour;
+        }
+        const itemsPerHour = killsPerHour / (bn.dropRate || 1);
         if (itemsPerHour > bestRate) {
           bestRate = itemsPerHour;
           bestAlt = m;

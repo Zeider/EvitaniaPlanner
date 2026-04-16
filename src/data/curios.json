@@ -1,96 +1,187 @@
 {
-  "rarities": ["common", "uncommon", "rare", "epic", "legendary"],
+  "rarities": ["gray", "green", "blue", "purple", "orange"],
+  "atkBonusByRarity": {
+    "gray": { "level1": 1.06 },
+    "green": { "level1": 1.08 },
+    "blue": { "level1": 1.10 },
+    "purple": { "level1": 1.13 },
+    "orange": { "level1": 1.15, "level50": 1.30 }
+  },
+  "earningsPerHour": {
+    "gray": { "base": 3, "max": 6 },
+    "green": { "base": 8, "max": 11 },
+    "blue": { "base": 14, "max": 20 },
+    "purple": { "base": 21, "max": 30 },
+    "orange": { "base": 31, "max": 40 }
+  },
+  "upgradeCosts": [
+    { "levels": "1-5", "gray": 50, "green": 60, "blue": 70, "purple": 80, "orange": 100 },
+    { "levels": "6-10", "gray": 100, "green": 120, "blue": 140, "purple": 160, "orange": 200 },
+    { "levels": "11-15", "gray": 200, "green": 240, "blue": 280, "purple": 320, "orange": 400 },
+    { "levels": "16-20", "gray": 300, "green": 360, "blue": 420, "purple": 480, "orange": 600 },
+    { "levels": "21-25", "gray": 600, "green": 720, "blue": 840, "purple": 960, "orange": 1200 },
+    { "levels": "26-30", "gray": 900, "green": 1000, "blue": 1100, "purple": 1400, "orange": 1700 },
+    { "levels": "31-35", "gray": 1200, "green": 1300, "blue": 1400, "purple": 1900, "orange": 2300 },
+    { "levels": "36-40", "gray": 1500, "green": 1700, "blue": 1900, "purple": 2400, "orange": 3000 },
+    { "levels": "41-45", "gray": 2000, "green": 2200, "blue": 2400, "purple": 3000, "orange": 3000 },
+    { "levels": "46-50", "gray": 3000, "green": 3000, "blue": 3000, "purple": 3000, "orange": 3000 }
+  ],
   "curios": [
     {
-      "name": "Wooden Idol",
-      "rarity": "common",
-      "primaryStat": "hp",
-      "tierBonuses": { "t1": 5, "t2": 10, "t3": 20, "t4": 35, "t5": 50 },
-      "atkMultiplierByLevel": [1.0, 1.02, 1.04, 1.06, 1.08, 1.10]
+      "name": "Elden Monolith", "rarity": "gray",
+      "primaryStat": "miningPower", "primaryValue": 1.21, "isMultiplier": true,
+      "tierBonuses": { "t3": { "stat": "miningOffline", "value": 3, "isPercent": true } }
     },
     {
-      "name": "Stone Figurine",
-      "rarity": "common",
-      "primaryStat": "def",
-      "tierBonuses": { "t1": 2, "t2": 4, "t3": 8, "t4": 14, "t5": 20 },
-      "atkMultiplierByLevel": [1.0, 1.02, 1.04, 1.06, 1.08, 1.10]
+      "name": "Fifth Stab", "rarity": "gray",
+      "primaryStat": "wcPower", "primaryValue": 1.21, "isMultiplier": true,
+      "tierBonuses": { "t3": { "stat": "wcOffline", "value": 3, "isPercent": true } }
     },
     {
-      "name": "Copper Coin",
-      "rarity": "common",
-      "primaryStat": "goldMulti",
-      "tierBonuses": { "t1": 1, "t2": 2, "t3": 3, "t4": 5, "t5": 7 },
-      "atkMultiplierByLevel": [1.0, 1.02, 1.04, 1.06, 1.08, 1.10]
+      "name": "Sected Bypiramid", "rarity": "green",
+      "primaryStat": "miningPower", "primaryValue": 1.25, "isMultiplier": true,
+      "tierBonuses": { "t3": { "stat": "wcOffline", "value": 3, "isPercent": true } }
     },
     {
-      "name": "Lucky Clover",
-      "rarity": "uncommon",
-      "primaryStat": "magicFind",
-      "tierBonuses": { "t1": 2, "t2": 4, "t3": 7, "t4": 11, "t5": 15 },
-      "atkMultiplierByLevel": [1.0, 1.03, 1.06, 1.09, 1.12, 1.15]
+      "name": "Urn Flask", "rarity": "green",
+      "primaryStat": "wcPower", "primaryValue": 1.25, "isMultiplier": true,
+      "tierBonuses": { "t3": { "stat": "wcOffline", "value": 3, "isPercent": true } }
     },
     {
-      "name": "Sharpened Fang",
-      "rarity": "uncommon",
-      "primaryStat": "atk",
-      "tierBonuses": { "t1": 3, "t2": 6, "t3": 12, "t4": 20, "t5": 30 },
-      "atkMultiplierByLevel": [1.0, 1.03, 1.06, 1.09, 1.12, 1.15]
+      "name": "Ceremonial Dagger", "rarity": "green",
+      "primaryStat": "physDef", "primaryValue": 1.16, "isMultiplier": true,
+      "tierBonuses": { "t3": { "stat": "offlineGains", "value": 3, "isPercent": true } }
     },
     {
-      "name": "Swift Feather",
-      "rarity": "uncommon",
-      "primaryStat": "atkSpeed",
-      "tierBonuses": { "t1": 2, "t2": 4, "t3": 7, "t4": 11, "t5": 15 },
-      "atkMultiplierByLevel": [1.0, 1.03, 1.06, 1.09, 1.12, 1.15]
+      "name": "Worm's Horn", "rarity": "blue",
+      "primaryStat": "miningPower", "primaryValue": 1.32, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "miningOffline", "value": 3, "isPercent": true },
+        "t7": { "stat": "miningMultiloot", "value": 15 }
+      }
     },
     {
-      "name": "Crystal Orb",
-      "rarity": "rare",
-      "primaryStat": "critChance",
-      "tierBonuses": { "t1": 1, "t2": 2, "t3": 4, "t4": 6, "t5": 9 },
-      "atkMultiplierByLevel": [1.0, 1.04, 1.08, 1.12, 1.16, 1.20]
+      "name": "Swirling Tear", "rarity": "blue",
+      "primaryStat": "wcPower", "primaryValue": 1.32, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "wcOffline", "value": 3, "isPercent": true },
+        "t7": { "stat": "wcMultiloot", "value": 15 }
+      }
     },
     {
-      "name": "War Horn",
-      "rarity": "rare",
-      "primaryStat": "critDamage",
-      "tierBonuses": { "t1": 5, "t2": 10, "t3": 18, "t4": 28, "t5": 40 },
-      "atkMultiplierByLevel": [1.0, 1.04, 1.08, 1.12, 1.16, 1.20]
+      "name": "Entomed Mask", "rarity": "blue",
+      "primaryStat": "physDef", "primaryValue": 1.20, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "offlineGains", "value": 3, "isPercent": true },
+        "t7": { "stat": "combatOffline", "value": 3, "isPercent": true }
+      }
     },
     {
-      "name": "Ancient Tome",
-      "rarity": "rare",
-      "primaryStat": "bonusXp",
-      "tierBonuses": { "t1": 3, "t2": 6, "t3": 10, "t4": 16, "t5": 22 },
-      "atkMultiplierByLevel": [1.0, 1.04, 1.08, 1.12, 1.16, 1.20]
+      "name": "Century Tome", "rarity": "blue",
+      "primaryStat": "goldMulti", "primaryValue": 19.8, "isPercent": true,
+      "tierBonuses": {
+        "t3": { "stat": "magicFind", "value": 15 },
+        "t7": { "stat": "mobSpawnReduction", "value": 3, "isPercent": true }
+      }
     },
     {
-      "name": "Golden Scarab",
-      "rarity": "epic",
-      "primaryStat": "allStats",
-      "tierBonuses": { "t1": 2, "t2": 4, "t3": 8, "t4": 13, "t5": 18 },
-      "atkMultiplierByLevel": [1.0, 1.05, 1.10, 1.15, 1.20, 1.25]
+      "name": "Ichored Specimen", "rarity": "purple",
+      "primaryStat": "miningPower", "primaryValue": 1.42, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "miningOffline", "value": 3, "isPercent": true },
+        "t7": { "stat": "miningMultiloot", "value": 15 },
+        "t9": { "stat": "miningSpeed", "value": 9, "isPercent": true }
+      }
     },
     {
-      "name": "Dragon Scale",
-      "rarity": "epic",
-      "primaryStat": "atkPercent",
-      "tierBonuses": { "t1": 3, "t2": 6, "t3": 10, "t4": 16, "t5": 22 },
-      "atkMultiplierByLevel": [1.0, 1.05, 1.10, 1.15, 1.20, 1.25]
+      "name": "Servant's Idol", "rarity": "purple",
+      "primaryStat": "wcPower", "primaryValue": 1.42, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "wcOffline", "value": 3, "isPercent": true },
+        "t7": { "stat": "wcMultiloot", "value": 15 },
+        "t9": { "stat": "wcSpeed", "value": 9, "isPercent": true }
+      }
     },
     {
-      "name": "Phoenix Feather",
-      "rarity": "legendary",
-      "primaryStat": "allPercent",
-      "tierBonuses": { "t1": 2, "t2": 5, "t3": 9, "t4": 14, "t5": 20 },
-      "atkMultiplierByLevel": [1.0, 1.06, 1.12, 1.18, 1.24, 1.30]
+      "name": "Cup of Indulgence", "rarity": "purple",
+      "primaryStat": "physDef", "primaryValue": 1.25, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "offlineGains", "value": 3, "isPercent": true },
+        "t7": { "stat": "combatOffline", "value": 3, "isPercent": true },
+        "t9": { "stat": "magicDef", "value": 1.09, "isMultiplier": true }
+      }
     },
     {
-      "name": "Void Crystal",
-      "rarity": "legendary",
-      "primaryStat": "offline",
-      "tierBonuses": { "t1": 1, "t2": 2, "t3": 4, "t4": 7, "t5": 10 },
-      "atkMultiplierByLevel": [1.0, 1.06, 1.12, 1.18, 1.24, 1.30]
+      "name": "Crystal Cranium", "rarity": "purple",
+      "primaryStat": "goldMulti", "primaryValue": 25, "isPercent": true,
+      "tierBonuses": {
+        "t3": { "stat": "magicFind", "value": 15 },
+        "t7": { "stat": "mobSpawnReduction", "value": 3, "isPercent": true },
+        "t9": { "stat": "moveSpeed", "value": 9, "isPercent": true }
+      }
+    },
+    {
+      "name": "Pandemonium Egg", "rarity": "purple",
+      "primaryStat": "critDamage", "primaryValue": 20, "isPercent": true,
+      "tierBonuses": {
+        "t3": { "stat": "portalKills", "value": 3 },
+        "t7": { "stat": "atkSpeed", "value": 6, "isPercent": true },
+        "t9": { "stat": "critChance", "value": 9, "isPercent": true }
+      }
+    },
+    {
+      "name": "Wyrd Goblet", "rarity": "orange",
+      "primaryStat": "miningPower", "primaryValue": 1.53, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "miningOffline", "value": 3, "isPercent": true },
+        "t7": { "stat": "miningMultiloot", "value": 15 },
+        "t9": { "stat": "miningSpeed", "value": 9, "isPercent": true }
+      }
+    },
+    {
+      "name": "Blooming Desert", "rarity": "orange",
+      "primaryStat": "wcPower", "primaryValue": 1.53, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "wcOffline", "value": 3, "isPercent": true },
+        "t7": { "stat": "wcMultiloot", "value": 15 },
+        "t9": { "stat": "wcSpeed", "value": 9, "isPercent": true }
+      }
+    },
+    {
+      "name": "Jade Scarab", "rarity": "orange",
+      "primaryStat": "physDef", "primaryValue": 1.20, "isMultiplier": true,
+      "tierBonuses": {
+        "t3": { "stat": "offlineGains", "value": 3, "isPercent": true },
+        "t7": { "stat": "combatOffline", "value": 3, "isPercent": true },
+        "t9": { "stat": "magicDef", "value": 1.09, "isMultiplier": true }
+      }
+    },
+    {
+      "name": "Necromancer's Hand", "rarity": "orange",
+      "primaryStat": "goldMulti", "primaryValue": 31.2, "isPercent": true,
+      "tierBonuses": {
+        "t3": { "stat": "magicFind", "value": 15 },
+        "t7": { "stat": "mobSpawnReduction", "value": 3, "isPercent": true },
+        "t9": { "stat": "moveSpeed", "value": 9, "isPercent": true }
+      }
+    },
+    {
+      "name": "Shattered Vow", "rarity": "orange",
+      "primaryStat": "critDamage", "primaryValue": 25, "isPercent": true,
+      "tierBonuses": {
+        "t3": { "stat": "portalKills", "value": 3 },
+        "t7": { "stat": "atkSpeed", "value": 6, "isPercent": true },
+        "t9": { "stat": "critChance", "value": 9, "isPercent": true }
+      }
+    },
+    {
+      "name": "Ever Eclipsed Sun", "rarity": "orange",
+      "primaryStat": "allXp", "primaryValue": 50, "primaryValueMax": 200, "isPercent": true,
+      "tierBonuses": {
+        "t3": { "stat": "miningXp", "value": 30, "isPercent": true },
+        "t7": { "stat": "wcXp", "value": 30, "isPercent": true },
+        "t9": { "stat": "combatXp", "value": 30, "isPercent": true }
+      }
     }
   ]
 }

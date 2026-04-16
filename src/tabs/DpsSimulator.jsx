@@ -129,10 +129,6 @@ export function DpsSimulator() {
         <ResultCard label="Alive Time" value={alivePercent.toFixed(1) + '%'} accent="green" />
       </div>
 
-      {/* ── What-If Bar ── */}
-      <div class="dps-sim__whatif">
-        <span class="dps-sim__whatif-label">What-If: coming soon</span>
-      </div>
     </div>
   );
 }

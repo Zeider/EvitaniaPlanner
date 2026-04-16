@@ -70,20 +70,220 @@ describe('computeStats', () => {
     expect(stats.totalAtk).toBeCloseTo(28.35, 1);
   });
 
+  it('weapon enhancement scales ATK at 27.5% per level', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {
+        weapon: { name: 'Essence Sword', enhancementLevel: 5 },
+      },
+    };
+    const stats = computeStats(profile);
+
+    // Essence Sword base ATK = 45, +5 enhancement
+    // 45 * (1 + 5 * 0.275) = 45 * 2.375 = 106.875 → 106.9
+    // total weapon contribution = 106.9
+    // plus rogue base atk (14) = 120.9
+    expect(stats.atk).toBeCloseTo(120.9, 1);
+  });
+
+  it('armor enhancement scales DEF at 5% per level', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {
+        helmet: { name: 'Bronze Helmet', enhancementLevel: 5 },
+      },
+    };
+    const stats = computeStats(profile);
+
+    // Bronze Helmet base DEF = 25, +5 enhancement
+    // 25 * (1 + 5 * 0.05) = 25 * 1.25 = 31.25 → 31.3
+    // plus rogue base def (25) = 56.3
+    expect(stats.def).toBeCloseTo(56.3, 1);
+  });
+
+  it('sacrifice multipliers scale stats', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      sacrificeUpgrades: {
+        'act-2-sacrifice-1': 10, // Attack Wish: x0.09 per rank, multiplier
+      },
+    };
+    const stats = computeStats(profile);
+
+    // Rogue base atk = 14
+    // Attack Wish rank 10: multiplier = 1 + 0.09 * 10 = 1.9
+    // After primary stat scaling (dex=0, no change): atk still 14
+    // After sacrifice: 14 * 1.9 = 26.6
+    expect(stats.atk).toBeCloseTo(26.6, 1);
+  });
+
+  it('flat sacrifice bonuses add correctly', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      sacrificeUpgrades: {
+        'act-2-sacrifice-2': 15, // Wish for Luck: +1 critChance per rank, flat
+      },
+    };
+    const stats = computeStats(profile);
+
+    // Rogue base critChance = 20, +15 from sacrifice
+    expect(stats.critChance).toBe(35);
+  });
+
+  it('bonfire buffs apply based on heat level', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      bonfireHeat: 3100, // Unlocks all bonfire buffs including Fiery Weapons (+50% ATK)
+    };
+    const stats = computeStats(profile);
+
+    // Rogue base atkPercent = 15, bonfire adds +50
+    expect(stats.atkPercent).toBe(65);
+    // XP multi: bonfire Owl Wisdom +50%
+    expect(stats.xpMulti).toBe(50);
+    // Mob spawn reduction: Monster Bait -20%
+    expect(stats.mobSpawnReduction).toBe(20);
+  });
+
+  it('ash upgrades add combat stats', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      ashUpgrades: {
+        'ash_2_0': 3, // Crit Damage +10% per rank
+        'ash_2_1': 4, // Crit Chance +1% per rank
+        'ash_3_0': 1, // Attack Increase +30% ATK
+      },
+    };
+    const stats = computeStats(profile);
+
+    // Rogue base critDmg = 40, +30 from ash
+    expect(stats.critDmg).toBe(70);
+    // Rogue base critChance = 20, +4 from ash
+    expect(stats.critChance).toBe(24);
+    // Rogue base atkPercent = 15, +30 from ash
+    expect(stats.atkPercent).toBe(45);
+  });
+
+  it('card flat bonuses apply at correct tier', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      cards: {
+        'Boar': 24, // Act 1, tier thresholds [1,8,24,60] → tier index 2 (3rd tier)
+      },
+    };
+    const stats = computeStats(profile);
+
+    // Boar card tier 3 (index 2): HP +30
+    // Rogue base HP = 35, +30 from card = 65
+    expect(stats.hp).toBe(65);
+  });
+
+  it('rune individual stats apply when equipped', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      equippedRunes: ['VEX', 'ORT'], // Ironwood family: ATK +45 and +36
+    };
+    const stats = computeStats(profile);
+
+    // Rogue base atk = 14, VEX (ATK +45) + ORT (ATK +36) = +81
+    expect(stats.atk).toBeCloseTo(95, 1);
+  });
+
+  it('rune word bonuses apply when all runes present', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      equippedRunes: ['APEX', 'SIRC', 'WER'],
+    };
+    const stats = computeStats(profile);
+
+    // Individual runes: APEX (critDmg +12), SIRC (critDmg +9), WER (physDef +8)
+    // Rune word [APEX,SIRC,WER]: critChance +10, critDamage +60, magicFind +5
+    // Rogue base critDmg = 40, +12 +9 (individual) +60 (word) = 121
+    expect(stats.critDmg).toBe(121);
+    // Rogue base critChance = 20, +10 from word = 30
+    expect(stats.critChance).toBe(30);
+    // Rogue base magicFind = 20, +5 from word = 25
+    expect(stats.magicFind).toBe(25);
+  });
+
+  it('active pet global bonus scales linearly with level', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      activePet: { name: 'Basic Bat', level: 9 },
+    };
+    const stats = computeStats(profile);
+
+    // Basic Bat global bonus: All ATK (isPercent: true, level50: 54)
+    // At level 9: 54 * (0.189 + 0.0162 * 9) = 54 * 0.3348 = 18.08 → atkPercent
+    // Rogue base atkPercent = 15, +18.08 = 33.08
+    expect(stats.atkPercent).toBeCloseTo(33.08, 0);
+  });
+
+  it('curio multipliers apply to stats', () => {
+    const profile = {
+      class: 'rogue',
+      hunterUpgrades: {},
+      talents: {},
+      gear: {},
+      equippedCurios: [
+        { name: 'Pandemonium Egg', tier: 9 }, // Purple, critDmg +20%, tiers: t3 portalKills+3, t7 atkSpeed+6%, t9 critChance+9%
+      ],
+    };
+    const stats = computeStats(profile);
+
+    // Rogue base critDmg = 40, +20 from curio primary
+    expect(stats.critDmg).toBe(60);
+    // ATK multiplier for purple rarity: x1.13
+    // Rogue base atk = 14 * 1.13 = 15.82
+    expect(stats.atk).toBeCloseTo(15.82, 1);
+    // Tier 7 bonus: atkSpeed +6%
+    expect(stats.atkSpeed).toBe(26); // 20 base + 6
+    // Tier 9 bonus: critChance +9%
+    expect(stats.critChance).toBe(29); // 20 base + 9
+  });
+
   it('talent points add bonuses', () => {
     const profile = {
       class: 'rogue',
       hunterUpgrades: {},
       talents: {
-        tt_rogue_0_0: 3, // DEX I: 2 per point => +6 dex
-        tt_rogue_1_1: 5, // ATKSPD I: 2 per point => +10 atkSpeed
+        tt_rogue_1_0: 2, // Crit Chance: +2% per point, max 2 => +4 critChance
+        tt_rogue_5_0: 7, // ATK Speed: +1% per point, max 7 => +7 atkSpeed
       },
       gear: {},
     };
     const stats = computeStats(profile);
 
-    expect(stats.dex).toBe(6);
-    expect(stats.atkSpeed).toBe(20 + 10); // base 20 + 10 from talent
+    expect(stats.critChance).toBe(20 + 4); // base 20 + 4 from talent (2pts * 2%/pt)
+    expect(stats.atkSpeed).toBe(20 + 7); // base 20 + 7 from talent
   });
 });
 

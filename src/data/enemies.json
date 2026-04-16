@@ -26,11 +26,11 @@
     "zones": [
       { "zone": "2.1", "name": "Iceboar", "hp": 40000, "atk": 200, "evasion": 275, "accuracy": 1900, "gold": 15, "xp": 28200 },
       { "zone": "2.2", "name": "Helmet", "hp": 80000, "atk": 200, "evasion": 275, "accuracy": 1900, "gold": 16, "xp": 39500 },
-      { "zone": "2.3", "name": "Dung Beetle", "hp": 140000, "atk": 200, "evasion": 275, "accuracy": 1900, "gold": 17, "xp": 55300 },
-      { "zone": "2.4", "name": "Ghost", "hp": 240000, "atk": 262, "evasion": 275, "accuracy": 1900, "gold": 18, "xp": 77400 },
-      { "zone": "2.5", "name": "Cactus Mommy", "hp": 320000, "atk": 277, "evasion": 275, "accuracy": 1900, "gold": 19, "xp": 77400 },
-      { "zone": "2.6", "name": "Yeti", "hp": 382000, "atk": 327, "evasion": 275, "accuracy": 1900, "gold": 20, "xp": 108000 },
-      { "zone": "2.7", "name": "Ratatoskr", "hp": 456000, "atk": 365, "evasion": 275, "accuracy": 1900, "gold": 21, "xp": 151000 },
+      { "zone": "2.3", "name": "Ghost", "hp": 140000, "atk": 200, "evasion": 275, "accuracy": 1900, "gold": 17, "xp": 55300 },
+      { "zone": "2.4", "name": "Yeti", "hp": 240000, "atk": 262, "evasion": 275, "accuracy": 1900, "gold": 18, "xp": 77400 },
+      { "zone": "2.5", "name": "Ratatoskr", "hp": 320000, "atk": 277, "evasion": 275, "accuracy": 1900, "gold": 19, "xp": 77400 },
+      { "zone": "2.6", "name": "Watches", "hp": 382000, "atk": 327, "evasion": 275, "accuracy": 1900, "gold": 20, "xp": 108000 },
+      { "zone": "2.7", "name": "Snowman", "hp": 456000, "atk": 365, "evasion": 275, "accuracy": 1900, "gold": 21, "xp": 151000 },
       { "zone": "2.8", "name": "Troll", "hp": 567000, "atk": 438, "evasion": 275, "accuracy": 1900, "gold": 22, "xp": 212000 },
       { "zone": "2.9", "name": "Penguin", "hp": 624000, "atk": 600, "evasion": 275, "accuracy": 1900, "gold": 23, "xp": 254000 },
       { "zone": "2.10", "name": "Glass", "hp": 686000, "atk": 800, "evasion": 275, "accuracy": 1900, "gold": 24, "xp": 305000 },
@@ -46,13 +46,13 @@
   "act3": {
     "zones": [
       { "zone": "3.1", "name": "Sun Boy", "hp": 1500000, "atk": 1500, "evasion": 275, "accuracy": 1900, "gold": 27, "xp": 495000 },
-      { "zone": "3.2", "name": "Winged Serpent", "hp": 2500000, "atk": 1700, "evasion": 275, "accuracy": 1900, "gold": 28, "xp": 825000 },
-      { "zone": "3.3", "name": "Fez", "hp": 4500000, "atk": 1900, "evasion": 275, "accuracy": 1900, "gold": 29, "xp": 1480000 },
+      { "zone": "3.2", "name": "Dung Beetle", "hp": 2500000, "atk": 1700, "evasion": 275, "accuracy": 1900, "gold": 28, "xp": 825000 },
+      { "zone": "3.3", "name": "Cactus Mommy", "hp": 4500000, "atk": 1900, "evasion": 275, "accuracy": 1900, "gold": 29, "xp": 1480000 },
       { "zone": "3.4", "name": "Kangaroo", "hp": 6500000, "atk": 2200, "evasion": 275, "accuracy": 1900, "gold": 30, "xp": 2640000 },
-      { "zone": "3.5", "name": "Bandiff", "hp": 11500000, "atk": 2500, "evasion": 275, "accuracy": 1900, "gold": 31, "xp": 3790000 },
-      { "zone": "3.6", "name": "Bettleman", "hp": 15800000, "atk": 2700, "evasion": 275, "accuracy": 1900, "gold": 32, "xp": 5210000 },
-      { "zone": "3.7", "name": "Ciphered Building", "hp": 22300000, "atk": 2900, "evasion": 275, "accuracy": 1900, "gold": 33, "xp": 7350000 },
-      { "zone": "3.8", "name": "Mummy", "hp": 31500000, "atk": 3100, "evasion": 275, "accuracy": 1900, "gold": 34, "xp": 10300000 }
+      { "zone": "3.5", "name": "Fez", "hp": 11500000, "atk": 2500, "evasion": 275, "accuracy": 1900, "gold": 31, "xp": 3790000 },
+      { "zone": "3.6", "name": "Winged Serpent", "hp": 15800000, "atk": 2700, "evasion": 275, "accuracy": 1900, "gold": 32, "xp": 5210000 },
+      { "zone": "3.7", "name": "Bandiff", "hp": 22300000, "atk": 2900, "evasion": 275, "accuracy": 1900, "gold": 33, "xp": 7350000 },
+      { "zone": "3.8", "name": "Beetleman", "hp": 31500000, "atk": 3100, "evasion": 275, "accuracy": 1900, "gold": 34, "xp": 10300000 }
     ],
     "bosses": [
       { "name": "Kangaroo Boss", "hp": 400000000, "atk": 0, "evasion": 90, "accuracy": 90, "gold": 44, "xp": 300000 }

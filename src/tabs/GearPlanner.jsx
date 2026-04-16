@@ -97,10 +97,32 @@ function fmtDelta(n) {
 const selectedSlot = signal('helmet');
 const candidateItem = signal('');
 
+/* ── Enhancement scaling ─────────────────────────── */
+const WEAPON_ENH_RATE = 0.275;
+const ARMOR_ENH_RATE = 0.05;
+
+function enhancedPrimary(item, level) {
+  if (item.atk) return Math.round(item.atk * (1 + level * WEAPON_ENH_RATE) * 10) / 10;
+  if (item.def) return Math.round(item.def * (1 + level * ARMOR_ENH_RATE) * 10) / 10;
+  return 0;
+}
+
 /* ── Profile helpers ──────────────────────────────── */
-function setCurrentGear(slot, itemName) {
+function setCurrentGear(slot, itemName, enhLevel) {
   const profile = { ...activeProfile.value };
-  profile.gear = { ...profile.gear, [slot]: { name: itemName, enhancementLevel: 0 } };
+  const existing = profile.gear?.[slot];
+  profile.gear = {
+    ...profile.gear,
+    [slot]: { name: itemName, enhancementLevel: enhLevel ?? existing?.enhancementLevel ?? 0 },
+  };
+  saveProfile(activeProfileKey.value, profile);
+}
+
+function setEnhancementLevel(slot, level) {
+  const profile = { ...activeProfile.value };
+  const existing = profile.gear?.[slot];
+  if (!existing || !existing.name) return;
+  profile.gear = { ...profile.gear, [slot]: { ...existing, enhancementLevel: level } };
   saveProfile(activeProfileKey.value, profile);
 }
 
@@ -204,15 +226,39 @@ export function GearPlanner() {
               {currentItem.subtype && (
                 <div class="gp-item-info__subtype">{currentItem.subtype}</div>
               )}
+              {currentItem.obtainable === false && (
+                <div class="gp-item-info__unobtainable">Unobtainable</div>
+              )}
               {currentItem.atk != null && (
-                <div class="gp-item-info__primary">ATK: {currentItem.atk}</div>
+                <div class="gp-item-info__primary">
+                  ATK: {enhancedPrimary(currentItem, currentGearSlot?.enhancementLevel || 0)}
+                  {currentGearSlot?.enhancementLevel > 0 && (
+                    <span class="gp-item-info__base"> (base {currentItem.atk})</span>
+                  )}
+                </div>
               )}
               {currentItem.def != null && (
-                <div class="gp-item-info__primary">DEF: {currentItem.def}</div>
+                <div class="gp-item-info__primary">
+                  DEF: {enhancedPrimary(currentItem, currentGearSlot?.enhancementLevel || 0)}
+                  {currentGearSlot?.enhancementLevel > 0 && (
+                    <span class="gp-item-info__base"> (base {currentItem.def})</span>
+                  )}
+                </div>
               )}
-              {currentGearSlot?.enhancementLevel > 0 && (
-                <div class="gp-item-info__enhance">+{currentGearSlot.enhancementLevel}</div>
-              )}
+              <div class="gp-enhance-row">
+                <label class="gp-enhance-label">Enhancement:</label>
+                <input
+                  type="number"
+                  class="gp-enhance-input"
+                  min="0"
+                  max="15"
+                  value={currentGearSlot?.enhancementLevel || 0}
+                  onInput={(e) => setEnhancementLevel(slot, Math.max(0, Math.min(15, parseInt(e.target.value) || 0)))}
+                />
+                <span class="gp-enhance-preview">
+                  +1 = {enhancedPrimary(currentItem, (currentGearSlot?.enhancementLevel || 0) + 1)}
+                </span>
+              </div>
               <div class="gp-stat-list">
                 {currentItem.stats && Object.entries(currentItem.stats).map(([k, v]) => (
                   <div class="gp-stat-row" key={k}>
@@ -274,7 +320,7 @@ export function GearPlanner() {
             <option value="">-- Select an item --</option>
             {availableItems.map(item => (
               <option value={item.name} key={item.name}>
-                {item.name}{item.subtype ? ` (${item.subtype})` : ''}
+                {item.name}{item.subtype ? ` (${item.subtype})` : ''}{item.obtainable === false ? ' [Unobtainable]' : ''}
               </option>
             ))}
           </select>
@@ -287,6 +333,9 @@ export function GearPlanner() {
               )}
               {candidate.subtype && (
                 <div class="gp-item-info__subtype">{candidate.subtype}</div>
+              )}
+              {candidate.obtainable === false && (
+                <div class="gp-item-info__unobtainable">Unobtainable</div>
               )}
               {candidate.atk != null && (
                 <div class="gp-item-info__primary">ATK: {candidate.atk}</div>

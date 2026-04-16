@@ -7,3 +7,208 @@
 @media (max-width: 900px) {
   .dashboard__grid { grid-template-columns: 1fr; }
 }
+
+/* ── Buffs & Bonuses Section ── */
+.dashboard__buffs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+@media (max-width: 900px) {
+  .dashboard__buffs { grid-template-columns: 1fr; }
+}
+
+.buffs-panel {
+  background: var(--card-bg, rgba(255,255,255,0.05));
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 8px;
+  padding: 12px;
+}
+.buffs-panel__title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent, #8af);
+  margin-bottom: 8px;
+}
+.buffs-panel__input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.buffs-panel__number-input {
+  width: 100px;
+  padding: 4px 8px;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border, rgba(255,255,255,0.15));
+  border-radius: 4px;
+  color: var(--text, #eee);
+  font-size: 0.9rem;
+  -moz-appearance: textfield;
+}
+.buffs-panel__number-input::-webkit-outer-spin-button,
+.buffs-panel__number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.buffs-panel__hint {
+  font-size: 0.75rem;
+  color: var(--text-dim, #888);
+}
+.buffs-panel__empty {
+  font-size: 0.8rem;
+  color: var(--text-dim, #888);
+  padding: 8px 0;
+}
+
+/* Bonfire buff list */
+.buffs-panel__buff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.buffs-panel__buff {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  opacity: 0.4;
+}
+.buffs-panel__buff--active {
+  opacity: 1;
+  background: rgba(255,255,255,0.04);
+}
+.buffs-panel__buff-heat {
+  min-width: 36px;
+  font-weight: 600;
+  color: var(--warn, #f80);
+  font-size: 0.7rem;
+}
+.buffs-panel__buff-name {
+  flex: 1;
+  color: var(--text, #eee);
+}
+.buffs-panel__buff-value {
+  color: var(--success, #8f8);
+  font-size: 0.7rem;
+}
+
+/* Equipped Runes */
+.rune-equip__slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.rune-equip__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--accent-dim, rgba(136,170,255,0.15));
+  border: 1px solid var(--accent, #8af);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent, #8af);
+  cursor: pointer;
+}
+.rune-equip__chip:hover {
+  background: rgba(255,80,80,0.2);
+  border-color: #f55;
+  color: #f88;
+}
+.rune-equip__remove {
+  font-size: 0.65rem;
+  opacity: 0.6;
+}
+.rune-equip__add-btn {
+  padding: 3px 10px;
+  background: transparent;
+  border: 1px dashed var(--border, rgba(255,255,255,0.2));
+  border-radius: 12px;
+  color: var(--text-dim, #888);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.rune-equip__add-btn:hover {
+  border-color: var(--accent, #8af);
+  color: var(--accent, #8af);
+}
+.rune-equip__select {
+  padding: 3px 6px;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--accent, #8af);
+  border-radius: 4px;
+  color: var(--text, #eee);
+  font-size: 0.75rem;
+}
+.rune-equip__words {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rune-equip__word-active {
+  padding: 4px 8px;
+  background: rgba(80,255,80,0.08);
+  border: 1px solid rgba(80,255,80,0.25);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  color: var(--success, #8f8);
+}
+
+/* Card Overview */
+.card-section {
+  margin-bottom: 6px;
+}
+.card-section__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+.card-row--active {
+  opacity: 1;
+}
+.card-row__name {
+  flex: 1;
+  color: var(--text, #eee);
+}
+.card-row__count {
+  min-width: 30px;
+  text-align: right;
+  color: var(--text-dim, #aaa);
+}
+.card-row__tier {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 0.65rem;
+}
+.card-row__tier--1 { color: #aaa; }
+.card-row__tier--2 { color: #6af; }
+.card-row__tier--3 { color: #c6f; }
+.card-row__tier--4 { color: #fa0; }
+.card-row__next {
+  font-size: 0.65rem;
+  color: var(--text-dim, #666);
+}

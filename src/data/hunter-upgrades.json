@@ -5,7 +5,7 @@
   { "id": "LeBabka_Con", "name": "Hunter Endurance Training", "stat": "con", "perRank": 1, "material": "Boar Meat", "maxRank": 40 },
   { "id": "LeBabka_Men", "name": "Meditation Training", "stat": "men", "perRank": 1, "material": "Honeycomb", "maxRank": 40 },
   { "id": "LeBabka_PAtk", "name": "Power Training", "stat": "atkPercent", "perRank": 10, "material": "Mini Plant", "maxRank": 40 },
-  { "id": "LeBabka_MAtk", "name": "More Damage Training", "stat": "atkPercent", "perRank": 2, "material": "Fire Essence", "maxRank": 40 },
+  { "id": "LeBabka_MAtk", "name": "More Damage Training", "stat": "atk", "perRank": 0.01, "material": "Fire Essence", "maxRank": 40, "isMultiplier": true },
   { "id": "LeBabka_PDef", "name": "Defence Training", "stat": "defPercent", "perRank": 3, "material": "Stoney McStoneface", "maxRank": 40 },
   { "id": "LeBabka_Accuracy", "name": "Accuracy Training", "stat": "accuracy", "perRank": 0.04, "material": "Leaf", "maxRank": 40 },
   { "id": "LeBabka_CritChance", "name": "Dice Training", "stat": "critChance", "perRank": 0.3, "material": "D20 Dice", "maxRank": 40 },

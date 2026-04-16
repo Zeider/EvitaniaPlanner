@@ -1,8 +1,19 @@
-import { useState, useMemo } from 'preact/hooks';
-import { profiles, activeProfileKey } from '../state/store.js';
+import { useState, useMemo, useCallback } from 'preact/hooks';
+import { profiles, activeProfileKey, saveProfile } from '../state/store.js';
 import { detectBottlenecks } from '../state/bottleneck-detector.js';
 import { buildCapabilityMatrix, assignAlts } from '../state/alt-optimizer.js';
 import enemies from '../data/enemies.json';
+
+/** Build flat zone list for dropdown. */
+function buildZoneList() {
+  const list = [];
+  for (const act of Object.values(enemies)) {
+    if (!act.zones) continue;
+    for (const e of act.zones) list.push(e);
+  }
+  return list;
+}
+const allZones = buildZoneList();
 
 function fmt(n) {
   if (!isFinite(n) || isNaN(n)) return '---';
@@ -27,8 +38,9 @@ function zoneMobName(zoneId) {
   return zoneId;
 }
 
-function AltCard({ assignment, isMain }) {
+function AltCard({ assignment, isMain, profileKey, onZoneChange }) {
   const p = assignment.profile;
+  const maxZone = p.maxUnlockedZone || '';
   return (
     <div class={`alt-card ${isMain ? 'alt-card--active' : ''}`}>
       <div class="alt-card__header">
@@ -38,6 +50,19 @@ function AltCard({ assignment, isMain }) {
         <span class={`alt-card__badge ${isMain ? 'alt-card__badge--active' : 'alt-card__badge--offline'}`}>
           {isMain ? 'Active' : 'Offline'}
         </span>
+      </div>
+      <div class="alt-card__zone-setting">
+        <label class="alt-card__override-label">Max unlocked zone:</label>
+        <select
+          class="alt-card__override-select"
+          value={maxZone}
+          onChange={(e) => onZoneChange(profileKey, e.target.value)}
+        >
+          <option value="">Auto (stat-based)</option>
+          {allZones.map(z => (
+            <option key={z.zone} value={z.zone}>{z.zone} - {z.name}</option>
+          ))}
+        </select>
       </div>
       {isMain ? (
         <div class="alt-card__recommendation">
@@ -76,26 +101,38 @@ function AltCard({ assignment, isMain }) {
 }
 
 export function AltAdvisor() {
-  const allProfiles = profiles.value;
-  const mainKey = activeProfileKey.value;
-  const profileList = Object.entries(allProfiles);
   const [refreshKey, setRefresh] = useState(0);
 
+  const handleZoneChange = useCallback((profileKey, zone) => {
+    const prof = profiles.value[profileKey];
+    if (!prof) return;
+    saveProfile(profileKey, { ...prof, maxUnlockedZone: zone || '' });
+    setRefresh(k => k + 1);
+  }, []);
+
+  // Force re-read profiles on every render triggered by refreshKey or signal change
+  const currentProfiles = profiles.value;
+  const currentMainKey = activeProfileKey.value;
+  const currentProfileList = Object.entries(currentProfiles);
+
   const result = useMemo(() => {
-    if (profileList.length === 0) return null;
-    const mainProfile = allProfiles[mainKey] || profileList[0][1];
-    const altProfiles = profileList
-      .filter(([key]) => key !== mainKey)
-      .map(([, p]) => p);
+    if (currentProfileList.length === 0) return null;
+    const mainProfile = currentProfiles[currentMainKey] || currentProfileList[0][1];
+    const altEntries = currentProfileList.filter(([key]) => key !== currentMainKey);
 
     const bottlenecks = detectBottlenecks(mainProfile);
-    const matrices = altProfiles.map(p => buildCapabilityMatrix(p));
+    const matrices = altEntries.map(([, p]) => buildCapabilityMatrix(p));
     const assignments = assignAlts(bottlenecks, matrices);
 
-    return { mainProfile, assignments, bottlenecks };
-  }, [allProfiles, mainKey, refreshKey]);
+    for (const a of assignments) {
+      const entry = altEntries.find(([, p]) => p.name === a.altName);
+      if (entry) a._profileKey = entry[0];
+    }
 
-  if (!result || profileList.length === 0) {
+    return { mainProfile, mainKey: currentMainKey, assignments, bottlenecks };
+  }, [currentProfiles, currentMainKey, refreshKey]);
+
+  if (!result || currentProfileList.length === 0) {
     return (
       <div class="alt-advisor">
         <div class="alt-advisor__empty">
@@ -118,9 +155,17 @@ export function AltAdvisor() {
         <AltCard
           assignment={{ type: 'active', zone: mainProfile.currentZone, profile: mainProfile }}
           isMain={true}
+          profileKey={result.mainKey}
+          onZoneChange={handleZoneChange}
         />
         {assignments.map((a, i) => (
-          <AltCard key={a.altName || i} assignment={a} isMain={false} />
+          <AltCard
+            key={a.altName || i}
+            assignment={a}
+            isMain={false}
+            profileKey={a._profileKey}
+            onZoneChange={handleZoneChange}
+          />
         ))}
       </div>
     </div>

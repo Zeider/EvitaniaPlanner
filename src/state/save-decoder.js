@@ -43,6 +43,12 @@ export function extractProfiles(saveData) {
   const progressEnhancements = saveData.ProgressProfile?.Enhancements ?? {};
   const cards = saveData.Currency?.cards ?? {};
 
+  // Bonfire heat is not stored in the save (only fuel/rate) — user sets manually
+  const bonfireHeat = 0;
+
+  // Extract pet data
+  const petSaveData = saveData.Pets?.petSaveData ?? [];
+
   // Shared upgrades extracted once from ProgressProfile.Enhancements
   const hunterUpgrades = {};
   const ashUpgrades = {};
@@ -105,6 +111,34 @@ export function extractProfiles(saveData) {
         goldPerHour: op.GoldPerHour ?? 0,
       },
       currentZone: hero.Progress?.scene ?? '',
+      bonfireHeat,
+      activePet: (() => {
+        const heroIndex = heroes.indexOf(hero);
+        const pet = petSaveData.find(p => p.characterId === heroIndex && p.petSlot === 0);
+        return pet ? { name: pet.petName, level: pet.level, tier: pet.tier } : null;
+      })(),
+      // Derive max unlocked zone from visitedScenes — find highest combat zone
+      maxUnlockedZone: (() => {
+        const visited = hero.Progress?.visitedScenes ?? [];
+        let maxZone = '';
+        let maxVal = -1;
+        for (const scene of visited) {
+          // Only combat zones match pattern like "1.0", "2.7", "3.12"
+          // Skip towns (x.0 for act 2+), bosses, towers, etc.
+          const match = scene.match(/^(\d+)\.(\d+)$/);
+          if (!match) continue;
+          const act = parseInt(match[1]);
+          const zone = parseInt(match[2]);
+          // Skip town zones (2.0, 3.0) and non-combat scenes
+          if (act >= 2 && zone === 0) continue;
+          const val = act * 100 + zone;
+          if (val > maxVal) {
+            maxVal = val;
+            maxZone = scene;
+          }
+        }
+        return maxZone;
+      })(),
     };
   });
 }

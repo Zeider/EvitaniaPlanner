@@ -40,6 +40,13 @@
   background: rgba(255,170,0,0.08); border: 1px solid rgba(255,170,0,0.2);
   border-radius: 4px; font-size: 0.72rem; color: var(--warn, #fa0);
 }
+.alt-card__zone-setting {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+}
 .alt-advisor__empty {
   text-align: center; padding: 40px; color: var(--text-dim, #888);
 }

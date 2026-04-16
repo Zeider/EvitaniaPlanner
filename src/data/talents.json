@@ -1,102 +1,247 @@
 {
   "novice": {
-    "description": "Shared novice talent tree available to all classes",
+    "description": "Shared novice talent tree available to all classes. 3-column layout, single nodes centered.",
     "nodes": [
-      { "id": "novice_0_0_patk", "name": "Attack I", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 0, "col": 0 },
-      { "id": "novice_1_0_hp", "name": "Health I", "stat": "hp", "perPoint": 5, "maxPoints": 2, "row": 1, "col": 0 },
-      { "id": "novice_1_1_patk", "name": "Attack II", "stat": "atk", "perPoint": 1, "maxPoints": 2, "row": 1, "col": 1 },
-      { "id": "novice_1_2_pdef", "name": "Defence I", "stat": "def", "perPoint": 1, "maxPoints": 2, "row": 1, "col": 2 },
-      { "id": "novice_2_0_exp", "name": "Experience I", "stat": "bonusXp", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 0 },
-      { "id": "novice_2_1_patk", "name": "Attack III", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 2, "col": 1 },
-      { "id": "novice_2_2_mf", "name": "Magic Find I", "stat": "magicFind", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 2 },
-      { "id": "novice_3_0_patk", "name": "Attack IV", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 0 }
+      { "id": "novice_0_0", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 0, "col": 1 },
+      { "id": "novice_1_0", "name": "More HP", "stat": "hp", "perPoint": 5, "maxPoints": 1, "row": 1, "col": 0 },
+      { "id": "novice_1_1", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 1, "col": 1 },
+      { "id": "novice_1_2", "name": "More Defence", "stat": "def", "perPoint": 1, "maxPoints": 1, "row": 1, "col": 2 },
+      { "id": "novice_2_0", "name": "More Levels", "stat": "bonusXp", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 0 },
+      { "id": "novice_2_1", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 2, "col": 1 },
+      { "id": "novice_2_2", "name": "More Loot", "stat": "magicFind", "perPoint": 5, "maxPoints": 1, "row": 2, "col": 2 },
+      { "id": "novice_3_0", "name": "Attack Damage", "stat": "atk", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 1 }
+    ],
+    "connections": [
+      ["novice_0_0", "novice_1_0"], ["novice_0_0", "novice_1_1"], ["novice_0_0", "novice_1_2"],
+      ["novice_1_0", "novice_2_0"], ["novice_1_1", "novice_2_1"], ["novice_1_2", "novice_2_2"],
+      ["novice_2_0", "novice_3_0"], ["novice_2_1", "novice_3_0"], ["novice_2_2", "novice_3_0"]
+    ]
+  },
+  "rogue": {
+    "description": "Rogue talent tree — 11 tiers, 38 nodes. Crit/ATK Speed/ATK% focused.",
+    "classUnlock": { "id": "class_1_rogue", "name": "Rogue", "maxPoints": 1 },
+    "nodes": [
+      { "id": "tt_rogue_0_0", "name": "Piercing Arrow", "stat": "skill_piercingArrow", "perPoint": 1, "maxPoints": 1, "row": 0, "col": 0, "isSkill": true },
+
+      { "id": "tt_rogue_1_0", "name": "Crit Chance", "stat": "critChance", "perPoint": 2, "maxPoints": 2, "row": 1, "col": 0 },
+      { "id": "tt_rogue_1_1", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 2, "row": 1, "col": 1 },
+      { "id": "tt_rogue_1_2", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 2, "row": 1, "col": 2 },
+      { "id": "tt_rogue_1_3", "name": "Attack Speed", "stat": "atkSpeed", "perPoint": 1, "maxPoints": 3, "row": 1, "col": 3 },
+
+      { "id": "tt_rogue_2_0", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 2, "row": 2, "col": 0 },
+      { "id": "tt_rogue_2_1", "name": "Maximum HP", "stat": "hp", "perPoint": 5, "maxPoints": 2, "row": 2, "col": 1 },
+      { "id": "tt_rogue_2_2", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 2, "row": 2, "col": 2 },
+
+      { "id": "tt_rogue_3_0", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 5, "row": 3, "col": 0 },
+      { "id": "tt_rogue_3_1", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 3, "row": 3, "col": 1 },
+      { "id": "tt_rogue_3_2", "name": "Crit Chance", "stat": "critChance", "perPoint": 1, "maxPoints": 3, "row": 3, "col": 2 },
+      { "id": "tt_rogue_3_3", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 3 },
+
+      { "id": "tt_rogue_4_0", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 2, "row": 4, "col": 0 },
+      { "id": "tt_rogue_4_1", "name": "Movespeed", "stat": "moveSpeed", "perPoint": 10, "maxPoints": 3, "row": 4, "col": 1 },
+      { "id": "tt_rogue_4_2", "name": "Movement Speed", "stat": "skill_movementSpeed", "perPoint": 1, "maxPoints": 1, "row": 4, "col": 2, "isSkill": true },
+
+      { "id": "tt_rogue_5_0", "name": "ATK Speed", "stat": "atkSpeed", "perPoint": 1, "maxPoints": 7, "row": 5, "col": 0 },
+      { "id": "tt_rogue_5_1", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 5, "row": 5, "col": 1 },
+      { "id": "tt_rogue_5_2", "name": "Critical Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 10, "row": 5, "col": 2 },
+      { "id": "tt_rogue_5_3", "name": "Improved Arrow", "stat": "skill_improvedArrow", "perPoint": 85, "maxPoints": 1, "row": 5, "col": 3 },
+
+      { "id": "tt_rogue_6_0", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 1, "row": 6, "col": 0 },
+      { "id": "tt_rogue_6_1", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 5, "row": 6, "col": 1 },
+      { "id": "tt_rogue_6_2", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 3, "row": 6, "col": 2 },
+      { "id": "tt_rogue_6_3", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 5, "row": 6, "col": 3 },
+
+      { "id": "tt_rogue_7_0", "name": "Maximum HP", "stat": "hp", "perPoint": 10, "maxPoints": 5, "row": 7, "col": 0 },
+      { "id": "tt_rogue_7_1", "name": "Crit Chance", "stat": "critChance", "perPoint": 1, "maxPoints": 5, "row": 7, "col": 1 },
+      { "id": "tt_rogue_7_2", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 5, "row": 7, "col": 2 },
+      { "id": "tt_rogue_7_3", "name": "Rapid Fire", "stat": "skill_rapidFire", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 3, "isSkill": true },
+
+      { "id": "tt_rogue_8_0", "name": "ATK%", "stat": "atkPercent", "perPoint": 1, "maxPoints": 5, "row": 8, "col": 0 },
+      { "id": "tt_rogue_8_1", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 5, "row": 8, "col": 1 },
+      { "id": "tt_rogue_8_2", "name": "ATK Speed", "stat": "atkSpeed", "perPoint": 1, "maxPoints": 10, "row": 8, "col": 2 },
+      { "id": "tt_rogue_8_3", "name": "Arrow Barrage", "stat": "skill_arrowBarrage", "perPoint": 1, "maxPoints": 1, "row": 8, "col": 3, "isSkill": true },
+
+      { "id": "tt_rogue_9_0", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 10, "row": 9, "col": 0 },
+      { "id": "tt_rogue_9_1", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 3, "row": 9, "col": 1 },
+      { "id": "tt_rogue_9_2", "name": "Crit Chance", "stat": "critChance", "perPoint": 1, "maxPoints": 10, "row": 9, "col": 2 },
+
+      { "id": "tt_rogue_10_0", "name": "ATK%", "stat": "atkPercent", "perPoint": 1, "maxPoints": 10, "row": 10, "col": 0 },
+      { "id": "tt_rogue_10_1", "name": "Crit Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 10, "row": 10, "col": 1 },
+      { "id": "tt_rogue_10_2", "name": "Improved Arrow", "stat": "skill_improvedArrow", "perPoint": 85, "maxPoints": 1, "row": 10, "col": 2 },
+      { "id": "tt_rogue_10_3", "name": "Movespeed", "stat": "moveSpeed", "perPoint": 10, "maxPoints": 2, "row": 10, "col": 3 }
+    ],
+    "connections": [
+      ["tt_rogue_0_0", "tt_rogue_1_0"], ["tt_rogue_0_0", "tt_rogue_1_1"], ["tt_rogue_0_0", "tt_rogue_1_2"], ["tt_rogue_0_0", "tt_rogue_1_3"],
+      ["tt_rogue_1_1", "tt_rogue_2_0"], ["tt_rogue_1_1", "tt_rogue_2_1"],
+      ["tt_rogue_1_2", "tt_rogue_2_1"], ["tt_rogue_1_2", "tt_rogue_2_2"],
+      ["tt_rogue_2_0", "tt_rogue_3_0"], ["tt_rogue_2_0", "tt_rogue_3_1"],
+      ["tt_rogue_2_1", "tt_rogue_3_1"], ["tt_rogue_2_1", "tt_rogue_3_2"],
+      ["tt_rogue_2_2", "tt_rogue_3_2"], ["tt_rogue_2_2", "tt_rogue_3_3"],
+      ["tt_rogue_3_1", "tt_rogue_4_0"],
+      ["tt_rogue_3_3", "tt_rogue_4_0"], ["tt_rogue_3_3", "tt_rogue_4_2"],
+      ["tt_rogue_4_0", "tt_rogue_4_1"], ["tt_rogue_4_0", "tt_rogue_5_0"], ["tt_rogue_4_0", "tt_rogue_5_1"], ["tt_rogue_4_0", "tt_rogue_5_2"],
+      ["tt_rogue_4_2", "tt_rogue_5_3"],
+      ["tt_rogue_5_1", "tt_rogue_6_0"], ["tt_rogue_5_1", "tt_rogue_6_1"], ["tt_rogue_5_1", "tt_rogue_6_2"],
+      ["tt_rogue_5_2", "tt_rogue_6_3"],
+      ["tt_rogue_6_0", "tt_rogue_7_0"],
+      ["tt_rogue_6_1", "tt_rogue_7_1"],
+      ["tt_rogue_6_2", "tt_rogue_7_1"], ["tt_rogue_6_2", "tt_rogue_7_2"], ["tt_rogue_6_2", "tt_rogue_7_3"],
+      ["tt_rogue_7_0", "tt_rogue_8_0"], ["tt_rogue_7_0", "tt_rogue_8_1"],
+      ["tt_rogue_7_2", "tt_rogue_8_1"], ["tt_rogue_7_2", "tt_rogue_8_2"], ["tt_rogue_7_2", "tt_rogue_8_3"],
+      ["tt_rogue_8_0", "tt_rogue_9_0"], ["tt_rogue_8_0", "tt_rogue_9_1"],
+      ["tt_rogue_8_1", "tt_rogue_9_1"], ["tt_rogue_8_1", "tt_rogue_9_2"],
+      ["tt_rogue_9_1", "tt_rogue_10_0"], ["tt_rogue_9_1", "tt_rogue_10_1"], ["tt_rogue_9_1", "tt_rogue_10_2"],
+      ["tt_rogue_9_2", "tt_rogue_10_3"]
     ]
   },
   "warrior": {
-    "description": "Warrior talent tree - STR focused with Cleave, Dragon Soul, Blade Strike skills",
+    "description": "Warrior talent tree — 11 tiers, 34 nodes. DEF/ATK/Crit focused.",
     "classUnlock": { "id": "class_1_warrior", "name": "Warrior", "maxPoints": 1 },
     "nodes": [
-      { "id": "tt_warrior_0_0", "name": "STR I", "stat": "str", "perPoint": 2, "maxPoints": 5, "row": 0, "col": 0 },
-      { "id": "tt_warrior_1_0", "name": "HP I", "stat": "hp", "perPoint": 10, "maxPoints": 5, "row": 1, "col": 0 },
-      { "id": "tt_warrior_1_1", "name": "ATK I", "stat": "atk", "perPoint": 2, "maxPoints": 5, "row": 1, "col": 1 },
-      { "id": "tt_warrior_1_2", "name": "DEF I", "stat": "def", "perPoint": 2, "maxPoints": 5, "row": 1, "col": 2 },
-      { "id": "tt_warrior_2_0", "name": "Crit Chance I", "stat": "critChance", "perPoint": 1, "maxPoints": 5, "row": 2, "col": 0 },
-      { "id": "tt_warrior_2_1", "name": "ATKSPD I", "stat": "atkSpeed", "perPoint": 2, "maxPoints": 5, "row": 2, "col": 1 },
-      { "id": "tt_warrior_2_2", "name": "Crit Damage I", "stat": "critDamage", "perPoint": 3, "maxPoints": 5, "row": 2, "col": 2 },
-      { "id": "tt_warrior_3_0", "name": "Cleave", "stat": "skill_cleave", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 0, "isSkill": true },
-      { "id": "tt_warrior_3_1", "name": "STR II", "stat": "str", "perPoint": 3, "maxPoints": 5, "row": 3, "col": 1 },
-      { "id": "tt_warrior_3_2", "name": "Mana I", "stat": "mana", "perPoint": 5, "maxPoints": 5, "row": 3, "col": 2 },
-      { "id": "tt_warrior_4_0", "name": "HP II", "stat": "hp", "perPoint": 15, "maxPoints": 5, "row": 4, "col": 0 },
-      { "id": "tt_warrior_4_1", "name": "ATK II", "stat": "atk", "perPoint": 3, "maxPoints": 5, "row": 4, "col": 1 },
-      { "id": "tt_warrior_4_2", "name": "Mana Regen I", "stat": "manaRegen", "perPoint": 1, "maxPoints": 5, "row": 4, "col": 2 },
-      { "id": "tt_warrior_5_0", "name": "Dragon Soul", "stat": "skill_dragonSoul", "perPoint": 1, "maxPoints": 1, "row": 5, "col": 0, "isSkill": true },
-      { "id": "tt_warrior_5_1", "name": "DEF II", "stat": "def", "perPoint": 3, "maxPoints": 5, "row": 5, "col": 1 },
-      { "id": "tt_warrior_5_2", "name": "MoveSpd I", "stat": "moveSpeed", "perPoint": 1, "maxPoints": 5, "row": 5, "col": 2 },
-      { "id": "tt_warrior_6_0", "name": "Crit Chance II", "stat": "critChance", "perPoint": 2, "maxPoints": 5, "row": 6, "col": 0 },
-      { "id": "tt_warrior_6_1", "name": "Bonus XP I", "stat": "bonusXp", "perPoint": 5, "maxPoints": 5, "row": 6, "col": 1 },
-      { "id": "tt_warrior_6_2", "name": "Crit Damage II", "stat": "critDamage", "perPoint": 5, "maxPoints": 5, "row": 6, "col": 2 },
-      { "id": "tt_warrior_7_0", "name": "Blade Strike", "stat": "skill_bladeStrike", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 0, "isSkill": true },
-      { "id": "tt_warrior_7_1", "name": "STR III", "stat": "str", "perPoint": 5, "maxPoints": 5, "row": 7, "col": 1 },
-      { "id": "tt_warrior_7_2", "name": "MF I", "stat": "magicFind", "perPoint": 2, "maxPoints": 5, "row": 7, "col": 2 },
-      { "id": "tt_warrior_8_0", "name": "HP III", "stat": "hp", "perPoint": 25, "maxPoints": 5, "row": 8, "col": 0 },
-      { "id": "tt_warrior_8_1", "name": "ATK III", "stat": "atk", "perPoint": 5, "maxPoints": 5, "row": 8, "col": 1 },
-      { "id": "tt_warrior_8_2", "name": "ATKSPD II", "stat": "atkSpeed", "perPoint": 3, "maxPoints": 3, "row": 8, "col": 2 }
+      { "id": "tt_warrior_0_0", "name": "Cleave", "stat": "skill_cleave", "perPoint": 1, "maxPoints": 1, "row": 0, "col": 0, "isSkill": true },
+
+      { "id": "tt_warrior_1_0", "name": "Bonus XP", "stat": "bonusXp", "perPoint": 5, "maxPoints": 3, "row": 1, "col": 0 },
+      { "id": "tt_warrior_1_1", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 3, "row": 1, "col": 1 },
+      { "id": "tt_warrior_1_2", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 2, "row": 1, "col": 2 },
+      { "id": "tt_warrior_1_3", "name": "Movespeed", "stat": "moveSpeed", "perPoint": 10, "maxPoints": 2, "row": 1, "col": 3 },
+
+      { "id": "tt_warrior_2_0", "name": "Last Stand", "stat": "skill_lastStand", "perPoint": 1, "maxPoints": 1, "row": 2, "col": 0, "isSkill": true },
+      { "id": "tt_warrior_2_1", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 5, "row": 2, "col": 1 },
+      { "id": "tt_warrior_2_2", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 1, "row": 2, "col": 2 },
+      { "id": "tt_warrior_2_3", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 2, "row": 2, "col": 3 },
+
+      { "id": "tt_warrior_3_0", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 3, "row": 3, "col": 0 },
+      { "id": "tt_warrior_3_1", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 3, "row": 3, "col": 1 },
+      { "id": "tt_warrior_3_2", "name": "Improved Cleave", "stat": "skill_improvedCleave", "perPoint": 125, "maxPoints": 1, "row": 3, "col": 2 },
+      { "id": "tt_warrior_3_3", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 5, "row": 3, "col": 3 },
+
+      { "id": "tt_warrior_4_0", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 5, "row": 4, "col": 0 },
+      { "id": "tt_warrior_4_1", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 1, "row": 4, "col": 1 },
+      { "id": "tt_warrior_4_2", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 5, "row": 4, "col": 2 },
+      { "id": "tt_warrior_4_3", "name": "Crit Chance", "stat": "critChance", "perPoint": 2, "maxPoints": 5, "row": 4, "col": 3 },
+
+      { "id": "tt_warrior_5_0", "name": "Defence", "stat": "def", "perPoint": 2, "maxPoints": 2, "row": 5, "col": 0 },
+      { "id": "tt_warrior_5_1", "name": "Attack Speed", "stat": "atkSpeed", "perPoint": 1, "maxPoints": 5, "row": 5, "col": 1 },
+      { "id": "tt_warrior_5_2", "name": "Critical Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 5, "row": 5, "col": 2 },
+
+      { "id": "tt_warrior_6_0", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 5, "row": 6, "col": 0 },
+      { "id": "tt_warrior_6_1", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 5, "row": 6, "col": 1 },
+      { "id": "tt_warrior_6_2", "name": "Max HP", "stat": "hp", "perPoint": 5, "maxPoints": 4, "row": 6, "col": 2 },
+      { "id": "tt_warrior_6_3", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 5, "row": 6, "col": 3 },
+
+      { "id": "tt_warrior_7_0", "name": "Dragon Soul", "stat": "skill_dragonSoul", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 0, "isSkill": true },
+      { "id": "tt_warrior_7_1", "name": "Crit Chance", "stat": "critChance", "perPoint": 2, "maxPoints": 5, "row": 7, "col": 1 },
+      { "id": "tt_warrior_7_2", "name": "Movespeed", "stat": "moveSpeed", "perPoint": 10, "maxPoints": 2, "row": 7, "col": 2 },
+      { "id": "tt_warrior_7_3", "name": "Blade Strike", "stat": "skill_bladeStrike", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 3, "isSkill": true },
+
+      { "id": "tt_warrior_8_0", "name": "Critical Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 2, "row": 8, "col": 0 },
+      { "id": "tt_warrior_8_1", "name": "Bonus XP", "stat": "bonusXp", "perPoint": 5, "maxPoints": 7, "row": 8, "col": 1 },
+      { "id": "tt_warrior_8_2", "name": "Max HP", "stat": "hp", "perPoint": 5, "maxPoints": 5, "row": 8, "col": 2 },
+      { "id": "tt_warrior_8_3", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 3, "row": 8, "col": 3 },
+
+      { "id": "tt_warrior_9_0", "name": "Attack Percent", "stat": "atkPercent", "perPoint": 1, "maxPoints": 5, "row": 9, "col": 0 },
+      { "id": "tt_warrior_9_1", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 5, "row": 9, "col": 1 },
+      { "id": "tt_warrior_9_2", "name": "Attack Speed", "stat": "atkSpeed", "perPoint": 1, "maxPoints": 10, "row": 9, "col": 2 },
+      { "id": "tt_warrior_9_3", "name": "Attack Percent", "stat": "atkPercent", "perPoint": 1, "maxPoints": 5, "row": 9, "col": 3 },
+
+      { "id": "tt_warrior_10_0", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 10, "row": 10, "col": 0 },
+      { "id": "tt_warrior_10_1", "name": "Crit Chance", "stat": "critChance", "perPoint": 2, "maxPoints": 5, "row": 10, "col": 1 },
+      { "id": "tt_warrior_10_2", "name": "Improved Cleave", "stat": "skill_improvedCleave", "perPoint": 125, "maxPoints": 1, "row": 10, "col": 2 }
     ],
-    "maxPoints": 153
-  },
-  "rogue": {
-    "description": "Rogue talent tree - DEX focused with Improved Arrow, Double Shot, Rain of Arrows skills",
-    "classUnlock": { "id": "class_1_rogue", "name": "Rogue", "maxPoints": 1 },
-    "nodes": [
-      { "id": "tt_rogue_0_0", "name": "DEX I", "stat": "dex", "perPoint": 2, "maxPoints": 5, "row": 0, "col": 0 },
-      { "id": "tt_rogue_1_0", "name": "Crit Chance I", "stat": "critChance", "perPoint": 1, "maxPoints": 5, "row": 1, "col": 0 },
-      { "id": "tt_rogue_1_1", "name": "ATKSPD I", "stat": "atkSpeed", "perPoint": 2, "maxPoints": 5, "row": 1, "col": 1 },
-      { "id": "tt_rogue_1_2", "name": "Mana Regen I", "stat": "manaRegen", "perPoint": 1, "maxPoints": 5, "row": 1, "col": 2 },
-      { "id": "tt_rogue_2_0", "name": "DEX II", "stat": "dex", "perPoint": 3, "maxPoints": 5, "row": 2, "col": 0 },
-      { "id": "tt_rogue_2_1", "name": "MF I", "stat": "magicFind", "perPoint": 2, "maxPoints": 5, "row": 2, "col": 1 },
-      { "id": "tt_rogue_2_2", "name": "DEF I", "stat": "def", "perPoint": 2, "maxPoints": 5, "row": 2, "col": 2 },
-      { "id": "tt_rogue_3_0", "name": "Improved Arrow", "stat": "skill_improvedArrow", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 0, "isSkill": true },
-      { "id": "tt_rogue_3_1", "name": "Crit Damage I", "stat": "critDamage", "perPoint": 3, "maxPoints": 5, "row": 3, "col": 1 },
-      { "id": "tt_rogue_3_2", "name": "HP I", "stat": "hp", "perPoint": 10, "maxPoints": 5, "row": 3, "col": 2 },
-      { "id": "tt_rogue_4_0", "name": "Mana I", "stat": "mana", "perPoint": 5, "maxPoints": 5, "row": 4, "col": 0 },
-      { "id": "tt_rogue_4_1", "name": "ATK I", "stat": "atk", "perPoint": 2, "maxPoints": 5, "row": 4, "col": 1 },
-      { "id": "tt_rogue_4_2", "name": "MoveSpd I", "stat": "moveSpeed", "perPoint": 1, "maxPoints": 5, "row": 4, "col": 2 },
-      { "id": "tt_rogue_5_0", "name": "Double Shot", "stat": "skill_doubleShot", "perPoint": 1, "maxPoints": 1, "row": 5, "col": 0, "isSkill": true },
-      { "id": "tt_rogue_5_1", "name": "Crit Chance II", "stat": "critChance", "perPoint": 2, "maxPoints": 5, "row": 5, "col": 1 },
-      { "id": "tt_rogue_5_2", "name": "Bonus XP I", "stat": "bonusXp", "perPoint": 5, "maxPoints": 5, "row": 5, "col": 2 },
-      { "id": "tt_rogue_6_0", "name": "DEX III", "stat": "dex", "perPoint": 5, "maxPoints": 5, "row": 6, "col": 0 },
-      { "id": "tt_rogue_6_1", "name": "Crit Damage II", "stat": "critDamage", "perPoint": 5, "maxPoints": 5, "row": 6, "col": 1 },
-      { "id": "tt_rogue_6_2", "name": "ATK II", "stat": "atk", "perPoint": 3, "maxPoints": 5, "row": 6, "col": 2 },
-      { "id": "tt_rogue_7_0", "name": "Rain of Arrows", "stat": "skill_rainOfArrows", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 0, "isSkill": true },
-      { "id": "tt_rogue_7_1", "name": "ATKSPD II", "stat": "atkSpeed", "perPoint": 3, "maxPoints": 5, "row": 7, "col": 1 },
-      { "id": "tt_rogue_7_2", "name": "MF II", "stat": "magicFind", "perPoint": 3, "maxPoints": 3, "row": 7, "col": 2 }
-    ],
-    "maxPoints": 156
+    "connections": [
+      ["tt_warrior_0_0", "tt_warrior_1_0"], ["tt_warrior_0_0", "tt_warrior_1_1"], ["tt_warrior_0_0", "tt_warrior_1_2"],
+      ["tt_warrior_1_1", "tt_warrior_2_0"], ["tt_warrior_1_1", "tt_warrior_2_1"],
+      ["tt_warrior_1_2", "tt_warrior_2_2"], ["tt_warrior_1_2", "tt_warrior_2_3"], ["tt_warrior_1_2", "tt_warrior_1_3"],
+      ["tt_warrior_2_0", "tt_warrior_3_0"],
+      ["tt_warrior_2_2", "tt_warrior_3_1"],
+      ["tt_warrior_2_3", "tt_warrior_3_2"], ["tt_warrior_2_3", "tt_warrior_3_3"],
+      ["tt_warrior_3_0", "tt_warrior_4_0"],
+      ["tt_warrior_3_1", "tt_warrior_4_1"],
+      ["tt_warrior_3_2", "tt_warrior_4_2"], ["tt_warrior_3_2", "tt_warrior_4_3"],
+      ["tt_warrior_3_3", "tt_warrior_4_2"], ["tt_warrior_3_3", "tt_warrior_4_3"],
+      ["tt_warrior_4_1", "tt_warrior_5_0"], ["tt_warrior_4_1", "tt_warrior_5_1"],
+      ["tt_warrior_4_2", "tt_warrior_5_2"],
+      ["tt_warrior_5_0", "tt_warrior_6_0"], ["tt_warrior_5_0", "tt_warrior_6_1"], ["tt_warrior_5_0", "tt_warrior_6_2"], ["tt_warrior_5_0", "tt_warrior_6_3"],
+      ["tt_warrior_6_0", "tt_warrior_7_1"],
+      ["tt_warrior_6_2", "tt_warrior_7_1"], ["tt_warrior_6_2", "tt_warrior_7_3"],
+      ["tt_warrior_7_1", "tt_warrior_8_0"], ["tt_warrior_7_1", "tt_warrior_8_1"], ["tt_warrior_7_1", "tt_warrior_8_2"], ["tt_warrior_7_1", "tt_warrior_8_3"],
+      ["tt_warrior_7_1", "tt_warrior_7_0"], ["tt_warrior_7_1", "tt_warrior_7_2"],
+      ["tt_warrior_8_2", "tt_warrior_9_0"],
+      ["tt_warrior_8_3", "tt_warrior_9_1"], ["tt_warrior_8_3", "tt_warrior_9_2"], ["tt_warrior_8_3", "tt_warrior_9_3"],
+      ["tt_warrior_9_0", "tt_warrior_10_0"],
+      ["tt_warrior_9_1", "tt_warrior_10_0"],
+      ["tt_warrior_9_3", "tt_warrior_10_1"], ["tt_warrior_9_3", "tt_warrior_10_2"]
+    ]
   },
   "mage": {
-    "description": "Mage talent tree - INT/MEN focused with Lightning skills",
+    "description": "Mage talent tree — 11 tiers, 28 nodes. XP/Mana/Lightning focused.",
     "classUnlock": { "id": "class_1_mage", "name": "Mage", "maxPoints": 1 },
     "nodes": [
-      { "id": "tt_mage_0_0", "name": "INT I", "stat": "int", "perPoint": 2, "maxPoints": 5, "row": 0, "col": 0 },
-      { "id": "tt_mage_1_0", "name": "MEN I", "stat": "men", "perPoint": 2, "maxPoints": 5, "row": 1, "col": 0 },
-      { "id": "tt_mage_1_1", "name": "Mana I", "stat": "mana", "perPoint": 10, "maxPoints": 5, "row": 1, "col": 1 },
-      { "id": "tt_mage_1_2", "name": "Mana Regen I", "stat": "manaRegen", "perPoint": 2, "maxPoints": 5, "row": 1, "col": 2 },
-      { "id": "tt_mage_2_0", "name": "INT II", "stat": "int", "perPoint": 3, "maxPoints": 5, "row": 2, "col": 0 },
-      { "id": "tt_mage_2_1", "name": "ATK I", "stat": "atk", "perPoint": 2, "maxPoints": 5, "row": 2, "col": 1 },
-      { "id": "tt_mage_2_2", "name": "Bonus XP I", "stat": "bonusXp", "perPoint": 5, "maxPoints": 5, "row": 2, "col": 2 },
-      { "id": "tt_mage_3_0", "name": "Lightning Bolt", "stat": "skill_lightningBolt", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 0, "isSkill": true },
-      { "id": "tt_mage_3_1", "name": "Crit Chance I", "stat": "critChance", "perPoint": 1, "maxPoints": 5, "row": 3, "col": 1 },
-      { "id": "tt_mage_3_2", "name": "HP I", "stat": "hp", "perPoint": 10, "maxPoints": 5, "row": 3, "col": 2 },
-      { "id": "tt_mage_4_0", "name": "MEN II", "stat": "men", "perPoint": 3, "maxPoints": 5, "row": 4, "col": 0 },
-      { "id": "tt_mage_4_1", "name": "Crit Damage I", "stat": "critDamage", "perPoint": 3, "maxPoints": 5, "row": 4, "col": 1 },
-      { "id": "tt_mage_4_2", "name": "MF I", "stat": "magicFind", "perPoint": 3, "maxPoints": 5, "row": 4, "col": 2 },
-      { "id": "tt_mage_5_0", "name": "Chain Lightning", "stat": "skill_chainLightning", "perPoint": 1, "maxPoints": 1, "row": 5, "col": 0, "isSkill": true },
-      { "id": "tt_mage_5_1", "name": "ATKSPD I", "stat": "atkSpeed", "perPoint": 2, "maxPoints": 5, "row": 5, "col": 1 },
-      { "id": "tt_mage_5_2", "name": "DEF I", "stat": "def", "perPoint": 2, "maxPoints": 5, "row": 5, "col": 2 },
-      { "id": "tt_mage_6_0", "name": "INT III", "stat": "int", "perPoint": 5, "maxPoints": 5, "row": 6, "col": 0 },
-      { "id": "tt_mage_6_1", "name": "ATK II", "stat": "atk", "perPoint": 3, "maxPoints": 5, "row": 6, "col": 1 },
-      { "id": "tt_mage_7_0", "name": "Thunder Storm", "stat": "skill_thunderStorm", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 0, "isSkill": true }
+      { "id": "tt_mage_0_0", "name": "Lightning Orb", "stat": "skill_lightningOrb", "perPoint": 1, "maxPoints": 1, "row": 0, "col": 0, "isSkill": true },
+
+      { "id": "tt_mage_1_0", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 1, "row": 1, "col": 0 },
+      { "id": "tt_mage_1_1", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 2, "row": 1, "col": 1 },
+      { "id": "tt_mage_1_2", "name": "Bonus XP", "stat": "bonusXp", "perPoint": 5, "maxPoints": 5, "row": 1, "col": 2 },
+
+      { "id": "tt_mage_2_0", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 5, "row": 2, "col": 0 },
+      { "id": "tt_mage_2_1", "name": "Movespeed", "stat": "moveSpeed", "perPoint": 5, "maxPoints": 2, "row": 2, "col": 1 },
+
+      { "id": "tt_mage_3_0", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 5, "row": 3, "col": 0 },
+      { "id": "tt_mage_3_1", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 2, "row": 3, "col": 1 },
+      { "id": "tt_mage_3_2", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 5, "row": 3, "col": 2 },
+      { "id": "tt_mage_3_3", "name": "Ice Armor", "stat": "skill_iceArmor", "perPoint": 1, "maxPoints": 1, "row": 3, "col": 3, "isSkill": true },
+
+      { "id": "tt_mage_4_0", "name": "Critical Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 5, "row": 4, "col": 0 },
+      { "id": "tt_mage_4_1", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 2, "row": 4, "col": 1 },
+      { "id": "tt_mage_4_2", "name": "Max HP", "stat": "hp", "perPoint": 5, "maxPoints": 5, "row": 4, "col": 2 },
+      { "id": "tt_mage_4_3", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 3, "row": 4, "col": 3 },
+
+      { "id": "tt_mage_5_0", "name": "Lightning Strike", "stat": "skill_lightningStrike", "perPoint": 1, "maxPoints": 1, "row": 5, "col": 0, "isSkill": true },
+      { "id": "tt_mage_5_1", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 5, "row": 5, "col": 1 },
+
+      { "id": "tt_mage_6_0", "name": "Bonus XP", "stat": "bonusXp", "perPoint": 5, "maxPoints": 10, "row": 6, "col": 0 },
+      { "id": "tt_mage_6_1", "name": "Attack Speed", "stat": "atkSpeed", "perPoint": 1, "maxPoints": 10, "row": 6, "col": 1 },
+      { "id": "tt_mage_6_2", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 4, "row": 6, "col": 2 },
+      { "id": "tt_mage_6_3", "name": "Improved Lightning Orb", "stat": "skill_improvedLightningOrb", "perPoint": 85, "maxPoints": 1, "row": 6, "col": 3 },
+
+      { "id": "tt_mage_7_0", "name": "Attack!", "stat": "atk", "perPoint": 1, "maxPoints": 5, "row": 7, "col": 0 },
+      { "id": "tt_mage_7_1", "name": "Crit Chance", "stat": "critChance", "perPoint": 1, "maxPoints": 5, "row": 7, "col": 1 },
+      { "id": "tt_mage_7_2", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 5, "row": 7, "col": 2 },
+      { "id": "tt_mage_7_3", "name": "Mage Supremacy", "stat": "skill_mageSupremacy", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 3, "isSkill": true },
+
+      { "id": "tt_mage_8_0", "name": "Attack Percent", "stat": "atkPercent", "perPoint": 1, "maxPoints": 5, "row": 8, "col": 0 },
+      { "id": "tt_mage_8_1", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 10, "row": 8, "col": 1 },
+      { "id": "tt_mage_8_2", "name": "Maximum Mana", "stat": "mana", "perPoint": 5, "maxPoints": 5, "row": 8, "col": 2 },
+      { "id": "tt_mage_8_3", "name": "Critical Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 5, "row": 8, "col": 3 },
+
+      { "id": "tt_mage_9_0", "name": "Crit Chance", "stat": "critChance", "perPoint": 1, "maxPoints": 5, "row": 9, "col": 0 },
+      { "id": "tt_mage_9_1", "name": "Defence", "stat": "def", "perPoint": 1, "maxPoints": 10, "row": 9, "col": 1 },
+      { "id": "tt_mage_9_2", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 7, "row": 9, "col": 2 },
+
+      { "id": "tt_mage_10_0", "name": "Improved Lightning Orb", "stat": "skill_improvedLightningOrb", "perPoint": 85, "maxPoints": 1, "row": 10, "col": 0 },
+      { "id": "tt_mage_10_1", "name": "Magic Find", "stat": "magicFind", "perPoint": 1, "maxPoints": 10, "row": 10, "col": 1 },
+      { "id": "tt_mage_10_2", "name": "Attack Percent", "stat": "atkPercent", "perPoint": 1, "maxPoints": 5, "row": 10, "col": 2 }
     ],
-    "maxPoints": 150
+    "connections": [
+      ["tt_mage_0_0", "tt_mage_1_0"], ["tt_mage_0_0", "tt_mage_1_1"], ["tt_mage_0_0", "tt_mage_1_2"],
+      ["tt_mage_1_0", "tt_mage_2_0"],
+      ["tt_mage_1_1", "tt_mage_2_0"],
+      ["tt_mage_2_0", "tt_mage_3_0"], ["tt_mage_2_0", "tt_mage_3_1"], ["tt_mage_2_0", "tt_mage_3_2"], ["tt_mage_2_0", "tt_mage_2_1"],
+      ["tt_mage_2_1", "tt_mage_3_3"],
+      ["tt_mage_3_0", "tt_mage_4_0"], ["tt_mage_3_0", "tt_mage_4_1"], ["tt_mage_3_0", "tt_mage_4_2"],
+      ["tt_mage_3_1", "tt_mage_4_2"], ["tt_mage_3_1", "tt_mage_4_3"],
+      ["tt_mage_4_1", "tt_mage_5_1"],
+      ["tt_mage_4_2", "tt_mage_5_1"],
+      ["tt_mage_4_3", "tt_mage_5_1"],
+      ["tt_mage_5_1", "tt_mage_5_0"], ["tt_mage_5_1", "tt_mage_6_0"], ["tt_mage_5_1", "tt_mage_6_1"], ["tt_mage_5_1", "tt_mage_6_2"], ["tt_mage_5_1", "tt_mage_6_3"],
+      ["tt_mage_6_2", "tt_mage_7_0"], ["tt_mage_6_2", "tt_mage_7_1"], ["tt_mage_6_2", "tt_mage_7_2"], ["tt_mage_6_2", "tt_mage_7_3"],
+      ["tt_mage_7_0", "tt_mage_8_0"], ["tt_mage_7_0", "tt_mage_8_1"],
+      ["tt_mage_7_2", "tt_mage_8_1"], ["tt_mage_7_2", "tt_mage_8_2"], ["tt_mage_7_2", "tt_mage_8_3"],
+      ["tt_mage_8_0", "tt_mage_9_0"],
+      ["tt_mage_8_2", "tt_mage_9_0"], ["tt_mage_8_2", "tt_mage_9_1"], ["tt_mage_8_2", "tt_mage_9_2"],
+      ["tt_mage_9_0", "tt_mage_10_0"], ["tt_mage_9_0", "tt_mage_10_1"],
+      ["tt_mage_9_1", "tt_mage_10_1"], ["tt_mage_9_1", "tt_mage_10_2"],
+      ["tt_mage_9_2", "tt_mage_10_2"]
+    ]
   }
 }

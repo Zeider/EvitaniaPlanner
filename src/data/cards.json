@@ -1,74 +1,74 @@
 {
-  "thresholds": {
-    "act1": 60,
-    "act2": 100,
-    "act3": 150
+  "tierThresholds": {
+    "act1": [1, 8, 24, 60],
+    "act2": [1, 12, 48, 100],
+    "act3": [1, 18, 72, 150],
+    "resource": {
+      "act1": [1, 8, 24, 50],
+      "act2": [1, 12, 48, 100],
+      "act3": [1, 18, 72, 150]
+    },
+    "hard": [1, 12, 48, 100]
   },
-  "cardBonuses": [
-    { "id": "hp", "name": "HP", "description": "+HP per card tier" },
-    { "id": "mana", "name": "Mana", "description": "+Mana per card tier" },
-    { "id": "miningPower", "name": "Mining Power", "description": "+Mining Power per card tier" },
-    { "id": "wcPower", "name": "WC Power", "description": "+Woodcutting Power per card tier" },
-    { "id": "smelterySpeed", "name": "Smeltery Speed", "description": "+Smeltery Speed % per card tier" },
-    { "id": "critDamage", "name": "Crit Damage", "description": "+Crit Damage % per card tier" },
-    { "id": "combatXp", "name": "Combat XP", "description": "+Combat XP % per card tier" },
-    { "id": "atkPercent", "name": "ATK%", "description": "+ATK % per card tier" },
-    { "id": "hunterCost", "name": "Hunter Cost", "description": "-Hunter Cost % per card tier" },
-    { "id": "goldMulti", "name": "Gold Multi", "description": "+Gold Multi % per card tier" },
-    { "id": "physDef", "name": "Phys DEF", "description": "+Physical DEF per card tier" },
-    { "id": "hpRegen", "name": "HP Regen", "description": "+HP Regen per card tier" },
-    { "id": "offlineGains", "name": "Offline Gains", "description": "+Offline Gains % per card tier" },
-    { "id": "magicFind", "name": "Magic Find", "description": "+Magic Find per card tier" }
-  ],
   "act1Cards": [
-    { "enemy": "Boar", "zone": "1.0", "cardBonus": "hp", "tierValues": [5, 10, 20, 35, 50] },
-    { "enemy": "Wasp", "zone": "1.2", "cardBonus": "atkPercent", "tierValues": [1, 2, 4, 7, 10] },
-    { "enemy": "Pebble", "zone": "1.3", "cardBonus": "physDef", "tierValues": [1, 2, 4, 7, 10] },
-    { "enemy": "Stump", "zone": "1.4", "cardBonus": "wcPower", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Plant", "zone": "1.5", "cardBonus": "hp", "tierValues": [5, 10, 20, 35, 50] },
-    { "enemy": "Wolf", "zone": "1.6", "cardBonus": "critDamage", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Gnoll", "zone": "1.7", "cardBonus": "combatXp", "tierValues": [1, 2, 4, 7, 10] },
-    { "enemy": "Animated Armor", "zone": "1.8", "cardBonus": "physDef", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Crab", "zone": "1.9", "cardBonus": "miningPower", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Bat", "zone": "1.10", "cardBonus": "smelterySpeed", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Kobold", "zone": "1.11", "cardBonus": "goldMulti", "tierValues": [1, 2, 4, 7, 10] },
-    { "enemy": "Weird Book", "zone": "1.12", "cardBonus": "mana", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Slime Cube", "zone": "1.13", "cardBonus": "hpRegen", "tierValues": [1, 1, 2, 3, 5] },
-    { "enemy": "Fire Elemental", "zone": "1.14", "cardBonus": "atkPercent", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Bringer of Death", "zone": "boss", "cardBonus": "hunterCost", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "The Crab", "zone": "boss", "cardBonus": "magicFind", "tierValues": [1, 2, 4, 7, 10] },
-    { "enemy": "Yrsainir", "zone": "boss", "cardBonus": "offlineGains", "tierValues": [1, 2, 4, 7, 10] }
+    { "enemy": "Boar", "zone": "1.0", "stat": "hp", "tierValues": [10, 20, 30, 40] },
+    { "enemy": "Wasp", "zone": "1.2", "stat": "wcPower", "tierValues": [10, 15, 20, 25], "isPercent": true },
+    { "enemy": "Pebble", "zone": "1.2", "stat": "critDamage", "tierValues": [5, 10, 15, 20], "isPercent": true },
+    { "enemy": "Stump", "zone": "1.3", "stat": "combatXp", "tierValues": [6, 12, 18, 24], "isPercent": true },
+    { "enemy": "Plant", "zone": "1.4", "stat": "hunterCost", "tierValues": [50, 100, 150, 200], "isPercent": true },
+    { "enemy": "Wolf", "zone": "1.5", "stat": "physDef", "tierValues": [3, 6, 9, 12] },
+    { "enemy": "Gnoll", "zone": "1.6", "stat": "offlineGains", "tierValues": [1, 2, 3, 4], "isPercent": true },
+    { "enemy": "Animated Armor", "zone": "1.7", "stat": "atkPercent", "tierValues": [4, 8, 12, 16], "isPercent": true },
+    { "enemy": "Crab", "zone": "1.8", "stat": "miningPower", "tierValues": [10, 15, 20, 25], "isPercent": true },
+    { "enemy": "Bat", "zone": "1.9", "stat": "wcPower", "tierValues": [10, 15, 20, 25], "isPercent": true },
+    { "enemy": "Kobold", "zone": "1.10", "stat": "goldMulti", "tierValues": [6, 12, 18, 24], "isPercent": true },
+    { "enemy": "Weird Book", "zone": "1.11", "stat": "mana", "tierValues": [3, 9, 15, 21] },
+    { "enemy": "Slime Cube", "zone": "1.12", "stat": "smelterySpeed", "tierValues": [5, 10, 15, 20] },
+    { "enemy": "Fire Elemental", "zone": "1.13", "stat": "smelterySpeed", "tierValues": [5, 10, 15, 20], "isPercent": true },
+    { "enemy": "Bringer of Death", "zone": "boss", "stat": "hunterCost", "tierValues": [50, 100, 150, 200], "isPercent": true },
+    { "enemy": "The Crab", "zone": "boss", "stat": "miningOffline", "tierValues": [2, 4, 6, 8], "isPercent": true },
+    { "enemy": "Yrsainir", "zone": "boss", "stat": "offlineGains", "tierValues": [2, 4, 6, 8], "isPercent": true }
   ],
   "act2Cards": [
-    { "enemy": "Iceboar", "zone": "2.1", "cardBonus": "hp", "tierValues": [10, 20, 40, 70, 100] },
-    { "enemy": "Helmet", "zone": "2.2", "cardBonus": "physDef", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Dung Beetle", "zone": "2.3", "cardBonus": "miningPower", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Ghost", "zone": "2.4", "cardBonus": "magicFind", "tierValues": [1, 2, 4, 7, 10] },
-    { "enemy": "Cactus Mommy", "zone": "2.5", "cardBonus": "atkPercent", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Yeti", "zone": "2.6", "cardBonus": "wcPower", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Ratatoskr", "zone": "2.7", "cardBonus": "critDamage", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Troll", "zone": "2.8", "cardBonus": "hp", "tierValues": [15, 30, 60, 105, 150] },
-    { "enemy": "Penguin", "zone": "2.9", "cardBonus": "goldMulti", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Glass", "zone": "2.10", "cardBonus": "critDamage", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Matryoshka", "zone": "2.11", "cardBonus": "combatXp", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Draugr", "zone": "2.12", "cardBonus": "atkPercent", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Ice Mammoth", "zone": "boss", "cardBonus": "offlineGains", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Jotunn", "zone": "boss", "cardBonus": "smelterySpeed", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Maevath", "zone": "boss", "cardBonus": "magicFind", "tierValues": [2, 4, 8, 14, 20] }
+    { "enemy": "Iceboar", "zone": "2.1", "stat": "smelterySpeed", "tierValues": [5, 10, 15, 20], "isPercent": true },
+    { "enemy": "Helmet", "zone": "2.2", "stat": "fuelCapacity", "tierValues": [1500, 3000, 4500, 6000] },
+    { "enemy": "Ghost", "zone": "2.3", "stat": "wcPower", "tierValues": [20, 25, 30, 35] },
+    { "enemy": "Yeti", "zone": "2.4", "stat": "goldMulti", "tierValues": [8, 16, 24, 32], "isPercent": true },
+    { "enemy": "Ratatoskr", "zone": "2.5", "stat": "miningPower", "tierValues": [8, 16, 24, 35] },
+    { "enemy": "Watches", "zone": "2.6", "stat": "physDef", "tierValues": [1.03, 1.06, 1.09, 1.12], "isMultiplier": true },
+    { "enemy": "Snowman", "zone": "2.7", "stat": "atk", "tierValues": [1.03, 1.06, 1.09, 1.12], "isMultiplier": true },
+    { "enemy": "Troll", "zone": "2.8", "stat": "hp", "tierValues": [1.01, 1.03, 1.05, 1.07], "isMultiplier": true },
+    { "enemy": "Penguin", "zone": "2.9", "stat": "fuelEfficiency", "tierValues": [3, 6, 9, 12], "isPercent": true },
+    { "enemy": "Glass", "zone": "2.10", "stat": "offlineGains", "tierValues": [1, 2, 3, 4], "isPercent": true },
+    { "enemy": "Matryoshka", "zone": "2.11", "stat": "ashDiscount", "tierValues": [2, 4, 6, 8], "isPercent": true },
+    { "enemy": "Draugr", "zone": "2.12", "stat": "magicFind", "tierValues": [3, 6, 9, 12] },
+    { "enemy": "Ice Mammoth", "zone": "boss", "stat": "critChance", "tierValues": [3, 6, 9, 12], "isPercent": true },
+    { "enemy": "Jötunn", "zone": "boss", "stat": "magicFind", "tierValues": [5, 10, 15, 20] },
+    { "enemy": "Maevath", "zone": "boss", "stat": "offlineGains", "tierValues": [2, 4, 6, 8], "isPercent": true }
   ],
   "act3Cards": [
-    { "enemy": "Sun Boy", "zone": "3.1", "cardBonus": "combatXp", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Winged Serpent", "zone": "3.2", "cardBonus": "atkPercent", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Fez", "zone": "3.3", "cardBonus": "magicFind", "tierValues": [2, 4, 8, 14, 20] },
-    { "enemy": "Kangaroo", "zone": "3.4", "cardBonus": "hp", "tierValues": [20, 40, 80, 140, 200] },
-    { "enemy": "Bandiff", "zone": "3.5", "cardBonus": "critDamage", "tierValues": [4, 8, 16, 28, 40] },
-    { "enemy": "Bettleman", "zone": "3.6", "cardBonus": "goldMulti", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Ciphered Building", "zone": "3.7", "cardBonus": "mana", "tierValues": [5, 10, 20, 35, 50] },
-    { "enemy": "Mummy", "zone": "3.8", "cardBonus": "offlineGains", "tierValues": [3, 6, 12, 20, 30] },
-    { "enemy": "Kangaroo Boss", "zone": "boss", "cardBonus": "hunterCost", "tierValues": [3, 6, 12, 20, 30] }
+    { "enemy": "Sun Boy", "zone": "3.1", "stat": "magicFind", "tierValues": [4, 8, 12, 16] },
+    { "enemy": "Dung Beetle", "zone": "3.2", "stat": "physDef", "tierValues": [1.06, 1.12, 1.18, 1.24], "isMultiplier": true },
+    { "enemy": "Cactus Mommy", "zone": "3.3", "stat": "atk", "tierValues": [1.05, 1.10, 1.15, 1.20], "isMultiplier": true },
+    { "enemy": "Kangaroo", "zone": "3.4", "stat": "smelterySpeed", "tierValues": [25, 50, 75, 100], "isPercent": true },
+    { "enemy": "Fez", "zone": "3.5", "stat": "miningPower", "tierValues": [1.03, null, null, null], "isMultiplier": true },
+    { "enemy": "Winged Serpent", "zone": "3.6", "stat": "wcPower", "tierValues": [1.03, null, null, null], "isMultiplier": true },
+    { "enemy": "Bandiff", "zone": "3.7", "stat": "accuracy", "tierValues": [5, null, null, null] },
+    { "enemy": "Beetleman", "zone": "3.8", "stat": "unknown", "tierValues": [5, 10, null, null] },
+    { "enemy": "Zhai Halud", "zone": "boss", "stat": "wcOffline", "tierValues": [2, 4, 6, 8], "isPercent": true }
   ],
-  "act1HardBonuses": {
-    "description": "Completing Act 1 Hard card set provides bonus hunter upgrade ranks",
-    "effect": "Hunter upgrade max rank increased to 40"
-  }
+  "resourceCards": [
+    { "resource": "Copper", "stat": "miningPower", "tierValues": [1, 2, 3, 4], "thresholdKey": "act1" },
+    { "resource": "Iron", "stat": "miningXp", "tierValues": [4, 8, 12, 16], "isPercent": true, "thresholdKey": "act1" },
+    { "resource": "Thorium", "stat": "miningPower", "tierValues": [1.02, 1.04, 1.06, 1.08], "isMultiplier": true, "thresholdKey": "act2" },
+    { "resource": "Sunstone", "stat": "miningMultiloot", "tierValues": [5, null, null, null], "thresholdKey": "act3" },
+    { "resource": "Ash", "stat": "wcPower", "tierValues": [1, 2, 3, 4], "thresholdKey": "act1" },
+    { "resource": "Pyrewood", "stat": "wcXp", "tierValues": [4, 8, 12, 16], "isPercent": true, "thresholdKey": "act1" },
+    { "resource": "Ironwood", "stat": "wcPower", "tierValues": [1.02, 1.04, 1.06, 1.08], "isMultiplier": true, "thresholdKey": "act2" },
+    { "resource": "Palm Tree", "stat": "wcMultiloot", "tierValues": [5, null, null, null], "thresholdKey": "act3" }
+  ],
+  "hardCards": [
+    { "name": "Act 1 Hard", "stat": "hunterMaxRank", "tierValues": [4, 6, 8, 10] },
+    { "name": "Act 2 Hard", "stat": "sacrificeMaxRank", "tierValues": [4, 6, 8, 10] }
+  ]
 }

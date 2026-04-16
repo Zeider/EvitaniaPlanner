@@ -7,7 +7,7 @@
         { "item": "Boar Card", "rate": 10000, "type": "card" }
       ]
     },
-    "1.1": {
+    "1.2": {
       "mob": "Wasp",
       "drops": [
         { "item": "Honeycomb", "rate": 4, "type": "material" },
@@ -260,6 +260,7 @@
         { "item": "Orange Chromo", "rate": 25000, "type": "material" },
         { "item": "Aether Crystal Shards", "rate": 125000, "type": "material" },
         { "item": "RUNE: GOR", "rate": 3000, "type": "rune" },
+        { "item": "RUNE: HAS", "rate": 3000, "type": "rune" },
         { "item": "Kangaroo Card", "rate": 50000, "type": "card" }
       ]
     },
@@ -269,6 +270,7 @@
         { "item": "Fez Fez", "rate": 4, "type": "material" },
         { "item": "Orange Chromo", "rate": 25000, "type": "material" },
         { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
+        { "item": "RUNE: HAS", "rate": 3000, "type": "rune" },
         { "item": "Fez Card", "rate": 50000, "type": "card" }
       ]
     },
@@ -279,6 +281,7 @@
         { "item": "Orange Chromo", "rate": 25000, "type": "material" },
         { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
         { "item": "RUNE: GOR", "rate": 3000, "type": "rune" },
+        { "item": "RUNE: HAS", "rate": 3000, "type": "rune" },
         { "item": "Winged Serpent Card", "rate": 50000, "type": "card" }
       ]
     },
@@ -289,6 +292,7 @@
         { "item": "Orange Chromo", "rate": 25000, "type": "material" },
         { "item": "Torn Silk Fabric", "rate": 50000, "type": "material" },
         { "item": "RUNE: GOR", "rate": 30000, "type": "rune" },
+        { "item": "RUNE: HAS", "rate": 3000, "type": "rune" },
         { "item": "Bandiff Card", "rate": 50000, "type": "card" }
       ]
     },
@@ -299,6 +303,7 @@
         { "item": "Orange Chromo", "rate": 25000, "type": "material" },
         { "item": "Aether Crystal Shards", "rate": 125000, "type": "material" },
         { "item": "RUNE: GOR", "rate": 30000, "type": "rune" },
+        { "item": "RUNE: HAS", "rate": 3000, "type": "rune" },
         { "item": "Beetleman Card", "rate": 50000, "type": "card" }
       ]
     },
@@ -424,7 +429,7 @@
   },
   "resources": {
     "Boar Meat": { "zone": "1.0", "rate": 4 },
-    "Honeycomb": { "zone": "1.1", "rate": 4 },
+    "Honeycomb": { "zone": "1.2", "rate": 4 },
     "Stoney McStoneface": { "zone": "1.2", "rate": 4 },
     "Leaf": { "zone": "1.3", "rate": 4 },
     "Mini Plant": { "zone": "1.4", "rate": 4 },
@@ -438,6 +443,7 @@
     "D20 Dice": { "zone": "1.12", "rate": 4 },
     "Fire Essence": { "zone": "1.13", "rate": 4 },
     "Coin": { "zone": "any", "rate": 1, "note": "gold drops" },
+    "Yellow Substance": { "vendor": true, "dailyLimit": 50, "cost": 10000, "note": "50/day from vendor at 10k each" },
     "Steel Ingot": { "craft": true, "note": "smelted from Iron Ore" },
     "Copper Ore": { "activity": "mining", "minLevel": 1 },
     "Iron Ore": { "activity": "mining", "minLevel": 10 },

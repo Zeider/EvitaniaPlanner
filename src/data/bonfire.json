@@ -1,12 +1,13 @@
 [
-  { "heatRequired": 100, "bonus": "Ash Creation", "effect": "Enables ash creation from the bonfire" },
-  { "heatRequired": 300, "bonus": "Basic Heat", "effect": "Removes Chilled debuff levels 1-4" },
-  { "heatRequired": 700, "bonus": "Overheat", "effect": "+1 HP Regen" },
-  { "heatRequired": 900, "bonus": "Woodcutting +100% Power", "effect": "+100% Woodcutting Power" },
-  { "heatRequired": 1100, "bonus": "Advanced Heat", "effect": "Removes Chilled debuff levels 5-8" },
-  { "heatRequired": 1400, "bonus": "Mining +100% Power", "effect": "+100% Mining Power" },
-  { "heatRequired": 1800, "bonus": "Monster Bait", "effect": "-20% monster respawn time" },
-  { "heatRequired": 2100, "bonus": "Expert Heat", "effect": "Removes Chilled debuff levels 9-12" },
-  { "heatRequired": 2500, "bonus": "Owl Wisdom", "effect": "+50% XP" },
-  { "heatRequired": 3100, "bonus": "Fiery Weapons", "effect": "+50% ATK" }
+  { "heatRequired": 100, "bonus": "Ash Creation", "effect": "Enables ash creation from the bonfire", "stat": null, "value": 0 },
+  { "heatRequired": 300, "bonus": "Basic Heat", "effect": "Removes Chilled debuff zones 1-4", "stat": null, "value": 0 },
+  { "heatRequired": 700, "bonus": "Overheat", "effect": "+1 HP Regen in heated zones", "stat": "hpRegen", "value": 1 },
+  { "heatRequired": 900, "bonus": "Woodcutting Efficiency", "effect": "+100% Woodcutting Power", "stat": "wcPowerPercent", "value": 100 },
+  { "heatRequired": 1100, "bonus": "Advanced Heat", "effect": "Removes Chilled debuff zones 5-8", "stat": null, "value": 0 },
+  { "heatRequired": 1400, "bonus": "Mining Efficiency", "effect": "+100% Mining Power", "stat": "miningPowerPercent", "value": 100 },
+  { "heatRequired": 1700, "bonus": "Ash per Kill", "effect": "3% chance to get 1 Ash per kill", "stat": null, "value": 0 },
+  { "heatRequired": 1800, "bonus": "Monster Bait", "effect": "-20% monster respawn time", "stat": "mobSpawnReduction", "value": 20 },
+  { "heatRequired": 2100, "bonus": "Expert Heat", "effect": "Removes Chilled debuff zones 9-12", "stat": null, "value": 0 },
+  { "heatRequired": 2500, "bonus": "Owl Wisdom", "effect": "+50% XP in heated zones", "stat": "xpMulti", "value": 50 },
+  { "heatRequired": 3100, "bonus": "Fiery Weapons", "effect": "+50% ATK in heated zones", "stat": "atkPercent", "value": 50 }
 ]

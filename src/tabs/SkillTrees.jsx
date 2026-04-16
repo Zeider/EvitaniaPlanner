@@ -1,5 +1,5 @@
 import { signal } from '@preact/signals';
-import { useState, useRef, useEffect, useCallback } from 'preact/hooks';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'preact/hooks';
 import { activeProfile, saveProfile, activeProfileKey } from '../state/store.js';
 import { computeStats, computeEffectiveDPS } from '../state/stat-engine.js';
 import { TreeNode } from '../components/TreeNode.jsx';
@@ -57,11 +57,26 @@ function groupByRow(nodes) {
   return groups;
 }
 
-/** Check whether all nodes in the previous row are maxed (simple prereq model). */
+/** Check whether prerequisite nodes are met.
+ *  If tree has explicit connections, a node's prereqs are all nodes that connect TO it.
+ *  Otherwise falls back to "all nodes in previous row must be maxed." */
 function arePrereqsMet(node, allocation, tree) {
-  // Row 0 nodes are always available
+  // Row 0 / first nodes are always available
   if ((node.row ?? 0) === 0) return true;
-  // All nodes in the previous row must be maxed
+
+  if (tree.connections && tree.connections.length > 0) {
+    // Find all parent nodes (connections where this node is the target)
+    const parents = tree.connections
+      .filter(([, toId]) => toId === node.id)
+      .map(([fromId]) => tree.nodes.find(n => n.id === fromId))
+      .filter(Boolean);
+    // If no parents listed, it's reachable (leaf with no explicit prereq)
+    if (parents.length === 0) return true;
+    // At least one parent must be maxed
+    return parents.some(p => (allocation[p.id] || 0) >= p.maxPoints);
+  }
+
+  // Fallback: all nodes in previous row must be maxed
   const prevRow = (node.row ?? 0) - 1;
   const prevNodes = tree.nodes.filter(n => (n.row ?? 0) === prevRow);
   if (prevNodes.length === 0) return true;
@@ -263,42 +278,74 @@ function ConnectionLines({ tree, allocation }) {
 
   const lines = [];
 
-  // Group nodes by row for prereq lines (each node connects to all nodes in prev row)
-  const byRow = {};
+  // Build node lookup by ID for connection rendering
+  const nodeById = {};
   for (const node of tree.nodes) {
-    const r = node.row ?? 0;
-    if (!byRow[r]) byRow[r] = [];
-    byRow[r].push(node);
+    nodeById[node.id] = node;
   }
 
-  for (const node of tree.nodes) {
-    const row = node.row ?? 0;
-    if (row === 0) continue;
+  // Use explicit connections from data if available, otherwise fall back to row-based
+  const connectionPairs = [];
+  if (tree.connections && tree.connections.length > 0) {
+    for (const [fromId, toId] of tree.connections) {
+      if (nodeById[fromId] && nodeById[toId]) {
+        connectionPairs.push([nodeById[fromId], nodeById[toId]]);
+      }
+    }
+  } else {
+    // Fallback: connect each node to all nodes in previous row
+    const byRow = {};
+    for (const node of tree.nodes) {
+      const r = node.row ?? 0;
+      if (!byRow[r]) byRow[r] = [];
+      byRow[r].push(node);
+    }
+    for (const node of tree.nodes) {
+      const row = node.row ?? 0;
+      if (row === 0) continue;
+      const prevNodes = byRow[row - 1] || [];
+      for (const prevNode of prevNodes) {
+        connectionPairs.push([prevNode, node]);
+      }
+    }
+  }
 
-    const prevRow = row - 1;
-    const prevNodes = byRow[prevRow] || [];
-    if (prevNodes.length === 0) continue;
-
-    const pos = computeNodePosition(node);
-    // Only draw line from closest prev-row node (same col if exists, or col 0)
-    const closestPrev = prevNodes.find(n => n.col === node.col) || prevNodes[0];
-    const prevPos = computeNodePosition(closestPrev);
+  for (const [fromNode, toNode] of connectionPairs) {
+    const prevPos = computeNodePosition(fromNode);
+    const pos = computeNodePosition(toNode);
 
     const x1 = prevPos.x + NODE_W;
     const y1 = prevPos.y + NODE_H / 2;
     const x2 = pos.x;
     const y2 = pos.y + NODE_H / 2;
 
-    const bothAllocated = (allocation[closestPrev.id] || 0) > 0 && (allocation[node.id] || 0) > 0;
+    const prevAllocated = (allocation[fromNode.id] || 0) > 0;
+    const nodeAllocated = (allocation[toNode.id] || 0) > 0;
+    const bothAllocated = prevAllocated && nodeAllocated;
+    const eitherAllocated = prevAllocated || nodeAllocated;
+
+    if (bothAllocated) {
+      lines.push(
+        <line
+          key={`glow-${fromNode.id}-${toNode.id}`}
+          x1={x1} y1={y1} x2={x2} y2={y2}
+          stroke="#8f8"
+          stroke-width={6}
+          opacity={0.15}
+          stroke-linecap="round"
+        />
+      );
+    }
 
     lines.push(
       <line
-        key={`${closestPrev.id}-${node.id}`}
+        key={`${fromNode.id}-${toNode.id}`}
         x1={x1} y1={y1} x2={x2} y2={y2}
-        stroke={bothAllocated ? 'var(--success, #8f8)' : 'var(--accent, #8af)'}
-        stroke-width={bothAllocated ? 2 : 1}
-        stroke-dasharray={bothAllocated ? 'none' : '4 4'}
-        opacity={bothAllocated ? 0.8 : 0.3}
+        stroke={bothAllocated ? '#8f8' : eitherAllocated ? '#8af' : '#667'}
+        stroke-width={bothAllocated ? 3 : 2}
+        stroke-dasharray={bothAllocated ? 'none' : eitherAllocated ? '6 3' : '4 4'}
+        opacity={bothAllocated ? 0.9 : eitherAllocated ? 0.6 : 0.4}
+        stroke-linecap="round"
       />
     );
   }
@@ -327,6 +374,26 @@ export function SkillTrees() {
     const combined = { ...profile.talents, ...profile.professionSkills };
     return combined;
   });
+
+  // Persist allocation changes back to the profile
+  useEffect(() => {
+    if (buildMode !== 'custom') return;
+    const talents = {};
+    const professionSkills = {};
+    for (const [key, val] of Object.entries(allocation)) {
+      if (key.startsWith('profession_')) {
+        professionSkills[key] = val;
+      } else {
+        talents[key] = val;
+      }
+    }
+    const currentProfile = activeProfile.value;
+    const talentsChanged = JSON.stringify(talents) !== JSON.stringify(currentProfile.talents);
+    const profsChanged = JSON.stringify(professionSkills) !== JSON.stringify(currentProfile.professionSkills);
+    if (talentsChanged || profsChanged) {
+      saveProfile(activeProfileKey.value, { ...currentProfile, talents, professionSkills });
+    }
+  }, [allocation, buildMode]);
 
   const tree = getTreeData(activeTree);
   if (!tree || !tree.nodes) {

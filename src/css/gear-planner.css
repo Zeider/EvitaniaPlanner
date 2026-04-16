@@ -115,6 +115,53 @@
   width: fit-content;
 }
 
+.gp-item-info__unobtainable {
+  display: inline-block;
+  background: rgba(255, 80, 80, 0.15);
+  color: #f88;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  width: fit-content;
+}
+.gp-item-info__base {
+  font-size: 0.75rem;
+  color: var(--text-dim, #888);
+  font-weight: 400;
+}
+.gp-enhance-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0;
+}
+.gp-enhance-label {
+  font-size: 0.75rem;
+  color: var(--text-dim, #aaa);
+}
+.gp-enhance-input {
+  width: 64px;
+  padding: 4px 8px;
+  background: var(--input-bg, rgba(0,0,0,0.3));
+  border: 1px solid var(--border, rgba(255,255,255,0.15));
+  border-radius: 4px;
+  color: var(--text, #eee);
+  font-size: 0.85rem;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.gp-enhance-input::-webkit-outer-spin-button,
+.gp-enhance-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.gp-enhance-preview {
+  font-size: 0.7rem;
+  color: var(--success, #8f8);
+}
+
 /* ── Stat List ───────────────────────────────────── */
 .gp-stat-list {
   display: flex;

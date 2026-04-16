@@ -7,7 +7,7 @@ export function TopBar() {
   const allProfiles = profiles.value;
   const profileKeys = Object.keys(allProfiles);
 
-  const SAVE_PATH = '%AppData%\\..\\LocalLow\\Fireblast Studios\\Evitania Online - Idle RPG\\data.sav';
+  const SAVE_PATH = '%AppData%\\..\\LocalLow\\Fireblast Studios\\Evitania Online - Idle RPG';
 
   function handleCopyPath() {
     navigator.clipboard.writeText(SAVE_PATH).then(() => alert('Save file path copied! Paste it into the file picker address bar.'));
@@ -45,7 +45,7 @@ export function TopBar() {
     <header class="top-bar">
       <div class="top-bar-left">
         <h1 class="top-bar-title">EvitaniaPlanner</h1>
-        <span class="top-bar-version">v2.0.0</span>
+        <span class="top-bar-version">v3.0.0</span>
       </div>
       <div class="top-bar-right">
         <button class="btn btn-sm btn-import" onClick={handleImport}>Import Save</button>

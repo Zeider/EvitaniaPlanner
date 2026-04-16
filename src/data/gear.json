@@ -25,7 +25,7 @@
         "slot": "weapon",
         "subtype": "sword",
         "atk": 45,
-        "stats": { "str": 10, "atkSpeed": 10, "accuracy": 30, "critChance": 5 },
+        "stats": { "str": 10, "atkSpeed": 10, "con": 10, "critChance": 5 },
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Essence Sword"
@@ -439,15 +439,17 @@
         "name": "Tower Ring",
         "slot": "ring",
         "stats": { "magicDef": 10, "physDef": 10, "critChance": 2, "critDamage": 20 },
-        "source": "Act 1 Boss Drop",
-        "obtainable": true
+        "source": "Tower Floor 5",
+        "obtainable": true,
+        "bossDrop": true, "bossZone": true
       },
       {
         "name": "Mammoth Ring",
         "slot": "ring",
         "stats": { "atk": 30, "magicDef": 10, "atkSpeed": 10, "critDamage": 30 },
-        "source": "Ice Mammoth Drop",
-        "obtainable": true
+        "source": "Ice Mammoth Boss (1/10)",
+        "obtainable": true,
+        "bossDrop": true, "bossZone": true
       },
       {
         "name": "Ashen Ring",
@@ -462,6 +464,20 @@
         "stats": { "atk": 50, "offline": 3, "allXp": 10 },
         "source": "Steam Shop",
         "obtainable": true
+      },
+      {
+        "name": "Halloween Signet",
+        "slot": "ring",
+        "stats": { "atk": 50, "offline": 3, "xpMulti": 10, "critChance": 3 },
+        "source": "Halloween Event",
+        "obtainable": false
+      },
+      {
+        "name": "Carrot Ring",
+        "slot": "ring",
+        "stats": { "atk": 50, "offline": 3, "critChance": 3 },
+        "source": "Easter 2026 Package",
+        "obtainable": false
       }
     ],
     "amulets": [
@@ -469,15 +485,31 @@
         "name": "Boss Amulet",
         "slot": "amulet",
         "stats": { "atk": 50, "physDef": 10, "accuracy": 10, "men": 10, "critDamage": 30 },
-        "source": "Boss Drop",
-        "obtainable": true
+        "source": "Bringer of Death Boss (1/6)",
+        "obtainable": true,
+        "bossDrop": true, "bossZone": true
       },
       {
         "name": "Nordic Amulet",
         "slot": "amulet",
         "stats": { "atk": 40, "magicDef": 70, "accuracy": 30, "moveSpeed": 5, "critChance": 7 },
-        "source": "Act 2 Drop",
-        "obtainable": true
+        "source": "Jotunn Boss (1/20)",
+        "obtainable": true,
+        "bossDrop": true, "bossZone": true
+      },
+      {
+        "name": "Rabbit's Foot",
+        "slot": "amulet",
+        "stats": { "atk": 30, "offline": 6, "magicFind": 10, "critChance": 5 },
+        "source": "Easter Event",
+        "obtainable": false
+      },
+      {
+        "name": "Valentine Amulet",
+        "slot": "amulet",
+        "stats": { "atk": 30, "offline": 6, "magicFind": 5, "xpMulti": 15 },
+        "source": "Valentine Event 2026",
+        "obtainable": false
       }
     ],
     "belts": [
@@ -488,6 +520,55 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Steel Belt"
+      },
+      {
+        "name": "Belt of Love",
+        "slot": "belt",
+        "stats": { "critDamage": 101, "wcPower": 10, "magicFind": 10 },
+        "source": "Quest",
+        "obtainable": true
+      },
+      {
+        "name": "Summer Belt",
+        "slot": "belt",
+        "stats": { "goldMulti": 20, "mobSpawn": -22, "magicFind": 5 },
+        "source": "Summer Event",
+        "obtainable": false
+      },
+      {
+        "name": "Harvest Belt",
+        "slot": "belt",
+        "stats": { "mobSpawn": -20, "offline": 3, "allXp": 10 },
+        "source": "Harvest Event",
+        "obtainable": false
+      },
+      {
+        "name": "Christmas Belt",
+        "slot": "belt",
+        "stats": { "critChance": 5, "critDamage": 10, "mobSpawn": -20, "magicFind": 20 },
+        "source": "Christmas Event",
+        "obtainable": false
+      },
+      {
+        "name": "Anniversary Belt",
+        "slot": "belt",
+        "stats": { "mobSpawn": 20, "magicFind": 10, "allXp": 20 },
+        "source": "Anniversary Event",
+        "obtainable": false
+      },
+      {
+        "name": "Valentine Belt",
+        "slot": "belt",
+        "stats": { "mobSpawn": -21, "magicFind": 5, "allXp": 15 },
+        "source": "Valentine Event 2026",
+        "obtainable": false
+      },
+      {
+        "name": "Steam Belt",
+        "slot": "belt",
+        "stats": { "mobSpawn": -20, "allXp": 10 },
+        "source": "Steam Release Event",
+        "obtainable": true
       }
     ]
   },
