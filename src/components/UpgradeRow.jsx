@@ -11,7 +11,11 @@ function formatNumber(n) {
   if (n === -Infinity) return '-\u221e';
   if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(1) + 'M';
   if (Math.abs(n) >= 1e3) return (n / 1e3).toFixed(1) + 'K';
-  return n.toFixed(1);
+  if (Math.abs(n) >= 10) return n.toFixed(1);
+  if (Math.abs(n) >= 1) return n.toFixed(2);
+  if (n === 0) return '0';
+  if (Math.abs(n) >= 0.01) return n.toFixed(3);
+  return n.toExponential(1);
 }
 
 function formatCost(materialCost) {

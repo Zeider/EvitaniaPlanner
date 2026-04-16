@@ -4,6 +4,13 @@ import ashUpgradesData from '../data/ash-upgrades.json';
 import sacrificesData from '../data/sacrifices.json';
 import gearData from '../data/gear.json';
 
+/** Maps each class to the weapon subtypes they can equip. */
+const CLASS_WEAPON_SUBTYPES = {
+  rogue: new Set(['bow']),
+  warrior: new Set(['sword', 'longsword']),
+  mage: new Set(['staff']),
+};
+
 /**
  * Build a flat list of all obtainable gear items grouped by slot+subtype,
  * sorted by total stat power so we can find "next tier" items.
@@ -140,6 +147,7 @@ function enumerateSacrificeUpgrades(profile) {
 function enumerateGearUpgrades(profile) {
   const upgrades = [];
   const currentGear = profile.gear || {};
+  const allowedWeapons = CLASS_WEAPON_SUBTYPES[profile.class];
 
   // For each equipped slot, find the matching subtype group and suggest the next tier
   for (const [slot, equipped] of Object.entries(currentGear)) {
@@ -150,6 +158,9 @@ function enumerateGearUpgrades(profile) {
       ? findItemInGearData(equipped.name)
       : null;
     if (!equippedItem) continue;
+
+    // Skip weapons this class can't use
+    if (equippedItem.slot === 'weapon' && allowedWeapons && equippedItem.subtype && !allowedWeapons.has(equippedItem.subtype)) continue;
 
     // Build the slot key matching the grouping
     const key = equippedItem.subtype
@@ -173,6 +184,8 @@ function enumerateGearUpgrades(profile) {
       type: 'gear',
       id: `gear_${slot}_${nextItem.name}`,
       name: nextItem.name,
+      gearSlot: slot,
+      gearName: nextItem.name,
       statChanges,
       materialCost: nextItem.recipe ? { [nextItem.recipe]: 1 } : {},
       farmTimeHours: nextItem.recipe ? 1.0 : 0.5,
@@ -185,6 +198,12 @@ function enumerateGearUpgrades(profile) {
     if (currentGear[baseSlot] && currentGear[baseSlot].name) continue;
     if (items.length === 0) continue;
 
+    // Skip weapon subtypes this class can't use
+    if (baseSlot === 'weapon') {
+      const subtype = key.split(':')[1];
+      if (allowedWeapons && subtype && !allowedWeapons.has(subtype)) continue;
+    }
+
     const firstItem = items[0];
     const statChanges = computeGearStatDelta(null, firstItem);
     if (Object.keys(statChanges).length === 0) continue;
@@ -193,6 +212,8 @@ function enumerateGearUpgrades(profile) {
       type: 'gear',
       id: `gear_${baseSlot}_${firstItem.name}`,
       name: firstItem.name,
+      gearSlot: baseSlot,
+      gearName: firstItem.name,
       statChanges,
       materialCost: firstItem.recipe ? { [firstItem.recipe]: 1 } : {},
       farmTimeHours: firstItem.recipe ? 1.0 : 0.5,

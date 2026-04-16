@@ -4,6 +4,18 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.0.1 <span class="release-notes__date">April 16, 2026</span></h3>
+
+        <h4>Upgrade Advisor Fixes</h4>
+        <ul>
+          <li><strong>Accurate Power Gain Scoring</strong> — Upgrade scoring now reruns the full 3-layer stat engine with each upgrade applied, properly capturing multiplicative interactions (ATK%, primary stat scaling, sacrifice multipliers, hunter multiplicative, etc.). Previously, small upgrades like talent points showed 0.0 power gain.</li>
+          <li><strong>Class-Locked Weapon Suggestions</strong> — Gear suggestions now respect class weapon restrictions: Rogues see bows only, Warriors see swords/longswords, Mages see staves. No more longsword suggestions for archers.</li>
+          <li><strong>Better Small-Number Display</strong> — Power gain and score columns now show adaptive precision for small values instead of truncating to 0.0.</li>
+          <li><strong>Free Upgrade Sorting</strong> — Talent points and other free upgrades (score: Infinity) now sort by power gain descending, so the most impactful free upgrade shows first.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.0.0 <span class="release-notes__date">April 16, 2026</span></h3>
 
         <h4>New Features</h4>

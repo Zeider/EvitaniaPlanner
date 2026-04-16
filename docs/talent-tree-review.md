@@ -285,6 +285,59 @@ graph LR
 
 ---
 
+## Ash Tree (Act 2 Bonfire)
+
+This is what we currently have in `ash-upgrades.json`. Please correct everything — order, names, effects, max ranks, connections, and costs.
+
+**Cost note:** The save file doesn't store ash costs, so I can't extract them. For nodes you've already bought, write "cost: ?" and we'll fill in later. For unpurchased nodes, record the ash cost shown in-game.
+
+```mermaid
+graph LR
+    T0_0["T0: Maximum Fuel<br/>+10000 capacity<br/>(1) cost: ?"]
+
+    T1_0["T1: Fuel Efficiency<br/>-5% consumption per pt<br/>(3) cost: ?"]
+    T1_1["T1: More Ash<br/>+15% ash odds per pt<br/>(3) cost: ?"]
+    T1_2["T1: Ash Discount<br/>-10% ash costs<br/>(1) cost: ?"]
+
+    T2_0["T2: Crit Damage<br/>+10% crit dmg per pt<br/>(3) cost: ?"]
+    T2_1["T2: Crit Chance<br/>+1% crit chance per pt<br/>(4) cost: ?"]
+    T2_2["T2: Defence Increase<br/>+5% phys def per pt<br/>(5) cost: ?"]
+
+    T3_0["T3: Attack Increase<br/>+30% all ATK<br/>(1) cost: ?"]
+    T3_1["T3: Auto Runes<br/>Runes auto-enter inventory<br/>(1) cost: ?"]
+    T3_2["T3: Rune Overload<br/>Runes stack in inventory<br/>(1) cost: ?"]
+
+    T4_0["T4: Smeltery Speed<br/>+7% per pt<br/>(4) cost: ?"]
+    T4_1["T4: Fiery Defence<br/>+5 phys def per pt<br/>(4) cost: ?"]
+    T4_2["T4: Hunter Cost Reduction<br/>-50% hunter costs per pt<br/>(5) cost: ?"]
+
+    T5_0["T5: Movespeed<br/>+5% per pt<br/>(2) cost: ?"]
+
+    T0_0 --> T1_0 & T1_1 & T1_2
+    T1_0 --> T2_0
+    T1_1 --> T2_1
+    T1_2 --> T2_2
+    T2_0 --> T3_0
+    T2_1 --> T3_1
+    T2_2 --> T3_2
+    T3_0 --> T4_0
+    T3_1 --> T4_1
+    T3_2 --> T4_2
+    T4_0 --> T5_0
+    T4_1 --> T5_0
+    T4_2 --> T5_0
+```
+
+**Total: 16 nodes across 6 rows**
+
+**What to correct:**
+- Node names, effects, max ranks
+- Add/remove/reorder nodes
+- Fix connections (I guessed 1-to-1 down each column — probably wrong)
+- Add ash cost per rank where you can see it
+
+---
+
 ## How to correct
 
 Edit this file and:

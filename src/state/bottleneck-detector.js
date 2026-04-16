@@ -54,7 +54,7 @@ export function detectBottlenecks(profile, topN = 10) {
 
   // 4. Enumerate and rank all upgrades
   const upgrades = enumerateAllUpgrades(profile);
-  const ranked = rankAllUpgrades(stats, upgrades, enemy, weights);
+  const ranked = rankAllUpgrades(profile, stats, upgrades, enemy, weights);
 
   // 5. Collect top N upgrades that have farmable materials
   const topUpgrades = [];

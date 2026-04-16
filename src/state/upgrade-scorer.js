@@ -1,21 +1,54 @@
-import { computeEffectiveDPS, computeEffectiveHP } from './stat-engine.js';
+import { computeStats, computeEffectiveDPS, computeEffectiveHP } from './stat-engine.js';
 
 /**
- * Scores a single upgrade by computing DPS/EHP delta and dividing by farm time.
- * Returns the upgrade object augmented with offenseDelta, defenseDelta, powerDelta, score.
+ * Clone a profile and apply a single upgrade mutation so the stat engine
+ * can recompute all three layers with the upgrade in place.
  */
-export function scoreUpgrade(currentStats, upgrade, enemy, weights) {
-  // 1. Clone stats, apply upgrade's stat changes
-  const afterStats = { ...currentStats };
-  for (const [stat, delta] of Object.entries(upgrade.statChanges)) {
-    afterStats[stat] = (afterStats[stat] || 0) + delta;
-  }
-  // Recompute totalAtk if atk-related stats changed
-  if (upgrade.statChanges.atk !== undefined || upgrade.statChanges.atkPercent !== undefined) {
-    afterStats.totalAtk = afterStats.atk * (1 + (afterStats.atkPercent || 0) / 100);
+function applyUpgrade(profile, upgrade) {
+  const p = {
+    ...profile,
+    talents: { ...(profile.talents || {}) },
+    hunterUpgrades: { ...(profile.hunterUpgrades || {}) },
+    ashUpgrades: { ...(profile.ashUpgrades || {}) },
+    sacrificeUpgrades: { ...(profile.sacrificeUpgrades || {}) },
+    gear: {},
+  };
+
+  // Shallow-clone each gear slot so mutations don't leak
+  for (const [slot, data] of Object.entries(profile.gear || {})) {
+    p.gear[slot] = data ? { ...data } : null;
   }
 
-  // 2. Compute deltas
+  switch (upgrade.type) {
+    case 'talent':
+      p.talents[upgrade.id] = (p.talents[upgrade.id] || 0) + 1;
+      break;
+    case 'hunter':
+      p.hunterUpgrades[upgrade.id] = (p.hunterUpgrades[upgrade.id] || 0) + 1;
+      break;
+    case 'ash':
+      p.ashUpgrades[upgrade.id] = (p.ashUpgrades[upgrade.id] || 0) + 1;
+      break;
+    case 'sacrifice':
+      p.sacrificeUpgrades[upgrade.id] = (p.sacrificeUpgrades[upgrade.id] || 0) + 1;
+      break;
+    case 'gear':
+      if (upgrade.gearSlot) {
+        p.gear[upgrade.gearSlot] = { name: upgrade.gearName, enhancementLevel: 0 };
+      }
+      break;
+  }
+  return p;
+}
+
+/**
+ * Scores a single upgrade by recomputing full stats through the stat engine
+ * with the upgrade applied, then comparing DPS/EHP deltas.
+ */
+export function scoreUpgrade(profile, currentStats, upgrade, enemy, weights) {
+  const mutatedProfile = applyUpgrade(profile, upgrade);
+  const afterStats = computeStats(mutatedProfile);
+
   const dpsBefore = computeEffectiveDPS(currentStats, enemy);
   const dpsAfter = computeEffectiveDPS(afterStats, enemy);
   const offenseDelta = dpsAfter - dpsBefore;
@@ -24,10 +57,7 @@ export function scoreUpgrade(currentStats, upgrade, enemy, weights) {
   const ehpAfter = computeEffectiveHP(afterStats, enemy);
   const defenseDelta = ehpAfter - ehpBefore;
 
-  // 3. Weighted power delta
   const powerDelta = offenseDelta * weights.offenseWeight + defenseDelta * weights.defenseWeight;
-
-  // 4. Score = power per hour of farming (infinity if free)
   const score = upgrade.farmTimeHours <= 0 ? Infinity : powerDelta / upgrade.farmTimeHours;
 
   return { ...upgrade, offenseDelta, defenseDelta, powerDelta, score };
@@ -35,13 +65,11 @@ export function scoreUpgrade(currentStats, upgrade, enemy, weights) {
 
 /**
  * Scores all upgrades and sorts by score descending.
- * Returns sorted array of scored upgrades.
  */
-export function rankAllUpgrades(currentStats, upgrades, enemy, weights) {
-  const scored = upgrades.map((u) => scoreUpgrade(currentStats, u, enemy, weights));
+export function rankAllUpgrades(profile, currentStats, upgrades, enemy, weights) {
+  const scored = upgrades.map((u) => scoreUpgrade(profile, currentStats, u, enemy, weights));
   scored.sort((a, b) => {
-    // Infinity first, then descending
-    if (b.score === Infinity && a.score === Infinity) return 0;
+    if (b.score === Infinity && a.score === Infinity) return b.powerDelta - a.powerDelta;
     if (b.score === Infinity) return 1;
     if (a.score === Infinity) return -1;
     return b.score - a.score;
@@ -51,7 +79,6 @@ export function rankAllUpgrades(currentStats, upgrades, enemy, weights) {
 
 /**
  * Returns offense/defense weights based on survival rate.
- * < 90% alive → 0.4/0.6, < 95% → 0.6/0.4, >= 95% → 0.8/0.2
  */
 export function autoCalibrate(aliveTimePercent) {
   if (aliveTimePercent < 90) {

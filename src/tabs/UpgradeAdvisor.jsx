@@ -60,7 +60,7 @@ export function UpgradeAdvisor() {
 
   // Enumerate and rank
   const allUpgrades = enumerateAllUpgrades(profile);
-  const ranked = rankAllUpgrades(stats, allUpgrades, enemy, weights);
+  const ranked = rankAllUpgrades(profile, stats, allUpgrades, enemy, weights);
 
   // Filter
   const filtered = activeFilter.value === 'all'
