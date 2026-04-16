@@ -1,0 +1,50 @@
+.release-notes {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.release-notes__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent, #8af);
+  margin-bottom: 16px;
+}
+.release-notes__version {
+  background: var(--card-bg, rgba(255,255,255,0.05));
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.release-notes__version h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text, #eee);
+  margin: 0 0 12px 0;
+}
+.release-notes__date {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-dim, #888);
+  margin-left: 8px;
+}
+.release-notes__version h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent, #8af);
+  margin: 12px 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.release-notes__version ul {
+  margin: 0 0 8px 0;
+  padding-left: 20px;
+}
+.release-notes__version li {
+  font-size: 0.82rem;
+  color: var(--text, #ddd);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.release-notes__version li strong {
+  color: var(--text, #eee);
+}

@@ -13,6 +13,7 @@ import './css/skill-trees.css';
 import './css/crafting.css';
 import './css/rune-planner.css';
 import './css/alt-advisor.css';
+import './css/release-notes.css';
 
 // Decode shared build from URL hash
 const hash = location.hash;

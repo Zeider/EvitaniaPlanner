@@ -9,6 +9,7 @@ const TABS = [
   { id: 'crafting', label: 'Crafting' },
   { id: 'runes', label: 'Rune Planner' },
   { id: 'alt-advisor', label: 'Alt Advisor' },
+  { id: 'release-notes', label: 'Release Notes' },
 ];
 
 export function TabNav() {
