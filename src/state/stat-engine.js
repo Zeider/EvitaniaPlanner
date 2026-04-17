@@ -369,15 +369,14 @@ export function computeStats(profile) {
 
   // --- Layer 3: Multipliers ---
 
-  // Primary stat scaling (coefficient derived from in-game comparison)
-  const PRIMARY_STAT_COEFF = 0.085;
+  // Primary stat scaling: STR/DEX/INT gives x10% ATK per point (from community spreadsheet)
   const primaryStat = classInfo?.primaryStat;
   if (primaryStat === 'str') {
-    stats.atk += stats.str * PRIMARY_STAT_COEFF * stats.atk;
+    stats.atk += stats.str * 0.10 * stats.atk;
   } else if (primaryStat === 'dex') {
-    stats.atk += stats.dex * PRIMARY_STAT_COEFF * stats.atk;
+    stats.atk += stats.dex * 0.10 * stats.atk;
   } else if (primaryStat === 'int') {
-    stats.atk += stats.int * PRIMARY_STAT_COEFF * stats.atk;
+    stats.atk += stats.int * 0.10 * stats.atk;
   }
 
   // Hunter multiplicative upgrades (e.g., More Damage Training x1.01 per rank)
@@ -470,9 +469,9 @@ export function computeStats(profile) {
   // ATK% multiplier
   stats.totalAtk = stats.atk * (1 + stats.atkPercent / 100);
 
-  // CON scaling (coefficients derived from in-game pet equip/unequip comparison)
-  stats.hp += stats.hp * (stats.con * 0.021);
-  stats.hpRegen += stats.hpRegen * (stats.con * 0.005);
+  // CON scaling: +5% Max HP per CON, +1% HP Regen per CON (from community spreadsheet)
+  stats.hp += stats.hp * (stats.con * 0.05);
+  stats.hpRegen += stats.hpRegen * (stats.con * 0.01);
 
   // DEF% multiplier
   stats.def = stats.def * (1 + stats.defPercent / 100);

@@ -63,11 +63,11 @@ describe('computeStats', () => {
     expect(stats.critDmg).toBe(40 + 6); // base 40 + 6 from upgrade
     expect(stats.atkPercent).toBe(15 + 20); // base 15 + 20 from upgrade
 
-    // Rogue: ATK += DEX * 0.085 * current ATK
+    // Rogue: ATK += DEX * 0.10 * current ATK
     // base atk = 14, dex = 5
-    // after primary stat scaling: atk = 14 + 5 * 0.085 * 14 = 14 + 5.95 = 19.95
-    // totalAtk = 19.95 * (1 + 35/100) = 19.95 * 1.35 = 26.9325
-    expect(stats.totalAtk).toBeCloseTo(26.93, 1);
+    // after primary stat scaling: atk = 14 + 5 * 0.10 * 14 = 14 + 7 = 21
+    // totalAtk = 21 * (1 + 35/100) = 21 * 1.35 = 28.35
+    expect(stats.totalAtk).toBeCloseTo(28.35, 1);
   });
 
   it('weapon enhancement scales ATK at 27.5% per level', () => {
