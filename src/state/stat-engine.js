@@ -436,7 +436,7 @@ export function computeStats(profile) {
 
   // Hunter multiplicative upgrades (e.g., More Damage Training x1.01 per rank)
   for (const hm of hunterMultipliers) {
-    const multiplier = Math.pow(1 + hm.perRank, hm.rank);
+    const multiplier = 1 + hm.perRank * hm.rank;
     if (hm.stat === 'atk') {
       stats.totalAtk *= multiplier;
       stats.atk *= multiplier;
