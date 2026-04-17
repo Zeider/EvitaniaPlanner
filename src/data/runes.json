@@ -99,10 +99,10 @@
     {
       "name": "Shop",
       "source": "Shop purchase",
-      "stat": "special",
+      "stat": "multi",
       "statLabel": "MF +2, Offline +2%, ATK +30",
       "tiers": {
-        "t1": { "rune": "PRE", "value": null }
+        "t1": { "rune": "PRE", "stats": { "magicFind": 2, "offlineGains": 2, "atk": 30 } }
       }
     }
   ],

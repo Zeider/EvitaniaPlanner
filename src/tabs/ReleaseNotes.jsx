@@ -4,6 +4,20 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.0.5 <span class="release-notes__date">April 17, 2026</span></h3>
+
+        <h4>Stat Engine</h4>
+        <ul>
+          <li><strong>PRE Rune Stats</strong> — Premium runes now correctly apply ATK +30, Magic Find +2, and Offline Gains +2% per rune. Previously showed no stat contribution.</li>
+        </ul>
+
+        <h4>Infrastructure</h4>
+        <ul>
+          <li><strong>E2E Test Suite</strong> — 21 Playwright browser tests covering save import, gear planner, upgrade advisor, character switching, and all tabs.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.0.4 <span class="release-notes__date">April 17, 2026</span></h3>
 
         <h4>Save Import</h4>

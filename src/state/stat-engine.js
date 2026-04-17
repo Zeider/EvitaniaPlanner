@@ -126,6 +126,7 @@ function buildRuneLookup() {
           family: family.name,
           stat: family.stat,
           value: tierData.value,
+          stats: tierData.stats || null, // multi-stat runes (e.g. PRE)
           tier: tierKey,
         };
       }
@@ -286,7 +287,13 @@ export function computeStats(profile) {
     // Individual rune stats
     for (const runeName of profile.equippedRunes) {
       const info = runeLookup[runeName];
-      if (info && info.value != null) {
+      if (!info) continue;
+      if (info.stats) {
+        // Multi-stat runes (e.g. PRE: ATK+30, MF+2, Offline+2%)
+        for (const [stat, value] of Object.entries(info.stats)) {
+          addStat(stats, stat, value);
+        }
+      } else if (info.value != null) {
         addStat(stats, info.stat, info.value);
       }
     }
