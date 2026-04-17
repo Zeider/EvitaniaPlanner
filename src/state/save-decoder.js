@@ -111,13 +111,17 @@ export function extractProfiles(saveData) {
   const petSaveData = saveData.Pets?.petSaveData ?? [];
 
   // Extract equipped runes from RuneSystem (shared across all characters)
+  // Gem shop unlocks (GemshopRuneSlotUnlock) add slots beyond the base UnlockedSlots
+  const gemSlotUnlocks = progressEnhancements.GemshopRuneSlotUnlock || 0;
   const equippedRunes = [];
   const runeSystem = saveData.RuneSystem;
   if (runeSystem?.Rows) {
     for (const row of runeSystem.Rows) {
-      const slots = row.UnlockedSlots || 0;
+      const baseSlots = row.UnlockedSlots || 0;
+      // Gem shop unlocks apply to the first row
+      const totalSlots = row.RowIndex === 0 ? baseSlots + gemSlotUnlocks : baseSlots;
       const slotted = row.SlottedRunes || {};
-      for (let i = 0; i < slots; i++) {
+      for (let i = 0; i < totalSlots; i++) {
         const guid = slotted[String(i)];
         if (guid) {
           const name = RUNE_GUID_MAP[guid];
