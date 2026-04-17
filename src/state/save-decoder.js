@@ -10,7 +10,68 @@ const CLASS_MAP = {
   3: 'rogue',
 };
 
+/**
+ * Known gear GUID → item name mappings.
+ * Add new entries as they're discovered from save files.
+ */
+const GEAR_GUID_MAP = {
+  // Helmets
+  'ebc99fd6-a250-4a20-a4a5-0815f796148c': 'Bronze Helmet',
+  '25f97961-90f6-4f18-9f7b-76e20c54e845': 'Iron Helmet',
+  // Chestplates
+  '8a4e9274-0396-415b-ae89-f268a8b9afae': 'Bronze Chestplate',
+  '19d55c7a-3354-4c01-9f7d-8b8a9620066f': 'Iron Chestplate',
+  // Gloves
+  '1d23d781-e7ba-4e85-9c4f-2ddf85a95804': 'Bronze Gloves',
+  '99528be3-8b4f-4067-88d8-662d72b3d578': 'Iron Gloves',
+  // Boots
+  '6fa4b8c7-adc0-42c7-98e5-7c5963f46f66': 'Bronze Boots',
+  'c6d360e1-1c30-454c-bb63-935e67761d8b': 'Iron Boots',
+  // Belts
+  '36737f24-0684-4744-a032-6feb29cd39dd': 'Steam Belt',
+  '8e42e15e-c3de-4471-8d40-19fccf9d0a23': 'Belt of Love',
+  // Amulets
+  '4d02a095-fe8b-4a12-a7c3-6d1ef2ab5107': 'Boss Amulet',
+  // Rings
+  '2c1d48e6-875a-4530-8080-f017bac70e99': 'Mammoth Ring',
+  // Swords
+  '5279b9a3-3ac1-44e2-8306-1374d6351c10': 'Essence Sword',
+  // Bows
+  'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
+  // Staffs
+  'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Steel Staff',
+  // Pickaxes
+  'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
+  // Axes
+  '95fbcc3e-b5f2-48cd-adc7-42a187ae4179': 'Iron Axe',
+};
+
 const HEX_PAIR = /^[0-9A-Fa-f]*$/;
+
+/**
+ * Known rune GUID → rune name mappings.
+ * Add new entries as they're discovered from save files.
+ */
+const RUNE_GUID_MAP = {
+  // Shop
+  'd90f7d7a-76ee-4209-875d-ba17f094d0e1': 'PRE',
+  // Act 2 Bosses (All EXP)
+  '076a243c-3906-48a9-8705-bd065f35d4cc': 'HAS',
+  '5a4efab8-a86a-4d9c-9edc-ba67cdce1b08': 'OLU',
+  // Iceboar-Yeti (WC Power)
+  '6268da07-03bb-47f7-80b7-03bb199093f6': 'NIL',
+  // Ratatoskr-Troll (Mining Power)
+  '7c65e420-77c6-4581-ba34-ba04bc9cccf2': 'FUS',
+  '4814b89d-ab1e-4c54-ae3a-224cbdaaf090': 'YIT',
+  // Penguin-Draugr (Gold Multi)
+  'b10b0191-5c58-4601-9817-efc150cfbad4': 'MU',
+  // Sunboy-Kangaroo (HP)
+  'e2dba269-d259-4091-a6e8-5f2dc597a0b9': 'GOR',
+  // Ironwood (Attack)
+  '8a3a86f3-e84c-444f-a47d-61dec9d5a396': 'RYS',
+  // Thorium Ore (Crit Damage)
+  '9fe2cd59-b50f-49f0-8e07-d7a498435953': 'WOM',
+};
 
 /**
  * Decode a hex-encoded, XOR-0xFF save string back to its original UTF-8 text.
@@ -49,6 +110,23 @@ export function extractProfiles(saveData) {
   // Extract pet data
   const petSaveData = saveData.Pets?.petSaveData ?? [];
 
+  // Extract equipped runes from RuneSystem (shared across all characters)
+  const equippedRunes = [];
+  const runeSystem = saveData.RuneSystem;
+  if (runeSystem?.Rows) {
+    for (const row of runeSystem.Rows) {
+      const slots = row.UnlockedSlots || 0;
+      const slotted = row.SlottedRunes || {};
+      for (let i = 0; i < slots; i++) {
+        const guid = slotted[String(i)];
+        if (guid) {
+          const name = RUNE_GUID_MAP[guid];
+          if (name) equippedRunes.push(name);
+        }
+      }
+    }
+  }
+
   // Shared upgrades extracted once from ProgressProfile.Enhancements
   const hunterUpgrades = {};
   const ashUpgrades = {};
@@ -85,9 +163,9 @@ export function extractProfiles(saveData) {
     // Map equipment slots
     const gear = {};
     for (const [slot, item] of Object.entries(hero.equipment ?? {})) {
-      gear[slot] = item
-        ? { guid: item.itemGuid, level: item.Level, enhancementLevel: item.EnhancementLevel }
-        : null;
+      if (!item) { gear[slot] = null; continue; }
+      const name = GEAR_GUID_MAP[item.itemGuid] || null;
+      gear[slot] = { guid: item.itemGuid, name, level: item.Level, enhancementLevel: item.EnhancementLevel };
     }
 
     const op = hero.OfflineProgress ?? {};
@@ -105,6 +183,7 @@ export function extractProfiles(saveData) {
       ashUpgrades,
       sacrificeUpgrades,
       cards: { ...cards },
+      equippedRunes: [...equippedRunes],
       farmingRates: {
         killsPerHour: op.KillsPerHour ?? 0,
         xpPerHour: op.XpPerHour ?? 0,

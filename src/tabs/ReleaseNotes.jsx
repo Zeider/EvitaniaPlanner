@@ -4,6 +4,22 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.0.4 <span class="release-notes__date">April 17, 2026</span></h3>
+
+        <h4>Save Import</h4>
+        <ul>
+          <li><strong>Gear Auto-Detection</strong> — Save import now resolves gear GUIDs to item names. 17 items mapped (Bronze/Iron armor, Essence Sword, Steel Bow/Staff, belts, accessories, tools). Gear stats and enhancement levels flow into the stat engine automatically.</li>
+          <li><strong>Equipped Runes</strong> — Save import extracts equipped runes from all rune rows. 10 rune GUIDs mapped (PRE, OLU, GOR, MU, HAS, NIL, FUS, YIT, RYS, WOM). Rune word detection works automatically.</li>
+        </ul>
+
+        <h4>Upgrade Advisor Fixes</h4>
+        <ul>
+          <li><strong>Talent Point Budget</strong> — Fixed off-by-one: talent budget is now level-1 (no point at level 1). Fully allocated characters no longer see phantom talent suggestions.</li>
+          <li><strong>Real Farm Time Estimates</strong> — Farm times now use actual kill rates and drop data instead of hardcoded guesses. Zone drops scale with your kills/hour, vendor items show days needed, boss drops estimate per-attempt time.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.0.3 <span class="release-notes__date">April 17, 2026</span></h3>
 
         <h4>Data</h4>

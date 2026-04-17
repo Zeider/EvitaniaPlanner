@@ -3,6 +3,7 @@ import talentsData from '../data/talents.json';
 import ashUpgradesData from '../data/ash-upgrades.json';
 import sacrificesData from '../data/sacrifices.json';
 import gearData from '../data/gear.json';
+import dropsData from '../data/drops.json';
 
 /** Maps each class to the weapon subtypes they can equip. */
 const CLASS_WEAPON_SUBTYPES = {
@@ -40,6 +41,41 @@ function buildGearBySlotSubtype() {
 
 const gearBySlotSubtype = buildGearBySlotSubtype();
 
+/**
+ * Estimate farm time in hours for a material cost object using the profile's
+ * kill rate and drop rate data. Returns the max across all materials (bottleneck).
+ */
+function estimateFarmTime(materialCost, profile) {
+  const kph = profile.farmingRates?.killsPerHour || 0;
+  if (!materialCost || Object.keys(materialCost).length === 0) return 0;
+
+  let maxHours = 0;
+  for (const [mat, qty] of Object.entries(materialCost)) {
+    if (qty <= 0) continue;
+    const source = dropsData.resources[mat];
+    if (!source) { maxHours = Math.max(maxHours, 1); continue; } // unknown source fallback
+
+    if (source.vendor) {
+      // Vendor items: limited daily purchases
+      const days = Math.ceil(qty / (source.dailyLimit || 1));
+      maxHours = Math.max(maxHours, days * 24);
+    } else if (source.boss) {
+      // Boss drops: rare, assume ~1 kill per attempt with long intervals
+      maxHours = Math.max(maxHours, qty * 2);
+    } else if (source.activity) {
+      // Mining/WC: rough estimate based on profession level
+      maxHours = Math.max(maxHours, qty * 0.01);
+    } else if (source.zone && source.rate && kph > 0) {
+      // Zone drops: qty needed / (kills per hour / rate)
+      const dropsPerHour = kph / source.rate;
+      maxHours = Math.max(maxHours, qty / dropsPerHour);
+    } else {
+      maxHours = Math.max(maxHours, 1);
+    }
+  }
+  return maxHours;
+}
+
 // --- Upgrade enumeration ---
 
 function enumerateHunterUpgrades(profile) {
@@ -50,13 +86,14 @@ function enumerateHunterUpgrades(profile) {
     const nextRank = currentRank + 1;
     // Material cost scales with rank (rough: rank * 10 base materials)
     const materialQty = nextRank * 10;
+    const materialCost = { [hu.material]: materialQty };
     upgrades.push({
       type: 'hunter',
       id: hu.id,
       name: `${hu.name} (Rank ${nextRank})`,
       statChanges: { [hu.stat]: hu.perRank },
-      materialCost: { [hu.material]: materialQty },
-      farmTimeHours: 0.5,
+      materialCost,
+      farmTimeHours: estimateFarmTime(materialCost, profile),
     });
   }
   return upgrades;
@@ -66,8 +103,8 @@ function enumerateTalentUpgrades(profile) {
   // Only suggest talents from novice tree + the character's own class tree
   const allowedTrees = new Set(['novice', profile.class]);
 
-  // Calculate available talent points: 1 point per combat level, minus allocated
-  const totalBudget = profile.level || 1;
+  // Calculate available talent points: 1 point per level starting at level 2
+  const totalBudget = Math.max(0, (profile.level || 1) - 1);
   let allocatedPoints = 0;
   if (profile.talents) {
     for (const pts of Object.values(profile.talents)) {
@@ -105,13 +142,14 @@ function enumerateAshUpgrades(profile) {
     const currentRank = (profile.ashUpgrades && profile.ashUpgrades[au.id]) || 0;
     if (currentRank >= au.maxRank) continue;
     const nextRank = currentRank + 1;
+    const materialCost = { Ash: nextRank * 50 };
     upgrades.push({
       type: 'ash',
       id: au.id,
       name: `${au.name} (Rank ${nextRank})`,
       statChanges: { [au.perRank.stat]: au.perRank.value },
-      materialCost: { Ash: nextRank * 50 },
-      farmTimeHours: 0.5,
+      materialCost,
+      farmTimeHours: estimateFarmTime(materialCost, profile),
     });
   }
   return upgrades;
@@ -127,13 +165,14 @@ function enumerateSacrificeUpgrades(profile) {
     if (currentRank === 0 && defeated.length > 0 && !defeated.includes(sac.soul)) continue;
     if (currentRank >= sac.maxRank) continue;
     const nextRank = currentRank + 1;
+    const materialCost = { [sac.costItem]: nextRank, [`${sac.soul} Soul`]: 1 };
     upgrades.push({
       type: 'sacrifice',
       id: sac.id,
       name: `${sac.name} (Rank ${nextRank})`,
       statChanges: { [sac.stat]: sac.isMultiplier ? sac.perRank * 100 : sac.perRank },
-      materialCost: { [sac.costItem]: nextRank, [`${sac.soul} Soul`]: 1 },
-      farmTimeHours: 1.0,
+      materialCost,
+      farmTimeHours: estimateFarmTime(materialCost, profile),
     });
   }
   return upgrades;
@@ -175,6 +214,7 @@ function enumerateGearUpgrades(profile) {
 
     if (Object.keys(statChanges).length === 0) continue;
 
+    const matCost1 = nextItem.recipe ? { [nextItem.recipe]: 1 } : {};
     upgrades.push({
       type: 'gear',
       id: `gear_${slot}_${nextItem.name}`,
@@ -182,8 +222,8 @@ function enumerateGearUpgrades(profile) {
       gearSlot: slot,
       gearName: nextItem.name,
       statChanges,
-      materialCost: nextItem.recipe ? { [nextItem.recipe]: 1 } : {},
-      farmTimeHours: nextItem.recipe ? 1.0 : 0.5,
+      materialCost: matCost1,
+      farmTimeHours: estimateFarmTime(matCost1, profile),
     });
   }
 
@@ -203,6 +243,7 @@ function enumerateGearUpgrades(profile) {
     const statChanges = computeGearStatDelta(null, firstItem);
     if (Object.keys(statChanges).length === 0) continue;
 
+    const matCost2 = firstItem.recipe ? { [firstItem.recipe]: 1 } : {};
     upgrades.push({
       type: 'gear',
       id: `gear_${baseSlot}_${firstItem.name}`,
@@ -210,8 +251,8 @@ function enumerateGearUpgrades(profile) {
       gearSlot: baseSlot,
       gearName: firstItem.name,
       statChanges,
-      materialCost: firstItem.recipe ? { [firstItem.recipe]: 1 } : {},
-      farmTimeHours: firstItem.recipe ? 1.0 : 0.5,
+      materialCost: matCost2,
+      farmTimeHours: estimateFarmTime(matCost2, profile),
     });
   }
 

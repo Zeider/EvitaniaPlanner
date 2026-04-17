@@ -125,6 +125,18 @@ const MOCK_SAVE = {
       'Ash Tree': 2.0,
     },
   },
+  RuneSystem: {
+    Rows: [{
+      RowIndex: 0,
+      UnlockedSlots: 3,
+      SlottedRunes: {
+        '0': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
+        '1': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
+        '2': '5a4efab8-a86a-4d9c-9edc-ba67cdce1b08',
+        '3': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
+      },
+    }],
+  },
 };
 
 describe('extractProfiles', () => {
@@ -211,6 +223,7 @@ describe('extractProfiles', () => {
     const zeider = profiles[0];
     expect(zeider.gear.Helmet).toEqual({
       guid: '25f97961-aaa',
+      name: null,
       level: 0,
       enhancementLevel: 7,
     });
@@ -225,6 +238,14 @@ describe('extractProfiles', () => {
       'Fire Worm': 3.0,
       'Ash Tree': 2.0,
     });
+  });
+
+  it('extracts equipped runes from RuneSystem (shared, only unlocked slots)', () => {
+    const zeider = profiles[0];
+    // 3 unlocked slots: slot 0=PRE, slot 1=PRE, slot 2=OLU (slot 3 is locked)
+    expect(zeider.equippedRunes).toEqual(['PRE', 'PRE', 'OLU']);
+    // Shared across all characters
+    expect(profiles[1].equippedRunes).toEqual(['PRE', 'PRE', 'OLU']);
   });
 });
 
