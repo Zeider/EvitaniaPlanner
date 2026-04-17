@@ -79,7 +79,7 @@ describe('scoreUpgrade', () => {
     // Give the profile some atkPercent so flat ATK gets amplified
     const profileWithPercent = {
       ...baseProfile,
-      ashUpgrades: { ash_3_0: 1 }, // +30% ATK
+      ashUpgrades: { ash_0_0: 1 }, // +30% ATK
     };
     const statsWithPercent = computeStats(profileWithPercent);
 

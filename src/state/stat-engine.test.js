@@ -165,9 +165,9 @@ describe('computeStats', () => {
       talents: {},
       gear: {},
       ashUpgrades: {
-        'ash_2_0': 3, // Crit Damage +10% per rank
-        'ash_2_1': 4, // Crit Chance +1% per rank
-        'ash_3_0': 1, // Attack Increase +30% ATK
+        'ash_3_0': 3, // Crit Damage +10% per rank
+        'ash_4_0': 4, // Crit Chance +1% per rank
+        'ash_0_0': 1, // Attack Increase +30% ATK
       },
     };
     const stats = computeStats(profile);

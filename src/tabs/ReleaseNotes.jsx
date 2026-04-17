@@ -4,6 +4,15 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.0.3 <span class="release-notes__date">April 17, 2026</span></h3>
+
+        <h4>Data</h4>
+        <ul>
+          <li><strong>Ash Tree Rewrite</strong> — Complete rewrite of the Act 2 bonfire ash upgrade tree from in-game data. Now 25 nodes across 11 tiers (was 16 nodes across 6 rows). Correct node order, names, effects, and max ranks. Multiple Attack Increase and Smeltery Speed nodes across the tree. Existing saves should be re-imported.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.0.2 <span class="release-notes__date">April 17, 2026</span></h3>
 
         <h4>New Features</h4>

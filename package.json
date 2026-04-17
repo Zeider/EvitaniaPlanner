@@ -1,6 +1,6 @@
 {
   "name": "evitania-planner",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "All-in-one character planning suite for Evitania Online: Idle RPG",
   "main": "index.js",
   "directories": {

@@ -1,16 +1,36 @@
 [
-  { "id": "ash_0_0", "name": "Maximum Fuel", "effect": "+10000 capacity", "maxRank": 1, "perRank": { "stat": "fuelCapacity", "value": 10000 } },
+  { "id": "ash_0_0", "name": "Attack Increase", "effect": "+30% all atk", "maxRank": 1, "perRank": { "stat": "atkPercent", "value": 30 } },
+
   { "id": "ash_1_0", "name": "Fuel Efficiency", "effect": "-5% consumption", "maxRank": 3, "perRank": { "stat": "fuelConsumption", "value": -5 } },
-  { "id": "ash_1_1", "name": "More Ash", "effect": "+15% ash odds", "maxRank": 3, "perRank": { "stat": "ashOdds", "value": 15 } },
-  { "id": "ash_1_2", "name": "Ash Discount", "effect": "-10% ash costs", "maxRank": 1, "perRank": { "stat": "ashCostReduction", "value": 10 } },
-  { "id": "ash_2_0", "name": "Crit Damage", "effect": "+10% crit damage", "maxRank": 3, "perRank": { "stat": "critDamage", "value": 10 } },
-  { "id": "ash_2_1", "name": "Crit Chance", "effect": "+1% crit chance", "maxRank": 4, "perRank": { "stat": "critChance", "value": 1 } },
-  { "id": "ash_2_2", "name": "Defence Increase", "effect": "+5% phys def", "maxRank": 5, "perRank": { "stat": "defPercent", "value": 5 } },
-  { "id": "ash_3_0", "name": "Attack Increase", "effect": "+30% all atk", "maxRank": 1, "perRank": { "stat": "atkPercent", "value": 30 } },
-  { "id": "ash_3_1", "name": "Auto Runes", "effect": "Runes auto-enter inventory", "maxRank": 1, "perRank": { "stat": "autoRunes", "value": 1 } },
-  { "id": "ash_3_2", "name": "Rune Overload", "effect": "Runes stack in inventory", "maxRank": 1, "perRank": { "stat": "runeOverload", "value": 1 } },
-  { "id": "ash_4_0", "name": "Smeltery Speed", "effect": "+7% per rank", "maxRank": 4, "perRank": { "stat": "smelterySpeed", "value": 7 } },
-  { "id": "ash_4_1", "name": "Fiery Defence", "effect": "+5 phys def per rank", "maxRank": 4, "perRank": { "stat": "physDef", "value": 5 } },
-  { "id": "ash_4_2", "name": "Hunter Cost Reduction", "effect": "-50% hunter costs per rank", "maxRank": 5, "perRank": { "stat": "hunterCostReduction", "value": 50 } },
-  { "id": "ash_5_0", "name": "Movespeed", "effect": "+5% per rank", "maxRank": 2, "perRank": { "stat": "moveSpeed", "value": 5 } }
+  { "id": "ash_1_1", "name": "Attack Increase", "effect": "+30% all atk", "maxRank": 1, "perRank": { "stat": "atkPercent", "value": 30 } },
+  { "id": "ash_1_2", "name": "Smeltery Speed", "effect": "+10% per rank", "maxRank": 1, "perRank": { "stat": "smelterySpeed", "value": 10 } },
+
+  { "id": "ash_2_0", "name": "Maximum Fuel", "effect": "+10000 capacity", "maxRank": 1, "perRank": { "stat": "fuelCapacity", "value": 10000 } },
+  { "id": "ash_2_1", "name": "More Ash", "effect": "+15% ash odds", "maxRank": 3, "perRank": { "stat": "ashOdds", "value": 15 } },
+  { "id": "ash_2_2", "name": "Fiery Defence", "effect": "+5 phys def per rank", "maxRank": 4, "perRank": { "stat": "physDef", "value": 5 } },
+  { "id": "ash_2_3", "name": "Hunter Cost Reduction", "effect": "-50% hunter costs per rank", "maxRank": 5, "perRank": { "stat": "hunterCostReduction", "value": 50 } },
+
+  { "id": "ash_3_0", "name": "Crit Damage", "effect": "+10% crit damage", "maxRank": 3, "perRank": { "stat": "critDamage", "value": 10 } },
+  { "id": "ash_3_1", "name": "Ash Discount", "effect": "-10% ash costs", "maxRank": 1, "perRank": { "stat": "ashCostReduction", "value": 10 } },
+  { "id": "ash_3_2", "name": "Smeltery Speed", "effect": "+10% per rank", "maxRank": 1, "perRank": { "stat": "smelterySpeed", "value": 10 } },
+  { "id": "ash_3_3", "name": "Movespeed", "effect": "+5% per rank", "maxRank": 2, "perRank": { "stat": "moveSpeed", "value": 5 } },
+
+  { "id": "ash_4_0", "name": "Crit Chance", "effect": "+1% crit chance", "maxRank": 4, "perRank": { "stat": "critChance", "value": 1 } },
+  { "id": "ash_4_1", "name": "Rune Overload", "effect": "Runes stack in inventory", "maxRank": 1, "perRank": { "stat": "runeOverload", "value": 1 } },
+
+  { "id": "ash_5_0", "name": "Defence Increase", "effect": "+5% phys def", "maxRank": 5, "perRank": { "stat": "defPercent", "value": 5 } },
+  { "id": "ash_5_1", "name": "Attack Increase", "effect": "+30% all atk", "maxRank": 1, "perRank": { "stat": "atkPercent", "value": 30 } },
+
+  { "id": "ash_6_0", "name": "Fuel Efficiency", "effect": "-5% consumption", "maxRank": 3, "perRank": { "stat": "fuelConsumption", "value": -5 } },
+  { "id": "ash_6_1", "name": "More Ash", "effect": "+15% ash odds", "maxRank": 3, "perRank": { "stat": "ashOdds", "value": 15 } },
+
+  { "id": "ash_7_0", "name": "Attack Increase", "effect": "+30% all atk", "maxRank": 1, "perRank": { "stat": "atkPercent", "value": 30 } },
+  { "id": "ash_7_1", "name": "More Ash", "effect": "+15% ash odds", "maxRank": 3, "perRank": { "stat": "ashOdds", "value": 15 } },
+
+  { "id": "ash_8_0", "name": "Maximum Fuel", "effect": "+10000 capacity", "maxRank": 6, "perRank": { "stat": "fuelCapacity", "value": 10000 } },
+  { "id": "ash_8_1", "name": "Smeltery Speed", "effect": "+10% per rank", "maxRank": 3, "perRank": { "stat": "smelterySpeed", "value": 10 } },
+
+  { "id": "ash_9_0", "name": "Auto Runes", "effect": "Runes auto-enter inventory", "maxRank": 1, "perRank": { "stat": "autoRunes", "value": 1 } },
+
+  { "id": "ash_10_0", "name": "Smeltery Speed", "effect": "+7% per rank", "maxRank": 4, "perRank": { "stat": "smelterySpeed", "value": 7 } }
 ]
