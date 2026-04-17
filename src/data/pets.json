@@ -243,7 +243,14 @@
     "name": "Mony",
     "rarity": "unique",
     "stats": ["hp", "allXp"],
-    "globalBonus": null,
+    "globalBonus": { "stat": "atk", "isPercent": true, "level50": 54 },
+    "tierBonuses": {
+      "3": [
+        { "stat": "physDef", "value": 50 },
+        { "stat": "hp", "value": 250 },
+        { "stat": "xpMulti", "value": 30 }
+      ]
+    },
     "source": "Steam Release Wishlist Reward",
     "obtainable": true
   },

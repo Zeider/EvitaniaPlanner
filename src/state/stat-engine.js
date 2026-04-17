@@ -70,6 +70,7 @@ function addStat(stats, statName, value) {
     mobSpawn: 'mobSpawnReduction',
     offline: 'offlineGains',
     allXp: 'xpMulti',
+    allExp: 'xpMulti',
     physDef: 'def',
     magicDef: 'def', // simplified: fold magic def into def
     wcPower: 'woodcuttingPower',
@@ -332,6 +333,18 @@ export function computeStats(profile) {
         }
       } else {
         addStat(stats, stat, value);
+      }
+    }
+
+    // Pet tier bonuses (fixed stats unlocked at each tier)
+    if (pet && pet.tierBonuses) {
+      const petTier = typeof profile.activePet === 'object' ? (profile.activePet.tier || 0) : 0;
+      for (const [tierKey, bonuses] of Object.entries(pet.tierBonuses)) {
+        if (petTier >= parseInt(tierKey, 10)) {
+          for (const bonus of bonuses) {
+            addStat(stats, bonus.stat, bonus.value);
+          }
+        }
       }
     }
   }
