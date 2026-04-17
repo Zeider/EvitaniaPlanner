@@ -1,6 +1,17 @@
 import { activeProfile } from '../state/store.js';
 
-const GEAR_SLOTS = ['Helmet', 'Chest', 'Gloves', 'Boots', 'Belt', 'Amulet', 'Ring', 'Weapon1', 'Axe', 'Pickaxe'];
+const GEAR_SLOTS = [
+  { id: 'helmet', label: 'Helmet' },
+  { id: 'chest', label: 'Chest' },
+  { id: 'gloves', label: 'Gloves' },
+  { id: 'boots', label: 'Boots' },
+  { id: 'belt', label: 'Belt' },
+  { id: 'amulet', label: 'Amulet' },
+  { id: 'ring', label: 'Ring' },
+  { id: 'weapon', label: 'Weapon' },
+  { id: 'axe', label: 'Axe' },
+  { id: 'pickaxe', label: 'Pickaxe' },
+];
 
 export function GearStrip({ onSlotClick }) {
   const gear = activeProfile.value.gear || {};
@@ -10,18 +21,18 @@ export function GearStrip({ onSlotClick }) {
       <div class="gear-strip__label">Equipped Gear</div>
       <div class="gear-strip__slots">
         {GEAR_SLOTS.map((slot) => {
-          const item = gear[slot];
-          const equipped = !!item;
+          const item = gear[slot.id];
+          const equipped = !!(item && item.name);
           return (
             <div
-              key={slot}
+              key={slot.id}
               class={`gear-slot ${equipped ? 'gear-slot--equipped' : 'gear-slot--empty'}`}
-              onClick={() => onSlotClick && onSlotClick(slot)}
-              title={slot}
+              onClick={() => onSlotClick && onSlotClick(slot.id)}
+              title={slot.label}
             >
-              <span class="gear-slot__name">{equipped ? item.name || slot : slot}</span>
-              {equipped && item.enhancement > 0 && (
-                <span class="gear-slot__badge">+{item.enhancement}</span>
+              <span class="gear-slot__name">{equipped ? item.name : slot.label}</span>
+              {equipped && item.enhancementLevel > 0 && (
+                <span class="gear-slot__badge">+{item.enhancementLevel}</span>
               )}
             </div>
           );

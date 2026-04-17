@@ -62,9 +62,33 @@ export function setLightMode(on) {
   lightMode.value = on;
 }
 
+/** Normalize old capitalized gear slot keys to lowercase IDs. */
+const SLOT_MIGRATE = {
+  Helmet: 'helmet', Chest: 'chest', Legs: 'gloves', Boots: 'boots',
+  Belt: 'belt', Amulet: 'amulet', Ring: 'ring',
+  Weapon1: 'weapon', Weapon2: 'weapon2', Potion: 'potion',
+  Axe: 'axe', Pickaxe: 'pickaxe',
+};
+
+function migrateGearSlots(profile) {
+  if (!profile.gear) return;
+  const newGear = {};
+  for (const [key, val] of Object.entries(profile.gear)) {
+    const mapped = SLOT_MIGRATE[key] || key;
+    newGear[mapped] = val;
+  }
+  profile.gear = newGear;
+}
+
 function loadProfiles() {
   try {
     const raw = localStorage.getItem('ic-profiles');
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const data = JSON.parse(raw);
+    // Migrate old gear slot names
+    for (const profile of Object.values(data)) {
+      migrateGearSlots(profile);
+    }
+    return data;
   } catch { return {}; }
 }
