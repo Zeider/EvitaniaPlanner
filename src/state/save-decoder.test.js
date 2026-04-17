@@ -221,14 +221,14 @@ describe('extractProfiles', () => {
 
   it('extracts gear from equipment', () => {
     const zeider = profiles[0];
-    expect(zeider.gear.Helmet).toEqual({
+    expect(zeider.gear.helmet).toEqual({
       guid: '25f97961-aaa',
       name: null,
       level: 0,
       enhancementLevel: 7,
     });
-    expect(zeider.gear.Weapon2).toBeNull();
-    expect(zeider.gear.Potion).toBeNull();
+    expect(zeider.gear.weapon2).toBeNull();
+    expect(zeider.gear.potion).toBeNull();
   });
 
   it('extracts cards from Currency', () => {

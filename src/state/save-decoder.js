@@ -160,9 +160,16 @@ export function extractProfiles(saveData) {
       }
     }
 
-    // Map equipment slots
+    // Map equipment slots — normalize game's slot names to our slot IDs
+    const SLOT_MAP = {
+      Helmet: 'helmet', Chest: 'chest', Legs: 'gloves', Boots: 'boots',
+      Belt: 'belt', Amulet: 'amulet', Ring: 'ring',
+      Weapon1: 'weapon', Weapon2: 'weapon2', Potion: 'potion',
+      Axe: 'axe', Pickaxe: 'pickaxe',
+    };
     const gear = {};
-    for (const [slot, item] of Object.entries(hero.equipment ?? {})) {
+    for (const [rawSlot, item] of Object.entries(hero.equipment ?? {})) {
+      const slot = SLOT_MAP[rawSlot] || rawSlot.toLowerCase();
       if (!item) { gear[slot] = null; continue; }
       const name = GEAR_GUID_MAP[item.itemGuid] || null;
       gear[slot] = { guid: item.itemGuid, name, level: item.Level, enhancementLevel: item.EnhancementLevel };
