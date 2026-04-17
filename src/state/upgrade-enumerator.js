@@ -29,16 +29,11 @@ function buildGearBySlotSubtype() {
         // Group weapons by subtype so bows only suggest bows, etc.
         const key = item.subtype ? `${item.slot}:${item.subtype}` : item.slot;
         if (!byKey[key]) byKey[key] = [];
-        let power = (item.atk || 0) + (item.def || 0);
-        if (item.stats) {
-          for (const v of Object.values(item.stats)) power += v;
-        }
-        byKey[key].push({ ...item, _slotKey: key, _power: power });
+        // Preserve data file order — items are listed in progression order
+        // (Copper → Bronze → Iron → Thorium → Infinite → Sunstone)
+        byKey[key].push({ ...item, _slotKey: key });
       }
     }
-  }
-  for (const key of Object.keys(byKey)) {
-    byKey[key].sort((a, b) => a._power - b._power);
   }
   return byKey;
 }

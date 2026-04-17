@@ -10,6 +10,80 @@
   animation: fadeIn 0.4s ease-out;
 }
 
+/* ── Progression Milestone Banner ───────────────── */
+.gp-milestone {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--primary, #6366f1);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+
+.gp-milestone__toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-main);
+  font-family: 'Outfit', sans-serif;
+}
+
+.gp-milestone__heading {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.gp-milestone__arrow {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.gp-milestone__body {
+  padding: 0 1rem 0.75rem;
+}
+
+.gp-milestone__tip {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0 0 0.5rem;
+  line-height: 1.4;
+}
+
+.gp-milestone__issues {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.gp-milestone__issue {
+  font-size: 0.8rem;
+  color: #facc15;
+  padding: 0.25rem 0.5rem;
+  background: rgba(250, 204, 21, 0.08);
+  border-radius: 6px;
+}
+
+.gp-milestone__issue::before {
+  content: '\25B6  ';
+  font-size: 0.55rem;
+  vertical-align: middle;
+}
+
+.gp-milestone__ready {
+  font-size: 0.82rem;
+  color: #22c55e;
+  margin: 0;
+  font-weight: 600;
+}
+
 /* ── Slot Selector Row ───────────────────────────── */
 .gp-slots {
   display: flex;

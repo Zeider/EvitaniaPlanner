@@ -81,6 +81,7 @@
     "Charcoal": { "yields": 1, "ingredients": [{ "name": "Pyrewood Log", "qty": 10 }] },
     "Steel Bar": { "yields": 1, "ingredients": [{ "name": "Iron Bar", "qty": 3 }, { "name": "Charcoal", "qty": 1 }] },
     "Chadcoal": { "yields": 1, "ingredients": [{ "name": "Ironwood Log", "qty": 10 }] },
+    "Charcoal (Ironwood)": { "yields": 3, "ingredients": [{ "name": "Ironwood Log", "qty": 10 }], "note": "Requires gem shop smelting multicraft upgrade. 3x1,100 = 3,300 fuel vs 10x100 = 1,000 fuel raw" },
     "Thorium Bar": { "yields": 1, "ingredients": [{ "name": "Thorium Ore", "qty": 42 }, { "name": "Chadcoal", "qty": 30 }] },
     "Palm Face": { "yields": 1, "ingredients": [{ "name": "Palm Tree Log", "qty": 50 }] },
     "Sunstone Bar": { "yields": 1, "ingredients": [{ "name": "Sunstone Ore", "qty": 480 }, { "name": "Palm Face", "qty": 56 }] }

@@ -164,6 +164,64 @@
   color: var(--success, #8f8);
 }
 
+/* Boss Readiness */
+.boss-readiness__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.boss-readiness__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  border: 1px solid transparent;
+}
+.boss-readiness__status--defeated {
+  background: rgba(255, 200, 50, 0.08);
+  border-color: rgba(255, 200, 50, 0.25);
+}
+.boss-readiness__status--ready {
+  background: rgba(80, 255, 80, 0.06);
+  border-color: rgba(80, 255, 80, 0.2);
+}
+.boss-readiness__status--not-ready {
+  opacity: 0.5;
+}
+.boss-readiness__icon {
+  font-size: 0.85rem;
+  min-width: 16px;
+  text-align: center;
+}
+.boss-readiness__status--defeated .boss-readiness__icon { color: #fc4; }
+.boss-readiness__status--ready .boss-readiness__icon { color: #8f8; }
+.boss-readiness__status--not-ready .boss-readiness__icon { color: #f66; }
+.boss-readiness__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.boss-readiness__name {
+  color: var(--text, #eee);
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+.boss-readiness__subtitle {
+  color: var(--text-dim, #888);
+  font-size: 0.65rem;
+}
+.boss-readiness__label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.boss-readiness__status--defeated .boss-readiness__label { color: #fc4; }
+.boss-readiness__status--ready .boss-readiness__label { color: #8f8; }
+.boss-readiness__status--not-ready .boss-readiness__label { color: var(--text-dim, #888); }
+
 /* Card Overview */
 .card-section {
   margin-bottom: 6px;
@@ -211,4 +269,42 @@
 .card-row__next {
   font-size: 0.65rem;
   color: var(--text-dim, #666);
+}
+
+/* Daily Reminders */
+.daily-reminders {
+  background: var(--card-bg, rgba(255,255,255,0.05));
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 8px;
+  padding: 12px;
+}
+.daily-reminders__title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent, #8af);
+  margin-bottom: 8px;
+}
+.daily-reminders__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text, #eee);
+  padding: 4px 0;
+}
+.daily-reminders__label {
+  font-weight: 500;
+}
+.daily-reminders__source {
+  font-size: 0.7rem;
+  color: var(--text-dim, #888);
+  white-space: nowrap;
+}
+.daily-reminders__detail {
+  font-size: 0.7rem;
+  color: var(--text-dim, #999);
+  padding: 2px 0 0;
 }

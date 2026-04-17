@@ -4,6 +4,19 @@ import { detectBottlenecks } from '../state/bottleneck-detector.js';
 import { buildCapabilityMatrix, assignAlts } from '../state/alt-optimizer.js';
 import enemies from '../data/enemies.json';
 
+/**
+ * Convert a zone string like "2.6" to a numeric value for comparison.
+ * act * 100 + zone  →  "2.6" = 206
+ */
+function zoneToNum(zoneStr) {
+  if (!zoneStr) return 0;
+  const [act, zone] = zoneStr.split('.').map(Number);
+  return (act || 0) * 100 + (zone || 0);
+}
+
+const FOURTH_SLOT_ZONE_THRESHOLD = 206; // zone "2.6"
+const MAX_SLOTS_WITHOUT_FOURTH = 3; // main + 2 alts  →  3 profiles total
+
 /** Build flat zone list for dropdown. */
 function buildZoneList() {
   const list = [];
@@ -113,7 +126,15 @@ export function AltAdvisor() {
   // Force re-read profiles on every render triggered by refreshKey or signal change
   const currentProfiles = profiles.value;
   const currentMainKey = activeProfileKey.value;
-  const currentProfileList = Object.entries(currentProfiles);
+  const allProfileEntries = Object.entries(currentProfiles);
+
+  // Gate the 4th character slot: only available if any profile has maxUnlockedZone >= "2.6"
+  const fourthSlotUnlocked = allProfileEntries.some(
+    ([, p]) => zoneToNum(p.maxUnlockedZone) >= FOURTH_SLOT_ZONE_THRESHOLD
+  );
+  const currentProfileList = fourthSlotUnlocked
+    ? allProfileEntries
+    : allProfileEntries.slice(0, MAX_SLOTS_WITHOUT_FOURTH);
 
   const result = useMemo(() => {
     if (currentProfileList.length === 0) return null;

@@ -4,6 +4,24 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.0.2 <span class="release-notes__date">April 17, 2026</span></h3>
+
+        <h4>New Features</h4>
+        <ul>
+          <li><strong>Boss Readiness Panel</strong> — Dashboard now shows kill-rate thresholds for Act 2 bosses (500/h Mammoth, 1,000/h Jotunn, 1,000/h+ Maevath) with defeated/ready/not-ready indicators.</li>
+          <li><strong>Progression Milestones</strong> — Gear Planner shows collapsible milestone tips for each Act 2 boss with recommended gear tiers and enhancement levels.</li>
+          <li><strong>Daily Vendor Reminders</strong> — Dashboard reminds you to buy 50 Yellow Substance daily and shows how many days of purchases are needed for Thorium gear.</li>
+          <li><strong>4th Alt Slot Gating</strong> — Alt Advisor now correctly shows only 3 character slots until zone 2.6 (Watches) is unlocked.</li>
+        </ul>
+
+        <h4>Data</h4>
+        <ul>
+          <li><strong>Charcoal Smelting</strong> — Added ironwood charcoal recipe (10 ironwood → 3 charcoal, 3,300 fuel vs 1,000 raw).</li>
+          <li><strong>Gear Upgrade Order</strong> — Fixed gear progression to use correct tier order (Copper → Bronze → Iron → Thorium → Infinite → Sunstone) instead of raw stat sum sorting.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.0.1 <span class="release-notes__date">April 16, 2026</span></h3>
 
         <h4>Upgrade Advisor Fixes</h4>

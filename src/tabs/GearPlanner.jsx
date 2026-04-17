@@ -93,9 +93,81 @@ function fmtDelta(n) {
   return '0';
 }
 
+/* ── Progression Milestones (Act 2 community guide) ─ */
+const ARMOR_SLOTS = ['helmet', 'chest', 'gloves', 'boots'];
+
+const MILESTONES = [
+  {
+    boss: 'Mammoth',
+    label: 'Mammoth (Act 2 Boss 1)',
+    tips: 'Iron armor set enhanced to +VII, Steel weapon enhanced to ~+X.',
+    check(gear) {
+      const issues = [];
+      for (const slot of ARMOR_SLOTS) {
+        const g = gear[slot];
+        if (!g || !g.name || !g.name.startsWith('Iron'))
+          issues.push(`Equip Iron ${slot}`);
+        else if ((g.enhancementLevel || 0) < 7)
+          issues.push(`Enhance ${g.name} to +VII (currently +${g.enhancementLevel || 0})`);
+      }
+      const w = gear.weapon;
+      if (!w || !w.name || !w.name.startsWith('Steel'))
+        issues.push('Equip a Steel weapon');
+      else if ((w.enhancementLevel || 0) < 10)
+        issues.push(`Enhance ${w.name} to +X (currently +${w.enhancementLevel || 0})`);
+      return issues;
+    },
+  },
+  {
+    boss: 'Jotunn',
+    label: 'Jotunn (Act 2 Boss 2)',
+    tips: 'Start transitioning to Thorium gear.',
+    check(gear) {
+      const issues = [];
+      const allSlots = [...ARMOR_SLOTS, 'weapon'];
+      let thoriumCount = 0;
+      for (const slot of allSlots) {
+        const g = gear[slot];
+        if (g && g.name && g.name.startsWith('Thorium')) thoriumCount++;
+      }
+      if (thoriumCount === 0) issues.push('Begin crafting Thorium gear');
+      else if (thoriumCount < allSlots.length) issues.push(`${thoriumCount}/${allSlots.length} Thorium pieces equipped — keep upgrading`);
+      return issues;
+    },
+  },
+  {
+    boss: 'Maevath',
+    label: 'Maevath (Act 2 Boss 3)',
+    tips: 'Full Thorium set, 1,300+ DEF minimum. Prioritize weapon enhancements, then armor.',
+    check(gear) {
+      const issues = [];
+      for (const slot of ARMOR_SLOTS) {
+        const g = gear[slot];
+        if (!g || !g.name || !g.name.startsWith('Thorium'))
+          issues.push(`Equip Thorium ${slot}`);
+      }
+      const w = gear.weapon;
+      if (!w || !w.name || !w.name.startsWith('Thorium'))
+        issues.push('Equip a Thorium weapon');
+      else if ((w.enhancementLevel || 0) < 7)
+        issues.push(`Enhance ${w.name} further (currently +${w.enhancementLevel || 0})`);
+      return issues;
+    },
+  },
+];
+
+function getNextMilestone(profile) {
+  const defeated = profile.defeatedBosses || [];
+  for (const m of MILESTONES) {
+    if (!defeated.includes(m.boss)) return m;
+  }
+  return null; // all Act 2 bosses defeated
+}
+
 /* ── Signals ──────────────────────────────────────── */
 const selectedSlot = signal('helmet');
 const candidateItem = signal('');
+const milestoneTipsOpen = signal(true);
 
 /* ── Enhancement scaling ─────────────────────────── */
 const WEAPON_ENH_RATE = 0.275;
@@ -197,8 +269,41 @@ export function GearPlanner() {
     saveProfile(activeProfileKey.value, prof);
   };
 
+  // Milestone tip
+  const milestone = getNextMilestone(profile);
+  const milestoneIssues = milestone ? milestone.check(profile.gear || {}) : [];
+
   return (
     <div class="gear-planner">
+      {/* ── Progression Milestone Tip ── */}
+      {milestone && (
+        <div class="gp-milestone">
+          <button
+            class="gp-milestone__toggle"
+            onClick={() => { milestoneTipsOpen.value = !milestoneTipsOpen.value; }}
+          >
+            <span class="gp-milestone__heading">
+              Next milestone: {milestone.label}
+            </span>
+            <span class="gp-milestone__arrow">{milestoneTipsOpen.value ? '\u25B2' : '\u25BC'}</span>
+          </button>
+          {milestoneTipsOpen.value && (
+            <div class="gp-milestone__body">
+              <p class="gp-milestone__tip">{milestone.tips}</p>
+              {milestoneIssues.length > 0 ? (
+                <ul class="gp-milestone__issues">
+                  {milestoneIssues.map((issue, i) => (
+                    <li key={i} class="gp-milestone__issue">{issue}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="gp-milestone__ready">You look ready for this fight!</p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* ── Slot Selector ── */}
       <div class="gp-slots">
         {SLOTS.map(s => (
