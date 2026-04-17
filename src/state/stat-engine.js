@@ -367,56 +367,13 @@ export function computeStats(profile) {
     }
   }
 
-  // --- Layer 3: Multipliers ---
+  // --- Layer 3: Apply formula: Final = SUM(Base) × SUM(Additive%) × PRODUCT(Multiplicative) ---
 
-  // Primary stat scaling: STR/DEX/INT gives x10% ATK per point (from community spreadsheet)
-  const primaryStat = classInfo?.primaryStat;
-  if (primaryStat === 'str') {
-    stats.atk += stats.str * 0.10 * stats.atk;
-  } else if (primaryStat === 'dex') {
-    stats.atk += stats.dex * 0.10 * stats.atk;
-  } else if (primaryStat === 'int') {
-    stats.atk += stats.int * 0.10 * stats.atk;
-  }
-
-  // Hunter multiplicative upgrades (e.g., More Damage Training x1.01 per rank)
-  for (const hm of hunterMultipliers) {
-    const multiplier = Math.pow(1 + hm.perRank, hm.rank);
-    if (hm.stat in stats) {
-      stats[hm.stat] *= multiplier;
-    }
-  }
-
-  // Multiplier sacrifice bonuses (applied after flat additions)
-  if (profile.sacrificeUpgrades) {
-    for (const sac of sacrificesData) {
-      const rank = profile.sacrificeUpgrades[sac.id] || 0;
-      if (rank <= 0 || !sac.isMultiplier) continue;
-      const multiplier = 1 + sac.perRank * rank;
-      const key = sacStatToKey(sac.stat);
-      if (key && key in stats) {
-        stats[key] *= multiplier;
-      }
-    }
-  }
-
-  // Card multiplier bonuses (e.g., Snowman Card ATK x1.12)
-  for (const cm of cardMultipliers) {
-    const key = cm.stat === 'atk' ? 'atk' : (sacStatToKey(cm.stat) || cm.stat);
-    if (key in stats) {
-      if (typeof cm.value === 'number' && cm.value > 0 && cm.value < 10) {
-        // Values like 1.12 are direct multipliers
-        stats[key] *= cm.value;
-      }
-    }
-  }
-
-  // Bonfire buffs (applied if profile has sufficient heat)
+  // Bonfire buffs add to additive pools
   const heat = profile.bonfireHeat || 0;
   if (heat > 0) {
     for (const buff of bonfireData) {
       if (heat < buff.heatRequired || !buff.stat) continue;
-      // Bonfire buffs are percentage-based additions
       if (buff.stat === 'atkPercent') {
         stats.atkPercent += buff.value;
       } else if (buff.stat === 'xpMulti') {
@@ -429,31 +386,13 @@ export function computeStats(profile) {
     }
   }
 
-  // Curio multipliers (primary stat is a multiplier, ATK bonus by rarity/level)
+  // Curio flat bonuses (tier bonuses are base, primary percentage is additive)
   if (profile.equippedCurios && Array.isArray(profile.equippedCurios)) {
     for (const curioEntry of profile.equippedCurios) {
       const curio = curioLookup[curioEntry.name];
       if (!curio) continue;
 
-      // Primary stat multiplier (e.g., miningPower x1.42)
-      if (curio.isMultiplier && curio.primaryValue) {
-        const key = sacStatToKey(curio.primaryStat);
-        if (key in stats) {
-          stats[key] *= curio.primaryValue;
-        }
-      } else if (curio.primaryValue) {
-        // Percentage-based primary (e.g., goldMulti 25%)
-        addStat(stats, curio.primaryStat, curio.primaryValue);
-      }
-
-      // ATK multiplier by rarity
-      const atkData = curiosData.atkBonusByRarity[curio.rarity];
-      if (atkData) {
-        const atkMulti = atkData.level1 || 1;
-        stats.atk *= atkMulti;
-      }
-
-      // Tier bonuses (t3, t7, t9 unlocked by curio tier/level)
+      // Tier bonuses are flat/base
       const curioTier = curioEntry.tier || 0;
       if (curio.tierBonuses) {
         for (const [tierKey, bonus] of Object.entries(curio.tierBonuses)) {
@@ -463,18 +402,99 @@ export function computeStats(profile) {
           }
         }
       }
+
+      // Percentage-based primary (e.g., goldMulti 25%) — additive
+      if (!curio.isMultiplier && curio.primaryValue) {
+        addStat(stats, curio.primaryStat, curio.primaryValue);
+      }
     }
   }
 
-  // ATK% multiplier
-  stats.totalAtk = stats.atk * (1 + stats.atkPercent / 100);
+  // --- Step A: Primary stat scaling (part of base layer) ---
+  // STR/DEX/INT gives x10% ATK per point
+  const primaryStat = classInfo?.primaryStat;
+  if (primaryStat === 'str') {
+    stats.atk += stats.str * 0.10 * stats.atk;
+  } else if (primaryStat === 'dex') {
+    stats.atk += stats.dex * 0.10 * stats.atk;
+  } else if (primaryStat === 'int') {
+    stats.atk += stats.int * 0.10 * stats.atk;
+  }
 
-  // CON scaling: +5% Max HP per CON, +1% HP Regen per CON (from community spreadsheet)
+  // CON scaling: +5% Max HP per CON, +1% HP Regen per CON
+  // MEN scaling: +5% Max Mana per MEN, +1% Mana Regen per MEN, +5% Magic Defence per MEN
   stats.hp += stats.hp * (stats.con * 0.05);
   stats.hpRegen += stats.hpRegen * (stats.con * 0.01);
+  stats.mana += stats.mana * (stats.men * 0.05);
+  stats.manaRegen += stats.manaRegen * (stats.men * 0.01);
 
-  // DEF% multiplier
+  // --- Step B: Additive % (sum all, apply once) ---
+  stats.totalAtk = stats.atk * (1 + stats.atkPercent / 100);
   stats.def = stats.def * (1 + stats.defPercent / 100);
+
+  // --- Step C: Multiplicative (chain-multiply after additive) ---
+
+  // Hunter multiplicative upgrades (e.g., More Damage Training x1.01 per rank)
+  for (const hm of hunterMultipliers) {
+    const multiplier = Math.pow(1 + hm.perRank, hm.rank);
+    if (hm.stat === 'atk') {
+      stats.totalAtk *= multiplier;
+      stats.atk *= multiplier;
+    } else if (hm.stat in stats) {
+      stats[hm.stat] *= multiplier;
+    }
+  }
+
+  // Multiplier sacrifice bonuses
+  if (profile.sacrificeUpgrades) {
+    for (const sac of sacrificesData) {
+      const rank = profile.sacrificeUpgrades[sac.id] || 0;
+      if (rank <= 0 || !sac.isMultiplier) continue;
+      const multiplier = 1 + sac.perRank * rank;
+      const key = sacStatToKey(sac.stat);
+      if (key === 'atk') {
+        stats.totalAtk *= multiplier;
+        stats.atk *= multiplier;
+      } else if (key && key in stats) {
+        stats[key] *= multiplier;
+      }
+    }
+  }
+
+  // Card multiplier bonuses (e.g., Snowman Card ATK x1.03)
+  for (const cm of cardMultipliers) {
+    const key = cm.stat === 'atk' ? 'atk' : (sacStatToKey(cm.stat) || cm.stat);
+    if (typeof cm.value === 'number' && cm.value > 0 && cm.value < 10) {
+      if (key === 'atk') {
+        stats.totalAtk *= cm.value;
+        stats.atk *= cm.value;
+      } else if (key in stats) {
+        stats[key] *= cm.value;
+      }
+    }
+  }
+
+  // Curio multiplicative bonuses (e.g., miningPower x1.42, ATK by rarity)
+  if (profile.equippedCurios && Array.isArray(profile.equippedCurios)) {
+    for (const curioEntry of profile.equippedCurios) {
+      const curio = curioLookup[curioEntry.name];
+      if (!curio) continue;
+
+      if (curio.isMultiplier && curio.primaryValue) {
+        const key = sacStatToKey(curio.primaryStat);
+        if (key in stats) {
+          stats[key] *= curio.primaryValue;
+        }
+      }
+
+      const atkData = curiosData.atkBonusByRarity?.[curio.rarity];
+      if (atkData) {
+        const atkMulti = atkData.level1 || 1;
+        stats.totalAtk *= atkMulti;
+        stats.atk *= atkMulti;
+      }
+    }
+  }
 
   return stats;
 }
