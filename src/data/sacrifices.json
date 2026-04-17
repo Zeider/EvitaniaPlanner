@@ -1,6 +1,6 @@
 [
   { "id": "act-2-sacrifice-0", "name": "Cutting Edge Technology", "soul": "Mammoth", "costItem": "Icy Needle", "stat": "wcPower", "perRank": 0.14, "maxRank": 30, "maxTotal": 4.20, "isMultiplier": true },
-  { "id": "act-2-sacrifice-1", "name": "Attack Wish", "soul": "Mammoth", "costItem": "Helmet", "stat": "atk", "perRank": 0.09, "maxRank": 30, "maxTotal": 2.70, "isMultiplier": true },
+  { "id": "act-2-sacrifice-1", "name": "Attack Wish", "soul": "Mammoth", "costItem": "Helmet", "stat": "atk", "perRank": 0.05, "maxRank": 30, "maxTotal": 2.50, "isMultiplier": true },
   { "id": "act-2-sacrifice-2", "name": "Wish for Luck", "soul": "Mammoth", "costItem": "Iceghost Doll", "stat": "critChance", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },
   { "id": "act-2-sacrifice-3", "name": "Food Donation", "soul": "Mammoth", "costItem": "Distinguished Glasses", "stat": "hp", "perRank": 0.08, "maxRank": 30, "maxTotal": 2.40, "isMultiplier": true },
   { "id": "act-2-sacrifice-4", "name": "Wish for Fuel", "soul": "Mammoth", "costItem": "Ironwood Logs", "stat": "wcMultiloot", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },

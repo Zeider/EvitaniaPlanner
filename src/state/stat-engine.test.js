@@ -112,16 +112,16 @@ describe('computeStats', () => {
       talents: {},
       gear: {},
       sacrificeUpgrades: {
-        'act-2-sacrifice-1': 10, // Attack Wish: x0.09 per rank, multiplier
+        'act-2-sacrifice-1': 10, // Attack Wish: x0.05 per rank, multiplier
       },
     };
     const stats = computeStats(profile);
 
-    // Rogue base atk = 14
-    // Attack Wish rank 10: multiplier = 1 + 0.09 * 10 = 1.9
-    // After primary stat scaling (dex=0, no change): atk still 14
-    // After sacrifice: 14 * 1.9 = 26.6
-    expect(stats.atk).toBeCloseTo(26.6, 1);
+    // Rogue base atk = 14, atkPercent = 15%
+    // After additive: totalAtk = 14 * 1.15 = 16.1
+    // Attack Wish rank 10: multiplier = 1 + 0.05 * 10 = 1.5
+    // After sacrifice: 14 * 1.5 = 21 (atk), 16.1 * 1.5 = 24.15 (totalAtk)
+    expect(stats.atk).toBeCloseTo(21, 1);
   });
 
   it('flat sacrifice bonuses add correctly', () => {
