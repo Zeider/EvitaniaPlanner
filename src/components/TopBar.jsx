@@ -1,6 +1,7 @@
 import { profiles, activeProfileKey, activeProfile, setActiveProfile, theme, setTheme, lightMode, setLightMode } from '../state/store.js';
 import { loadSaveFile } from '../state/save-decoder.js';
 import { importProfiles } from '../state/store.js';
+import { version } from '../../package.json';
 
 export function TopBar() {
   const profile = activeProfile.value;
@@ -45,7 +46,7 @@ export function TopBar() {
     <header class="top-bar">
       <div class="top-bar-left">
         <h1 class="top-bar-title">EvitaniaPlanner</h1>
-        <span class="top-bar-version">v3.0.0</span>
+        <span class="top-bar-version">v{version}</span>
       </div>
       <div class="top-bar-right">
         <button class="btn btn-sm btn-import" onClick={handleImport}>Import Save</button>
