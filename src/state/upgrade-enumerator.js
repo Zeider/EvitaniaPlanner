@@ -112,7 +112,7 @@ function enumerateTalentUpgrades(profile) {
     }
   }
   const availablePoints = totalBudget - allocatedPoints;
-  if (availablePoints <= 0) return [];
+  const hasFreePoints = availablePoints > 0;
 
   const upgrades = [];
   for (const [treeName, tree] of Object.entries(talentsData)) {
@@ -129,7 +129,8 @@ function enumerateTalentUpgrades(profile) {
         name: `${node.name} (${treeName})`,
         statChanges: { [node.stat]: node.perPoint },
         materialCost: {},
-        farmTimeHours: 0,
+        free: hasFreePoints,
+        farmTimeHours: hasFreePoints ? 0 : 0.01,
       });
     }
   }

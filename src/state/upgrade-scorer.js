@@ -68,8 +68,7 @@ export function scoreUpgrade(profile, currentStats, upgrade, enemy, weights) {
  */
 export function rankAllUpgrades(profile, currentStats, upgrades, enemy, weights) {
   const scored = upgrades
-    .map((u) => scoreUpgrade(profile, currentStats, u, enemy, weights))
-    .filter((u) => u.powerDelta > 0);
+    .map((u) => scoreUpgrade(profile, currentStats, u, enemy, weights));
   scored.sort((a, b) => {
     if (b.score === Infinity && a.score === Infinity) return b.powerDelta - a.powerDelta;
     if (b.score === Infinity) return 1;

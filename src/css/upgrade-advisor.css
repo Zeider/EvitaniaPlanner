@@ -150,6 +150,15 @@
   color: var(--accent-color, #8cf);
 }
 
+.upgrade-advisor__sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.upgrade-advisor__sortable:hover {
+  color: var(--accent-color, #8cf);
+}
+
 .upgrade-advisor__empty {
   text-align: center;
   padding: 32px;

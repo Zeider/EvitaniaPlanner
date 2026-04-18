@@ -100,6 +100,14 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Longsword"
+      },
+      {
+        "name": "Christmas Longsword",
+        "slot": "weapon",
+        "subtype": "longsword",
+        "stats": { "str": 39, "mobSpawnReduction": -10, "magicFind": 5, "critDamage": 26 },
+        "source": "Christmas Event",
+        "obtainable": false
       }
     ],
     "bows": [
@@ -152,6 +160,14 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Bow"
+      },
+      {
+        "name": "Christmas Bow",
+        "slot": "weapon",
+        "subtype": "bow",
+        "stats": { "dex": 29, "mobSpawnReduction": -10, "magicFind": 5, "critDamage": 26 },
+        "source": "Christmas Event",
+        "obtainable": false
       }
     ],
     "staffs": [
@@ -204,6 +220,14 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Staff"
+      },
+      {
+        "name": "Christmas Staff",
+        "slot": "weapon",
+        "subtype": "staff",
+        "stats": { "int": 31, "mobSpawnReduction": -10, "magicFind": 5, "critDamage": 26 },
+        "source": "Christmas Event",
+        "obtainable": false
       }
     ]
   },
@@ -262,6 +286,27 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Helmet"
+      },
+      {
+        "name": "Christmas Helmet",
+        "slot": "helmet",
+        "stats": { "xpMulti": 35, "magicFind": 5, "offlineGains": 3, "critChance": 5 },
+        "source": "Christmas Event",
+        "obtainable": false
+      },
+      {
+        "name": "Halloween Helmet",
+        "slot": "helmet",
+        "stats": { "xpMulti": 35, "offlineGains": 2, "magicFind": 5 },
+        "source": "Halloween Event",
+        "obtainable": false
+      },
+      {
+        "name": "Second Anniversary Cap",
+        "slot": "helmet",
+        "stats": { "xpMulti": 10, "offlineGains": 3 },
+        "source": "Anniversary 2026 Event",
+        "obtainable": false
       }
     ],
     "chestplates": [
@@ -318,6 +363,20 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Chestplate"
+      },
+      {
+        "name": "Harvest Shirt",
+        "slot": "chest",
+        "stats": { "xpMulti": 35, "offlineGains": 3 },
+        "source": "Harvest Event",
+        "obtainable": false
+      },
+      {
+        "name": "Christmas Coat",
+        "slot": "chest",
+        "stats": { "xpMulti": 35, "magicFind": 5, "offlineGains": 3, "hp": 126 },
+        "source": "Christmas Event",
+        "obtainable": false
       }
     ],
     "gloves": [
@@ -374,6 +433,20 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Gloves"
+      },
+      {
+        "name": "Harvest Gloves",
+        "slot": "gloves",
+        "stats": { "critChance": 12, "atkSpeed": 10, "magicFind": 5, "offlineGains": 3 },
+        "source": "Harvest Event",
+        "obtainable": false
+      },
+      {
+        "name": "Christmas Gloves",
+        "slot": "gloves",
+        "stats": { "xpMulti": 35, "magicFind": 5, "offlineGains": 3, "critDamage": 10 },
+        "source": "Christmas Event",
+        "obtainable": false
       }
     ],
     "boots": [
@@ -430,6 +503,20 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Boots"
+      },
+      {
+        "name": "Summer Boots",
+        "slot": "boots",
+        "stats": { "critDamage": 30, "critChance": 10, "magicFind": 5, "moveSpeed": 11 },
+        "source": "Summer Event",
+        "obtainable": false
+      },
+      {
+        "name": "Christmas Boots",
+        "slot": "boots",
+        "stats": { "xpMulti": 35, "magicFind": 5, "offlineGains": 3, "moveSpeed": 11 },
+        "source": "Christmas Event",
+        "obtainable": false
       }
     ]
   },
@@ -613,6 +700,13 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Pickaxe"
+      },
+      {
+        "name": "Anniversary Pickaxe",
+        "slot": "pickaxe",
+        "stats": { "miningPower": 60 },
+        "source": "Anniversary 2026 Event",
+        "obtainable": false
       }
     ],
     "axes": [
@@ -655,6 +749,13 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Sunstone Axe"
+      },
+      {
+        "name": "Anniversary Axe",
+        "slot": "axe",
+        "stats": { "woodcuttingPower": 60 },
+        "source": "Anniversary 2026 Event",
+        "obtainable": false
       }
     ]
   }

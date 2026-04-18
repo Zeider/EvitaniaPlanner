@@ -4,6 +4,23 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.0.6 <span class="release-notes__date">April 18, 2026</span></h3>
+
+        <h4>Community Feedback</h4>
+        <ul>
+          <li><strong>Talent Recommendations Always Visible</strong> — Upgrade Advisor now shows talent power gains even when all points are allocated, so you can plan ahead for future levels.</li>
+          <li><strong>Show Downgrades Toggle</strong> — New checkbox in Upgrade Advisor to show negative power suggestions for comparing alternatives (e.g. Summer Boots vs Thorium Boots).</li>
+          <li><strong>Sortable Columns</strong> — Click Power Gain, Farm Time, or Score headers to sort ascending/descending.</li>
+        </ul>
+
+        <h4>Data</h4>
+        <ul>
+          <li><strong>14 Event Items Added</strong> — Summer Boots, Harvest Shirt/Gloves, Christmas armor set + weapons, Halloween Helmet, Anniversary Cap/tools. All marked unobtainable but available for comparison in Gear Planner.</li>
+          <li><strong>Stat Engine Calibration</strong> — Formula restructured to match game's Base x Additive x Multiplicative model. Attack Wish sacrifice corrected (0.09 to 0.05/rank). Hunter multiplicative changed from compound to linear. Gear CON values corrected from spreadsheet.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.0.5 <span class="release-notes__date">April 17, 2026</span></h3>
 
         <h4>Stat Engine</h4>

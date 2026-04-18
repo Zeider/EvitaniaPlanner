@@ -38,6 +38,9 @@ const selectedZone = signal('');
 const activeFilter = signal('all');
 const autoMode = signal(true);
 const offenseSlider = signal(80); // 0-100
+const showNegatives = signal(false);
+const sortColumn = signal('score');
+const sortDirection = signal('desc');
 
 export function UpgradeAdvisor() {
   const profile = activeProfile.value;
@@ -62,10 +65,41 @@ export function UpgradeAdvisor() {
   const allUpgrades = enumerateAllUpgrades(profile);
   const ranked = rankAllUpgrades(profile, stats, allUpgrades, enemy, weights);
 
-  // Filter
-  const filtered = activeFilter.value === 'all'
+  // Filter negatives
+  const withoutNegatives = showNegatives.value
     ? ranked
-    : ranked.filter((u) => u.type === activeFilter.value);
+    : ranked.filter((u) => u.powerDelta > 0);
+
+  // Filter by type
+  const filtered = activeFilter.value === 'all'
+    ? withoutNegatives
+    : withoutNegatives.filter((u) => u.type === activeFilter.value);
+
+  // Sort
+  const sortKey = sortColumn.value;
+  const dir = sortDirection.value === 'asc' ? 1 : -1;
+  const sorted = [...filtered].sort((a, b) => {
+    const av = a[sortKey];
+    const bv = b[sortKey];
+    if (av === Infinity && bv === Infinity) return dir * (b.powerDelta - a.powerDelta);
+    if (av === Infinity) return -1;
+    if (bv === Infinity) return 1;
+    return dir * (av - bv);
+  });
+
+  function toggleSort(col) {
+    if (sortColumn.value === col) {
+      sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc';
+    } else {
+      sortColumn.value = col;
+      sortDirection.value = 'desc';
+    }
+  }
+
+  function sortArrow(col) {
+    if (sortColumn.value !== col) return '';
+    return sortDirection.value === 'desc' ? ' \u25BC' : ' \u25B2';
+  }
 
   return (
     <div class="upgrade-advisor">
@@ -118,10 +152,19 @@ export function UpgradeAdvisor() {
             {autoMode.value ? 'Auto: ' : ''}{offPct}/{defPct}
           </span>
         </div>
+
+        <label class="upgrade-advisor__auto-toggle">
+          <input
+            type="checkbox"
+            checked={showNegatives.value}
+            onChange={(e) => { showNegatives.value = e.target.checked; }}
+          />
+          Show downgrades
+        </label>
       </div>
 
       <div class="upgrade-advisor__table-wrap">
-        {filtered.length === 0 ? (
+        {sorted.length === 0 ? (
           <div class="upgrade-advisor__empty">No available upgrades found. Import a save to see recommendations.</div>
         ) : (
           <table class="upgrade-advisor__table">
@@ -130,14 +173,14 @@ export function UpgradeAdvisor() {
                 <th>Rank</th>
                 <th>Upgrade Name</th>
                 <th>Type</th>
-                <th>Power Gain</th>
+                <th class="upgrade-advisor__sortable" onClick={() => toggleSort('powerDelta')}>Power Gain{sortArrow('powerDelta')}</th>
                 <th>Cost</th>
-                <th>Farm Time</th>
-                <th>Score</th>
+                <th class="upgrade-advisor__sortable" onClick={() => toggleSort('farmTimeHours')}>Farm Time{sortArrow('farmTimeHours')}</th>
+                <th class="upgrade-advisor__sortable" onClick={() => toggleSort('score')}>Score{sortArrow('score')}</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((u, i) => (
+              {sorted.map((u, i) => (
                 <UpgradeRow key={u.id} rank={i + 1} upgrade={u} />
               ))}
             </tbody>

@@ -293,39 +293,60 @@ This is what we currently have in `ash-upgrades.json`. Please correct everything
 
 ```mermaid
 graph LR
-    T0_0["T0: Maximum Fuel<br/>+10000 capacity<br/>(1) cost: ?"]
+    T0_0["T0: Attack Increase<br/>+30% per pt<br/>(1) cost: ?"]
 
     T1_0["T1: Fuel Efficiency<br/>-5% consumption per pt<br/>(3) cost: ?"]
-    T1_1["T1: More Ash<br/>+15% ash odds per pt<br/>(3) cost: ?"]
-    T1_2["T1: Ash Discount<br/>-10% ash costs<br/>(1) cost: ?"]
+    T1_1["T1: Attack Increase<br/>+30% per pt<br/>(1) cost: ?"]
+    T1_2["T1: Smeltery Speed<br/>+10% per pt<br/>(1) cost: ?"]
 
-    T2_0["T2: Crit Damage<br/>+10% crit dmg per pt<br/>(3) cost: ?"]
-    T2_1["T2: Crit Chance<br/>+1% crit chance per pt<br/>(4) cost: ?"]
-    T2_2["T2: Defence Increase<br/>+5% phys def per pt<br/>(5) cost: ?"]
+    T2_0["T2: Maximum Fuel<br/>+10000 capacity<br/>(1) cost: ?"]
+    T2_1["T2: More Ash<br/>+15% ash odds per pt<br/>(3) cost: ?"]
+    T2_2["T2: Fiery Defence<br/>+5 phys def per pt<br/>(4) cost: ?"]
+    T2_3["T2: Hunter Cost Reduction<br/>-50% hunter costs per pt<br/>(5) cost: ?"]
 
-    T3_0["T3: Attack Increase<br/>+30% all ATK<br/>(1) cost: ?"]
-    T3_1["T3: Auto Runes<br/>Runes auto-enter inventory<br/>(1) cost: ?"]
-    T3_2["T3: Rune Overload<br/>Runes stack in inventory<br/>(1) cost: ?"]
+    T3_0["T3: Crit Damage<br/>+10% crit dmg per pt<br/>(3) cost: ?"]
+    T3_1["T3: Ash Discount<br/>-10% ash costs<br/>(1) cost: ?"]
+    T3_2["T3: Smeltery Speed<br/>+10% per pt<br/>(1) cost: ?"]
+    T3_3["T3: Movespeed<br/>+5% per pt<br/>(2) cost: ?"]
 
-    T4_0["T4: Smeltery Speed<br/>+7% per pt<br/>(4) cost: ?"]
-    T4_1["T4: Fiery Defence<br/>+5 phys def per pt<br/>(4) cost: ?"]
-    T4_2["T4: Hunter Cost Reduction<br/>-50% hunter costs per pt<br/>(5) cost: ?"]
+    T4_0["T4: Crit Chance<br/>+1% crit chance per pt<br/>(4) cost: ?"]
+    T4_1["T4: Rune Overload<br/>Runes stack in inventory<br/>(1) cost: ?"]
 
-    T5_0["T5: Movespeed<br/>+5% per pt<br/>(2) cost: ?"]
+    T5_0["T5: Defence Increase<br/>+5% phys def per pt<br/>(5) cost: ?"]
+    T5_1["T5: Attack Increase<br/>+30% per pt<br/>(1) cost: ?"]
+
+    T6_0["T6: Fuel Efficiency<br/>-5% consumption per pt<br/>(3) cost: ?"]
+    T6_1["T6: More Ash<br/>+15% ash odds per pt<br/>(3) cost: ?"]
+
+    T7_0["T7: Attack Increase<br/>+30% per pt<br/>(1) cost: ?"]
+    T7_1["T7: More Ash<br/>+15% ash odds per pt<br/>(3) cost: ?"]
+
+    T8_0["T8: Maximum Fuel<br/>+10000 capacity<br/>(6) cost: ?"]
+    T8_1["T8: Smeltery Speed<br/>+10% per pt<br/>(3) cost: ?"]
+
+    T9_0["T9: Auto Runes<br/>Runes auto-enter inventory<br/>(1) cost: ?"]
+
+    T10_0["T10: Smeltery Speed<br/>+7% per pt<br/>(4) cost: ?"]
 
     T0_0 --> T1_0 & T1_1 & T1_2
     T1_0 --> T2_0
-    T1_1 --> T2_1
-    T1_2 --> T2_2
+    T1_1 --> T2_1 & T2_2
+    T1_2 --> T2_3
     T2_0 --> T3_0
-    T2_1 --> T3_1
-    T2_2 --> T3_2
-    T3_0 --> T4_0
-    T3_1 --> T4_1
-    T3_2 --> T4_2
-    T4_0 --> T5_0
-    T4_1 --> T5_0
-    T4_2 --> T5_0
+    T2_1 --> T3_0
+    T2_2 --> T3_0
+    T2_3 --> T3_3
+    T3_0 --> T4_0 & T4_1 & T3_1
+    T3_1 --> T3_2
+    T4_0 --> T5_0 & T5_1
+    T5_0 --> T6_0
+    T5_1 --> T6_1
+    T6_0 --> T7_0
+    T6_1 --> T7_1
+    T7_0 --> T8_0
+    T7_1 --> T8_0 & T8_1
+    T8_1 --> T9_0
+    T9_0 --> T10_0
 ```
 
 **Total: 16 nodes across 6 rows**
