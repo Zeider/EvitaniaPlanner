@@ -18,15 +18,19 @@ const GEAR_GUID_MAP = {
   // Helmets
   'ebc99fd6-a250-4a20-a4a5-0815f796148c': 'Bronze Helmet',
   '25f97961-90f6-4f18-9f7b-76e20c54e845': 'Iron Helmet',
+  'cdd7ffa7-dd6e-499c-8fec-107ad960042e': 'Thorium Helmet',
   // Chestplates
   '8a4e9274-0396-415b-ae89-f268a8b9afae': 'Bronze Chestplate',
   '19d55c7a-3354-4c01-9f7d-8b8a9620066f': 'Iron Chestplate',
+  '8317c874-94e9-49d7-9eba-72a339f96791': 'Thorium Chestplate',
   // Gloves
   '1d23d781-e7ba-4e85-9c4f-2ddf85a95804': 'Bronze Gloves',
   '99528be3-8b4f-4067-88d8-662d72b3d578': 'Iron Gloves',
+  '3c9065ee-7794-4e2c-8d08-6c88ae394040': 'Thorium Gloves',
   // Boots
   '6fa4b8c7-adc0-42c7-98e5-7c5963f46f66': 'Bronze Boots',
   'c6d360e1-1c30-454c-bb63-935e67761d8b': 'Iron Boots',
+  '666c26e3-2516-4204-9055-e1c4947275ce': 'Summer Boots',
   // Belts
   '36737f24-0684-4744-a032-6feb29cd39dd': 'Steam Belt',
   '8e42e15e-c3de-4471-8d40-19fccf9d0a23': 'Belt of Love',
@@ -36,6 +40,7 @@ const GEAR_GUID_MAP = {
   '2c1d48e6-875a-4530-8080-f017bac70e99': 'Mammoth Ring',
   // Swords
   '5279b9a3-3ac1-44e2-8306-1374d6351c10': 'Essence Sword',
+  'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Sword',
   // Bows
   'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
   // Staffs
