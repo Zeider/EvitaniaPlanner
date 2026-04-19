@@ -310,44 +310,90 @@ function ConnectionLines({ tree, allocation }) {
     }
   }
 
+  const INTRA_BRACKET_OFFSET = 10;
+
   for (const [fromNode, toNode] of connectionPairs) {
     const prevPos = computeNodePosition(fromNode);
     const pos = computeNodePosition(toNode);
 
-    const x1 = prevPos.x + NODE_W;
-    const y1 = prevPos.y + NODE_H / 2;
-    const x2 = pos.x;
-    const y2 = pos.y + NODE_H / 2;
+    const sameTier = (fromNode.row ?? 0) === (toNode.row ?? 0);
 
     const prevAllocated = (allocation[fromNode.id] || 0) > 0;
     const nodeAllocated = (allocation[toNode.id] || 0) > 0;
     const bothAllocated = prevAllocated && nodeAllocated;
     const eitherAllocated = prevAllocated || nodeAllocated;
 
-    if (bothAllocated) {
+    const stroke = bothAllocated ? '#8f8' : eitherAllocated ? '#8af' : '#667';
+    const strokeWidth = bothAllocated ? 3 : 2;
+    const dash = bothAllocated ? 'none' : eitherAllocated ? '6 3' : '4 4';
+    const opacity = bothAllocated ? 0.9 : eitherAllocated ? 0.6 : 0.4;
+    const key = `${fromNode.id}-${toNode.id}`;
+
+    if (sameTier) {
+      // Intra-tier: draw as a bracket "]" on the right side of the column so it's visible
+      const rightEdge = prevPos.x + NODE_W;
+      const bracketX = rightEdge + INTRA_BRACKET_OFFSET;
+      const yA = prevPos.y + NODE_H / 2;
+      const yB = pos.y + NODE_H / 2;
+      const points = `${rightEdge},${yA} ${bracketX},${yA} ${bracketX},${yB} ${rightEdge},${yB}`;
+
+      if (bothAllocated) {
+        lines.push(
+          <polyline
+            key={`glow-${key}`}
+            points={points}
+            fill="none"
+            stroke="#8f8"
+            stroke-width={6}
+            opacity={0.15}
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        );
+      }
+      lines.push(
+        <polyline
+          key={key}
+          points={points}
+          fill="none"
+          stroke={stroke}
+          stroke-width={strokeWidth}
+          stroke-dasharray={dash}
+          opacity={opacity}
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      );
+    } else {
+      const x1 = prevPos.x + NODE_W;
+      const y1 = prevPos.y + NODE_H / 2;
+      const x2 = pos.x;
+      const y2 = pos.y + NODE_H / 2;
+
+      if (bothAllocated) {
+        lines.push(
+          <line
+            key={`glow-${key}`}
+            x1={x1} y1={y1} x2={x2} y2={y2}
+            stroke="#8f8"
+            stroke-width={6}
+            opacity={0.15}
+            stroke-linecap="round"
+          />
+        );
+      }
       lines.push(
         <line
-          key={`glow-${fromNode.id}-${toNode.id}`}
+          key={key}
           x1={x1} y1={y1} x2={x2} y2={y2}
-          stroke="#8f8"
-          stroke-width={6}
-          opacity={0.15}
+          stroke={stroke}
+          stroke-width={strokeWidth}
+          stroke-dasharray={dash}
+          opacity={opacity}
           stroke-linecap="round"
         />
       );
     }
-
-    lines.push(
-      <line
-        key={`${fromNode.id}-${toNode.id}`}
-        x1={x1} y1={y1} x2={x2} y2={y2}
-        stroke={bothAllocated ? '#8f8' : eitherAllocated ? '#8af' : '#667'}
-        stroke-width={bothAllocated ? 3 : 2}
-        stroke-dasharray={bothAllocated ? 'none' : eitherAllocated ? '6 3' : '4 4'}
-        opacity={bothAllocated ? 0.9 : eitherAllocated ? 0.6 : 0.4}
-        stroke-linecap="round"
-      />
-    );
   }
 
   return (
