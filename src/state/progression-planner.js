@@ -46,11 +46,17 @@ function resolveRecipeNames(target, profile) {
       (classWeaponSuffix[profile.class] || []).map(s => `${tier} ${s}`)
     );
     const weaponSuffixes = new Set(['Sword', 'Longsword', 'Bow', 'Staff']);
+    // Only equippable slots belong in a gear set — armor, tools, and the
+    // class-appropriate weapon. Excludes intermediate crafts like "<Tier> Bar".
+    const armorAndToolSuffixes = new Set([
+      'Helmet', 'Chestplate', 'Gloves', 'Boots',
+      'Pickaxe', 'Axe',
+    ]);
     return Object.keys(recipeLookup).filter(name => {
       if (!name.startsWith(tier + ' ')) return false;
       const suffix = name.slice(tier.length + 1);
       if (weaponSuffixes.has(suffix)) return allowedWeapons.has(name);
-      return true;
+      return armorAndToolSuffixes.has(suffix);
     });
   }
   if (target.type === 'autoNextTier') {
