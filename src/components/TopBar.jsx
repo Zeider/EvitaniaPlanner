@@ -1,4 +1,4 @@
-import { profiles, activeProfileKey, activeProfile, setActiveProfile, theme, setTheme, lightMode, setLightMode } from '../state/store.js';
+import { profiles, activeProfileKey, activeProfile, setActiveProfile, theme, setTheme, lightMode, setLightMode, activeTab } from '../state/store.js';
 import { loadSaveFile } from '../state/save-decoder.js';
 import { importProfiles } from '../state/store.js';
 import { version } from '../../package.json';
@@ -68,6 +68,13 @@ export function TopBar() {
           </select>
         )}
         <button class="btn btn-sm btn-share" onClick={handleShare}>Share</button>
+        <button
+          class={`btn btn-sm btn-release-notes ${activeTab.value === 'release-notes' ? 'active' : ''}`}
+          onClick={() => { activeTab.value = 'release-notes'; }}
+          title="Release Notes"
+        >
+          Release Notes
+        </button>
         <button class="btn btn-sm btn-theme" onClick={handleThemeToggle}>
           {lightMode.value ? '🌙' : '☀️'}
         </button>
