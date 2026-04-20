@@ -127,4 +127,16 @@ describe('estimateMaterialEta', () => {
     expect(r.etaHrs).toBe(Infinity);
     expect(r.reason).toBeDefined();
   });
+
+  it('returns 0 ETA with source "none" when remainingQty is 0', () => {
+    const r = estimateMaterialEta('Yellow Substance', 0, profile);
+    expect(r.etaHrs).toBe(0);
+    expect(r.source).toBe('none');
+  });
+
+  it('returns 0 ETA with source "none" when remainingQty is negative', () => {
+    const r = estimateMaterialEta('Yellow Substance', -5, profile);
+    expect(r.etaHrs).toBe(0);
+    expect(r.source).toBe('none');
+  });
 });

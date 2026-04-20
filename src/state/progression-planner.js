@@ -81,7 +81,7 @@ export function expandTargetToMaterials(target, profile) {
   }));
 }
 
-const ROUGH_MINING_RATE = 100;       // fallback nodes/hr
+const ROUGH_GATHERING_RATE = 100;   // fallback nodes/hr for both mining and woodcutting
 const ROUGH_BOSS_HOURS_PER_DROP = 2; // fallback boss hours per drop
 
 /** Estimate farming hours for a single material and remaining qty. */
@@ -105,6 +105,7 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
     };
   }
 
+  // NOTE: must precede the `zone && rate` branch below — boss entries also carry `rate`.
   if (source.boss) {
     return {
       etaHrs: remainingQty * ROUGH_BOSS_HOURS_PER_DROP,
@@ -117,7 +118,7 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
   if (source.activity === 'mining' || source.activity === 'woodcutting') {
     const observedRate = profile.observedRates?.[materialName];
     const kind = source.activity; // 'mining' or 'woodcutting'
-    if (observedRate && observedRate > 0) {
+    if (observedRate > 0) {
       return {
         etaHrs: remainingQty / observedRate,
         source: kind,
@@ -126,7 +127,7 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
       };
     }
     return {
-      etaHrs: remainingQty / ROUGH_MINING_RATE,
+      etaHrs: remainingQty / ROUGH_GATHERING_RATE,
       source: kind,
       location: `${kind} (rough estimate — enter observed rate to refine)`,
       isRough: true,
