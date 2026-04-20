@@ -46,6 +46,11 @@ export function Progression() {
   const pieces = useMemo(() => getAvailablePieces(), []);
   const target = profile.progressionTarget;
 
+  const sortedMaterials = useMemo(
+    () => [...plan.aggregateMaterials].sort((a, b) => (b.etaHrs || 0) - (a.etaHrs || 0)),
+    [plan.aggregateMaterials]
+  );
+
   if (!activeProfileKey.value) {
     return (
       <div class="progression">
@@ -114,29 +119,28 @@ export function Progression() {
           <table class="progression__shopping-list">
             <thead>
               <tr>
-                <th>Material</th>
-                <th>Owned / Needed</th>
-                <th>ETA</th>
-                <th>Source</th>
+                <th scope="col">Material</th>
+                <th scope="col">Owned / Needed</th>
+                <th scope="col">ETA</th>
+                <th scope="col">Source</th>
               </tr>
             </thead>
             <tbody>
-              {[...plan.aggregateMaterials]
-                .sort((a, b) => (b.etaHrs || 0) - (a.etaHrs || 0))
-                .map(m => {
-                  let className = '';
-                  if (m.remaining === 0) className = 'progression__mat-complete';
-                  else if (m.source === 'unknown') className = 'progression__mat-unknown';
-                  else if (m.isRough) className = 'progression__mat-rough';
-                  return (
-                    <tr key={m.name} class={className}>
-                      <td>{m.name}</td>
-                      <td>{m.owned} / {m.totalNeeded}</td>
-                      <td>{m.remaining === 0 ? '✓' : fmtHours(m.etaHrs)}{m.isRough && m.remaining > 0 ? ' (rough)' : ''}</td>
-                      <td title={m.reason || ''}>{m.location || (m.reason ? '⚠ ' + m.reason : '—')}</td>
-                    </tr>
-                  );
-                })}
+              {sortedMaterials.map(m => {
+                const className =
+                  m.remaining === 0 ? 'progression__mat-complete'
+                  : m.source === 'unknown' ? 'progression__mat-unknown'
+                  : m.isRough ? 'progression__mat-rough'
+                  : '';
+                return (
+                  <tr key={m.name} class={className}>
+                    <td>{m.name}</td>
+                    <td>{m.owned} / {m.totalNeeded}</td>
+                    <td>{m.remaining === 0 ? '✓' : fmtHours(m.etaHrs)}{m.isRough ? ' (rough)' : ''}</td>
+                    <td title={m.reason || ''}>{m.location || (m.reason ? '⚠ ' + m.reason : '—')}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
