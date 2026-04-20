@@ -25,7 +25,34 @@ export function createDefaultProfile() {
     maxUnlockedZone: '',
     farmingRates: { killsPerHour: 0, xpPerHour: 0, goldPerHour: 0 },
     currentZone: '1.0',
+    inventory: {},
+    progressionTarget: null,
+    observedRates: {},
   };
+}
+
+/** One-time migration: if profile.inventory is empty and ic-invent-v1
+ *  has data, copy it over. Returns the (possibly mutated) profile.
+ *  Safe to call multiple times — no-op once inventory is populated. */
+export function migrateCraftingInventory(profile) {
+  if (!profile.inventory) profile.inventory = {};
+  if (Object.keys(profile.inventory).length > 0) return profile;
+  try {
+    const raw = localStorage.getItem('ic-invent-v1');
+    if (!raw) return profile;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object') {
+      profile.inventory = { ...parsed };
+    }
+  } catch (e) {
+    // Don't swallow silently — if legacy inventory is corrupt, the user would
+    // otherwise see an empty Progression-tab inventory with no indication that
+    // migration was attempted. Log enough breadcrumb to diagnose from DevTools.
+    const rawLen = localStorage.getItem('ic-invent-v1')?.length ?? 0;
+    // eslint-disable-next-line no-console
+    console.warn(`[migrateCraftingInventory] failed to migrate ic-invent-v1 (raw length=${rawLen}):`, e);
+  }
+  return profile;
 }
 
 export function setActiveProfile(key) {

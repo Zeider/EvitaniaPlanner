@@ -172,7 +172,7 @@ graph LR
     T7_2["T7: Movespeed<br/>+10% per pt<br/>(2)"]
     T7_3["T7: Blade Strike*<br/>Strikes enemies with huge strike, dealing 150% ATK damage to all enemies in front of the warrior. CD: 15, Mana: 6<br/>(1)"]
 
-    T8_0["T8: Critical Damage<br/>+2% per pt<br/>(2)"]
+    T8_0["T8: Critical Damage<br/>+2% per pt<br/>(10)"]
     T8_1["T8: Bonus XP<br/>+5% per pt<br/>(7)"]
     T8_2["T8: Max HP<br/>+5 per pt<br/>(5)"]
     T8_3["T8: Mana Regen<br/>+1 per pt<br/>(3)"]

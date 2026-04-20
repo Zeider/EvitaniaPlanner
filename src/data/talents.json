@@ -134,7 +134,7 @@
       { "id": "tt_warrior_7_2", "name": "Movespeed", "stat": "moveSpeed", "perPoint": 10, "maxPoints": 2, "row": 7, "col": 2 },
       { "id": "tt_warrior_7_3", "name": "Blade Strike", "stat": "skill_bladeStrike", "perPoint": 1, "maxPoints": 1, "row": 7, "col": 3, "isSkill": true },
 
-      { "id": "tt_warrior_8_0", "name": "Critical Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 2, "row": 8, "col": 0 },
+      { "id": "tt_warrior_8_0", "name": "Critical Damage", "stat": "critDamage", "perPoint": 2, "maxPoints": 10, "row": 8, "col": 0 },
       { "id": "tt_warrior_8_1", "name": "Bonus XP", "stat": "bonusXp", "perPoint": 5, "maxPoints": 7, "row": 8, "col": 1 },
       { "id": "tt_warrior_8_2", "name": "Max HP", "stat": "hp", "perPoint": 5, "maxPoints": 5, "row": 8, "col": 2 },
       { "id": "tt_warrior_8_3", "name": "Mana Regen", "stat": "manaRegen", "perPoint": 1, "maxPoints": 3, "row": 8, "col": 3 },

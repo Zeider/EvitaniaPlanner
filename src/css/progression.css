@@ -1,0 +1,28 @@
+.progression { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.progression__panel {
+  background: var(--card-bg, rgba(255,255,255,0.05));
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.progression__panel-title { margin: 0 0 10px; font-size: 0.95rem; color: var(--muted, #aab); text-transform: uppercase; letter-spacing: 0.05em; }
+.progression__picker { display: flex; gap: 16px; flex-wrap: wrap; }
+.progression__picker label { display: flex; gap: 6px; align-items: center; font-size: 0.9rem; }
+.progression__picker select { background: rgba(0,0,0,0.3); color: inherit; border: 1px solid var(--border, rgba(255,255,255,0.15)); border-radius: 4px; padding: 4px 8px; }
+.progression__empty { color: var(--muted, #aab); margin: 0; }
+.progression__summary-line { font-size: 1.05rem; margin-bottom: 8px; }
+.progression__progress-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.progression__progress-fill { height: 100%; background: var(--accent, #8af); transition: width 0.2s; }
+.progression__shopping-list { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.progression__shopping-list th, .progression__shopping-list td { padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border, rgba(255,255,255,0.06)); }
+.progression__shopping-list th { color: var(--muted, #aab); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
+.progression__mat-complete { color: var(--success, #8f8); }
+.progression__mat-rough { color: var(--warn, #fb8); }
+.progression__mat-unknown { color: var(--danger, #f88); }
+.progression__piece { padding: 8px 0; border-bottom: 1px solid var(--border, rgba(255,255,255,0.06)); }
+.progression__piece-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.progression__piece-owned { color: var(--success, #8f8); }
+.progression__piece-mats { margin-top: 8px; padding-left: 16px; font-size: 0.85rem; color: var(--muted, #aab); }
+.progression__piece-mats-hint { font-style: italic; margin-bottom: 4px; font-size: 0.8rem; opacity: 0.75; }
+.progression__inv-input { width: 60px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid var(--border, rgba(255,255,255,0.15)); border-radius: 3px; padding: 2px 6px; font-size: 0.9rem; }
+.progression__observed-prompt { font-size: 0.8rem; color: var(--muted, #aab); margin-left: 8px; }
