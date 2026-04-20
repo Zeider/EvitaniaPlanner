@@ -28,6 +28,7 @@ export function createDefaultProfile() {
     inventory: {},
     progressionTarget: null,
     observedRates: {},
+    completedPieces: {},
   };
 }
 

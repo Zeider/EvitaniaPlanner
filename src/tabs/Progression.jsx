@@ -63,6 +63,16 @@ export function Progression() {
     saveProfile(activeProfileKey.value, { ...profile, inventory: inv });
   }, [profile]);
 
+  const togglePieceCompleted = useCallback((pieceName) => {
+    const completed = { ...(profile.completedPieces || {}) };
+    if (completed[pieceName]) {
+      delete completed[pieceName];
+    } else {
+      completed[pieceName] = true;
+    }
+    saveProfile(activeProfileKey.value, { ...profile, completedPieces: completed });
+  }, [profile]);
+
   const updateObservedRate = useCallback((matName, raw) => {
     const rates = { ...profile.observedRates };
     const n = Number(raw);
@@ -151,14 +161,30 @@ export function Progression() {
         ) : plan.pieces.length === 0 ? (
           <p class="progression__empty">No pieces in this target.</p>
         ) : (
-          plan.pieces.map(piece => (
+          plan.pieces.map(piece => {
+            const isEquipped = piece.owned && !piece.completedManually;
+            const statusLabel = isEquipped ? 'equipped' : piece.owned ? 'done' : fmtHours(piece.pieceEtaHrs);
+            return (
             <div key={piece.name} class="progression__piece">
-              <div class="progression__piece-header" onClick={() => toggleExpand(piece.name)}>
-                <span>
-                  {piece.owned ? <span class="progression__piece-owned">✓ </span> : '☐ '}
-                  {piece.name}
+              <div class="progression__piece-header">
+                <span class="progression__piece-name">
+                  <input
+                    type="checkbox"
+                    class="progression__piece-check"
+                    checked={piece.owned}
+                    disabled={isEquipped}
+                    title={isEquipped ? 'Detected as equipped in your gear' : 'Click to mark complete'}
+                    onChange={() => togglePieceCompleted(piece.name)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <span onClick={() => toggleExpand(piece.name)}>{piece.name}</span>
                 </span>
-                <span>{piece.owned ? 'owned' : fmtHours(piece.pieceEtaHrs)}</span>
+                <span
+                  class={piece.owned ? 'progression__piece-owned' : ''}
+                  onClick={() => toggleExpand(piece.name)}
+                >
+                  {statusLabel}
+                </span>
               </div>
               {expandedPieces[piece.name] && (
                 <div class="progression__piece-mats">
@@ -173,7 +199,8 @@ export function Progression() {
                 </div>
               )}
             </div>
-          ))
+          );
+          })
         )}
       </section>
 

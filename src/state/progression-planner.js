@@ -243,11 +243,22 @@ export function buildProgressionPlan(profile) {
 
   const inventory = profile.inventory || {};
 
-  // Per-piece breakdown: expand each piece separately. Owned pieces short-circuit
+  // Per-piece breakdown: expand each piece separately. A piece is "done" if it
+  // is either already equipped (detected from profile.gear) or manually checked
+  // off by the user (profile.completedPieces[name]). Done pieces short-circuit
   // to zero — they contribute nothing to the shopping list or total work.
+  const completedPieces = profile.completedPieces || {};
   const pieces = recipeNames.map(name => {
-    if (isPieceOwned(name, profile)) {
-      return { name, owned: true, materials: [], pieceEtaHrs: 0 };
+    const equipped = isPieceOwned(name, profile);
+    const manuallyCompleted = !!completedPieces[name];
+    if (equipped || manuallyCompleted) {
+      return {
+        name,
+        owned: true,
+        completedManually: manuallyCompleted && !equipped,
+        materials: [],
+        pieceEtaHrs: 0,
+      };
     }
     const materials = expandRecipe(name, 1, {});
     const pieceMats = Object.entries(materials).map(([matName, needed]) => {
@@ -259,7 +270,7 @@ export function buildProgressionPlan(profile) {
     const pieceEtaHrs = pieceMats
       .filter(m => isFinite(m.eta.etaHrs))
       .reduce((s, m) => s + m.eta.etaHrs, 0);
-    return { name, owned: false, materials: pieceMats, pieceEtaHrs };
+    return { name, owned: false, completedManually: false, materials: pieceMats, pieceEtaHrs };
   });
 
   // Aggregate across pieces, deduplicating by material name. Owned pieces

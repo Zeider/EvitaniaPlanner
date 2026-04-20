@@ -20,8 +20,12 @@
 .progression__mat-rough { color: var(--warn, #fb8); }
 .progression__mat-unknown { color: var(--danger, #f88); }
 .progression__piece { padding: 8px 0; border-bottom: 1px solid var(--border, rgba(255,255,255,0.06)); }
-.progression__piece-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-.progression__piece-owned { color: var(--success, #8f8); }
+.progression__piece-header { display: flex; justify-content: space-between; align-items: center; }
+.progression__piece-name { display: inline-flex; align-items: center; gap: 8px; }
+.progression__piece-name > span { cursor: pointer; }
+.progression__piece-check { width: 16px; height: 16px; cursor: pointer; accent-color: var(--success, #8f8); }
+.progression__piece-check:disabled { cursor: not-allowed; opacity: 0.7; }
+.progression__piece-owned { color: var(--success, #8f8); cursor: pointer; }
 .progression__piece-mats { margin-top: 8px; padding-left: 16px; font-size: 0.85rem; color: var(--muted, #aab); }
 .progression__piece-mats-hint { font-style: italic; margin-bottom: 4px; font-size: 0.8rem; opacity: 0.75; }
 .progression__inv-input { width: 60px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid var(--border, rgba(255,255,255,0.15)); border-radius: 3px; padding: 2px 6px; font-size: 0.9rem; }
