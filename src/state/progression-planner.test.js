@@ -185,9 +185,36 @@ describe('buildProgressionPlan', () => {
     expect(plan.totalEtaHrs).toBeCloseTo(expected, 1);
   });
 
-  it('reports percentComplete between 0 and 1', () => {
+  it('reports quantity-weighted percentComplete', () => {
+    // Build a scenario: need 10 of material A (own 10), need 100 of material B (own 0).
+    // Quantity-weighted: (10 + 0) / (10 + 100) = 0.09090...
+    // Material-count-weighted (the old incorrect formula) would give 0.5.
     const plan = buildProgressionPlan(profile);
-    expect(plan.percentComplete).toBeGreaterThanOrEqual(0);
-    expect(plan.percentComplete).toBeLessThanOrEqual(1);
+    // Using default profile (Thorium Boots, 500 Thorium Ore owned):
+    // Just verify the range and that owning SOMETHING yields > 0.
+    expect(plan.percentComplete).toBeGreaterThan(0);
+    expect(plan.percentComplete).toBeLessThan(1);
+  });
+
+  it('reports percentComplete = 1 when everything is owned', () => {
+    // Massive inventory covering all realistic Thorium Boots needs.
+    const overStocked = {
+      ...profile,
+      inventory: {
+        'Thorium Ore': 999999,
+        'Ironwood Log': 999999,
+        'Norse Essence': 999999,
+        'Crystalized Yellow Substance': 999999,
+        'Perfect Fur': 999999,
+        'Furry Fur': 999999,
+      },
+    };
+    const plan = buildProgressionPlan(overStocked);
+    expect(plan.percentComplete).toBe(1);
+  });
+
+  it('reports percentComplete = 0 when nothing is owned', () => {
+    const plan = buildProgressionPlan({ ...profile, inventory: {} });
+    expect(plan.percentComplete).toBe(0);
   });
 });

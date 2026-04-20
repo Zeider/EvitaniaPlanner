@@ -61,7 +61,7 @@ function resolveRecipeNames(target, profile) {
 }
 
 /** Check if a recipe piece is already owned (in gear slots). */
-function checkPieceOwned(recipeName, profile) {
+function isPieceOwned(recipeName, profile) {
   if (!profile.gear) return false;
   for (const slotData of Object.values(profile.gear)) {
     if (slotData?.name === recipeName) return true;
@@ -166,7 +166,17 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
            reason: 'unrecognized source shape' };
 }
 
-/** Orchestrate: expand target → subtract inventory → compute ETAs → aggregate. */
+/**
+ * Orchestrate: expand target → subtract inventory → compute ETAs → aggregate.
+ *
+ * Returns:
+ * - `pieces[].pieceEtaHrs`: standalone ETA for each piece's full material list,
+ *   computed in isolation. **Do NOT sum pieces[].pieceEtaHrs** — it double-counts
+ *   materials shared across pieces. Use `totalEtaHrs` instead, which deduplicates
+ *   materials before summing.
+ * - `totalEtaHrs`: authoritative total, computed from aggregate deduplicated materials.
+ * - `percentComplete`: 0..1, quantity-weighted (owned/needed across all materials).
+ */
 export function buildProgressionPlan(profile) {
   const target = profile.progressionTarget;
   const empty = {
@@ -187,7 +197,7 @@ export function buildProgressionPlan(profile) {
   // Per-piece breakdown: expand each piece separately
   const pieces = recipeNames.map(name => {
     const materials = expandRecipe(name, 1, {});
-    const ownedThisPiece = checkPieceOwned(name, profile);
+    const ownedThisPiece = isPieceOwned(name, profile);
     const pieceMats = Object.entries(materials).map(([matName, needed]) => {
       const owned = inventory[matName] || 0;
       const remaining = Math.max(0, needed - owned);
@@ -231,11 +241,13 @@ export function buildProgressionPlan(profile) {
     .filter(m => isFinite(m.etaHrs))
     .reduce((s, m) => s + m.etaHrs, 0);
 
-  // percentComplete: fraction of aggregate materials where remaining === 0
-  const satisfied = aggregateMaterials.filter(m => m.remaining === 0).length;
-  const percentComplete = aggregateMaterials.length > 0
-    ? satisfied / aggregateMaterials.length
-    : 0;
+  // percentComplete: quantity-weighted fraction of owned vs. needed
+  const totalQtyNeeded = aggregateMaterials.reduce((s, m) => s + m.totalNeeded, 0);
+  const totalQtyOwned = aggregateMaterials.reduce(
+    (s, m) => s + Math.min(m.owned, m.totalNeeded),
+    0
+  );
+  const percentComplete = totalQtyNeeded > 0 ? totalQtyOwned / totalQtyNeeded : 0;
 
   return {
     target: target.value,
