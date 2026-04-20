@@ -54,17 +54,29 @@ export function Progression() {
   const [expandedPieces, setExpandedPieces] = useState({});
   const toggleExpand = (name) => setExpandedPieces(p => ({ ...p, [name]: !p[name] }));
 
-  const updateInventory = useCallback((matName, qty) => {
-    const inv = { ...profile.inventory, [matName]: Math.max(0, qty | 0) };
+  const updateInventory = useCallback((matName, raw) => {
+    // Ignore invalid input instead of clobbering existing value with 0.
+    // `qty | 0` would silently reset large numbers (>2^31), NaN, and paste typos.
+    const n = Number(raw);
+    if (!Number.isFinite(n) || n < 0) return;
+    const inv = { ...profile.inventory, [matName]: Math.floor(n) };
     saveProfile(activeProfileKey.value, { ...profile, inventory: inv });
   }, [profile]);
 
-  const updateObservedRate = useCallback((matName, rate) => {
-    const rates = { ...profile.observedRates, [matName]: Math.max(0, Number(rate) || 0) };
+  const updateObservedRate = useCallback((matName, raw) => {
+    const rates = { ...profile.observedRates };
+    const n = Number(raw);
+    if (!Number.isFinite(n) || n <= 0) {
+      // Empty/zero/negative clears the entry so the rough-estimate branch kicks back in.
+      delete rates[matName];
+    } else {
+      rates[matName] = n;
+    }
     saveProfile(activeProfileKey.value, { ...profile, observedRates: rates });
   }, [profile]);
 
-  // One-time migration from Crafting tab's legacy inventory on first visit
+  // One-time migration from Crafting tab's legacy inventory. Re-runs when the
+  // active profile changes (e.g. the user imports a save mid-session).
   useEffect(() => {
     if (!activeProfileKey.value) return;
     if (Object.keys(profile.inventory || {}).length > 0) return;
@@ -72,7 +84,7 @@ export function Progression() {
     if (Object.keys(migrated.inventory).length > 0) {
       saveProfile(activeProfileKey.value, { ...profile, inventory: migrated.inventory });
     }
-  }, []);
+  }, [activeProfileKey.value]);
 
   if (!activeProfileKey.value) {
     return (
@@ -195,15 +207,16 @@ export function Progression() {
                     <td>{m.remaining === 0 ? '✓' : fmtHours(m.etaHrs)}{m.isRough ? ' (rough)' : ''}</td>
                     <td title={m.reason || ''}>
                       {m.location || (m.reason ? '⚠ ' + m.reason : '—')}
-                      {(m.source === 'mining' || m.source === 'woodcutting') &&
-                        !(profile.observedRates?.[m.name] > 0) && (
+                      {(m.source === 'mining' || m.source === 'woodcutting') && (
                         <span class="progression__observed-prompt">
                           {' [rate/hr: '}
                           <input
                             type="number"
                             class="progression__inv-input"
                             min="0"
-                            onBlur={(e) => e.target.value && updateObservedRate(m.name, e.target.value)}
+                            defaultValue={profile.observedRates?.[m.name] || ''}
+                            onBlur={(e) => updateObservedRate(m.name, e.target.value)}
+                            key={profile.observedRates?.[m.name] || 0}
                           />
                           {']'}
                         </span>
@@ -235,8 +248,10 @@ export function Progression() {
                       type="number"
                       class="progression__inv-input"
                       min="0"
-                      value={m.owned}
-                      onChange={(e) => updateInventory(m.name, Number(e.target.value))}
+                      step="1"
+                      defaultValue={m.owned}
+                      onBlur={(e) => updateInventory(m.name, e.target.value)}
+                      key={`${m.name}:${m.owned}`}
                     />
                   </td>
                 </tr>

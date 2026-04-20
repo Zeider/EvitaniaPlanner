@@ -60,7 +60,8 @@ function resolveRecipeNames(target, profile) {
     });
   }
   if (target.type === 'autoNextTier') {
-    // Placeholder — implemented in Task 3b (follow-up) or a later pass
+    // Not yet implemented — when wired, should delegate to the Upgrade Advisor's
+    // next-tier suggestion and resolve to a gearSet.
     return [];
   }
   return [];
@@ -134,10 +135,22 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
   }
 
   if (source.quest) {
-    // One-time quest rewards — negligible time to claim, but limited to the
-    // quest's single drop so high remaining qty isn't actually achievable.
+    // One-time quest rewards. If the recipe needs more than the quest gives
+    // (default: 1 drop), the surplus is genuinely unobtainable from this source
+    // — don't pretend a 6-minute ETA when the player would need to repeat a
+    // non-repeatable quest.
+    const cap = source.questCap || 1;
+    if (remainingQty > cap) {
+      return {
+        etaHrs: Infinity,
+        source: 'quest',
+        location: `Quest reward (${source.quest})`,
+        isRough: true,
+        reason: `quest gives ${cap} drop(s); ${remainingQty} needed — surplus not achievable from this source`,
+      };
+    }
     return {
-      etaHrs: remainingQty > 0 ? 0.1 : 0,
+      etaHrs: 0.1,
       source: 'quest',
       location: `Quest reward (${source.quest})`,
       isRough: true,
@@ -196,12 +209,22 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
  * Orchestrate: expand target → subtract inventory → compute ETAs → aggregate.
  *
  * Returns:
- * - `pieces[].pieceEtaHrs`: standalone ETA for each piece's full material list,
- *   computed in isolation. **Do NOT sum pieces[].pieceEtaHrs** — it double-counts
- *   materials shared across pieces. Use `totalEtaHrs` instead, which deduplicates
- *   materials before summing.
+ * - `pieces[].pieceEtaHrs`: the ETA **if this piece were farmed in isolation**.
+ *   Two caveats:
+ *   (1) Do NOT sum pieces[].pieceEtaHrs — materials shared across pieces would
+ *       be double-counted.
+ *   (2) Each individual value is optimistic when pieces share materials, because
+ *       the full profile inventory is subtracted from every piece independently
+ *       (i.e. owning 50 Thorium Ore makes each of 7 pieces report the same 50
+ *       toward their needed count, as if the ore were multiplied).
+ *   For any correctness-sensitive display, use `totalEtaHrs`.
+ * - Owned pieces (already equipped per `profile.gear`) return `{ owned: true,
+ *   materials: [], pieceEtaHrs: 0 }` and their materials are excluded from
+ *   `aggregateMaterials`. The shopping list and totals show only remaining work.
  * - `totalEtaHrs`: authoritative total, computed from aggregate deduplicated materials.
  * - `percentComplete`: 0..1, quantity-weighted (owned/needed across all materials).
+ *   Per-material owned is clamped to that material's totalNeeded before summing,
+ *   so excess stockpile on one material does not offset shortages on another.
  */
 export function buildProgressionPlan(profile) {
   const target = profile.progressionTarget;
@@ -220,10 +243,13 @@ export function buildProgressionPlan(profile) {
 
   const inventory = profile.inventory || {};
 
-  // Per-piece breakdown: expand each piece separately
+  // Per-piece breakdown: expand each piece separately. Owned pieces short-circuit
+  // to zero — they contribute nothing to the shopping list or total work.
   const pieces = recipeNames.map(name => {
+    if (isPieceOwned(name, profile)) {
+      return { name, owned: true, materials: [], pieceEtaHrs: 0 };
+    }
     const materials = expandRecipe(name, 1, {});
-    const ownedThisPiece = isPieceOwned(name, profile);
     const pieceMats = Object.entries(materials).map(([matName, needed]) => {
       const owned = inventory[matName] || 0;
       const remaining = Math.max(0, needed - owned);
@@ -233,10 +259,12 @@ export function buildProgressionPlan(profile) {
     const pieceEtaHrs = pieceMats
       .filter(m => isFinite(m.eta.etaHrs))
       .reduce((s, m) => s + m.eta.etaHrs, 0);
-    return { name, owned: ownedThisPiece, materials: pieceMats, pieceEtaHrs };
+    return { name, owned: false, materials: pieceMats, pieceEtaHrs };
   });
 
-  // Aggregate across pieces, deduplicating by material name
+  // Aggregate across pieces, deduplicating by material name. Owned pieces
+  // contribute nothing (their `materials` is []), so the shopping list and totals
+  // correctly reflect only remaining work.
   const aggregateMap = {};
   for (const piece of pieces) {
     for (const m of piece.materials) {

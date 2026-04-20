@@ -132,11 +132,20 @@ describe('estimateMaterialEta', () => {
     expect(r.isRough).toBe(true);
   });
 
-  it('returns small ETA with source "quest" for quest-reward materials', () => {
+  it('returns small ETA with source "quest" for quest-reward materials within cap', () => {
     const r = estimateMaterialEta('Animal Bone', 1, profile);
     expect(r.source).toBe('quest');
     expect(r.etaHrs).toBeLessThan(1);
     expect(r.isRough).toBe(true);
+  });
+
+  it('returns Infinity + reason for quest-reward materials beyond cap (one-time drops)', () => {
+    // Animal Bone drops once from the boar-kill quest — asking for 5 is not achievable.
+    const r = estimateMaterialEta('Animal Bone', 5, profile);
+    expect(r.source).toBe('quest');
+    expect(r.etaHrs).toBe(Infinity);
+    expect(r.isRough).toBe(true);
+    expect(r.reason).toMatch(/quest gives/);
   });
 
   it('returns Infinity with reason for unmapped materials', () => {
@@ -238,5 +247,35 @@ describe('buildProgressionPlan', () => {
   it('reports percentComplete = 0 when nothing is owned', () => {
     const plan = buildProgressionPlan({ ...profile, inventory: {} });
     expect(plan.percentComplete).toBe(0);
+  });
+
+  it('excludes owned pieces from aggregateMaterials and totalEtaHrs', () => {
+    // User owns Thorium Boots — the Thorium-set plan should not ask them to farm
+    // boots materials (Crystalized Yellow Substance, Perfect Fur, etc.) just for
+    // that piece. Other pieces still contribute.
+    const setTarget = { type: 'gearSet', value: 'Thorium' };
+    const withOwned = {
+      ...profile,
+      progressionTarget: setTarget,
+      inventory: {},
+      gear: { boots: { name: 'Thorium Boots' } },
+    };
+    const withoutOwned = { ...withOwned, gear: {} };
+    const planOwned = buildProgressionPlan(withOwned);
+    const planFresh = buildProgressionPlan(withoutOwned);
+
+    // The owned piece is flagged and has no material breakdown
+    const bootsPiece = planOwned.pieces.find(p => p.name === 'Thorium Boots');
+    expect(bootsPiece.owned).toBe(true);
+    expect(bootsPiece.materials).toEqual([]);
+    expect(bootsPiece.pieceEtaHrs).toBe(0);
+
+    // Every material needed for Thorium Boots should be reduced in totalNeeded
+    // (since the boots piece no longer contributes). Thorium Ore is the clearest:
+    // it's in nearly every piece so the delta should be exactly the boots recipe.
+    const oreOwned = planOwned.aggregateMaterials.find(m => m.name === 'Thorium Ore');
+    const oreFresh = planFresh.aggregateMaterials.find(m => m.name === 'Thorium Ore');
+    expect(oreOwned.totalNeeded).toBeLessThan(oreFresh.totalNeeded);
+    expect(planOwned.totalEtaHrs).toBeLessThan(planFresh.totalEtaHrs);
   });
 });

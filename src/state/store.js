@@ -44,7 +44,14 @@ export function migrateCraftingInventory(profile) {
     if (parsed && typeof parsed === 'object') {
       profile.inventory = { ...parsed };
     }
-  } catch (_) { /* noop */ }
+  } catch (e) {
+    // Don't swallow silently — if legacy inventory is corrupt, the user would
+    // otherwise see an empty Progression-tab inventory with no indication that
+    // migration was attempted. Log enough breadcrumb to diagnose from DevTools.
+    const rawLen = localStorage.getItem('ic-invent-v1')?.length ?? 0;
+    // eslint-disable-next-line no-console
+    console.warn(`[migrateCraftingInventory] failed to migrate ic-invent-v1 (raw length=${rawLen}):`, e);
+  }
   return profile;
 }
 
