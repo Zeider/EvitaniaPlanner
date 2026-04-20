@@ -23,6 +23,7 @@ const GEAR_GUID_MAP = {
   '8a4e9274-0396-415b-ae89-f268a8b9afae': 'Bronze Chestplate',
   '19d55c7a-3354-4c01-9f7d-8b8a9620066f': 'Iron Chestplate',
   '8317c874-94e9-49d7-9eba-72a339f96791': 'Thorium Chestplate',
+  '7aa5a7a5-8e6e-4e0d-b0a9-e03b2b9a1ae0': 'Harvest Shirt',
   // Gloves
   '1d23d781-e7ba-4e85-9c4f-2ddf85a95804': 'Bronze Gloves',
   '99528be3-8b4f-4067-88d8-662d72b3d578': 'Iron Gloves',
@@ -49,6 +50,7 @@ const GEAR_GUID_MAP = {
   'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
   // Axes
   '95fbcc3e-b5f2-48cd-adc7-42a187ae4179': 'Iron Axe',
+  '08cd484a-023b-4bae-93c9-465683d681ed': 'Thorium Axe',
 };
 
 const HEX_PAIR = /^[0-9A-Fa-f]*$/;
