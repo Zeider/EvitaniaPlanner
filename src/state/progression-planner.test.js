@@ -90,6 +90,16 @@ describe('estimateMaterialEta', () => {
     expect(r.source).toBe('vendor');
     // ceil(200 / 50) = 4 days = 96 hrs
     expect(r.etaHrs).toBe(96);
+    expect(r.isRough).toBe(false);
+  });
+
+  it('returns Infinity + rough flag for vendor entries with no dailyLimit', () => {
+    // Crystallized Blue Substance: { vendor: true } — no dailyLimit known
+    const r = estimateMaterialEta('Crystallized Blue Substance', 100, profile);
+    expect(r.source).toBe('vendor');
+    expect(r.etaHrs).toBe(Infinity);
+    expect(r.isRough).toBe(true);
+    expect(r.reason).toMatch(/dailyLimit/);
   });
 
   it('computes zone ETA as qty × rate / killsPerHour', () => {
@@ -192,15 +202,20 @@ describe('buildProgressionPlan', () => {
     expect(plan.totalEtaHrs).toBeCloseTo(expected, 1);
   });
 
-  it('reports quantity-weighted percentComplete', () => {
-    // Build a scenario: need 10 of material A (own 10), need 100 of material B (own 0).
-    // Quantity-weighted: (10 + 0) / (10 + 100) = 0.09090...
-    // Material-count-weighted (the old incorrect formula) would give 0.5.
+  it('reports quantity-weighted percentComplete (distinguishes from material-count weighting)', () => {
+    // Thorium Boots needs ~1974 Thorium Ore + other mats, user owns 500 Thorium Ore
+    // and nothing else. Under quantity-weighting the ratio is nonzero (~500/totalNeeded).
+    // Under material-count-weighting it would be 0 (zero materials fully satisfied).
     const plan = buildProgressionPlan(profile);
-    // Using default profile (Thorium Boots, 500 Thorium Ore owned):
-    // Just verify the range and that owning SOMETHING yields > 0.
+    const totalQtyNeeded = plan.aggregateMaterials.reduce((s, m) => s + m.totalNeeded, 0);
+    const totalQtyOwned = plan.aggregateMaterials.reduce(
+      (s, m) => s + Math.min(m.owned, m.totalNeeded), 0
+    );
+    const expected = totalQtyNeeded > 0 ? totalQtyOwned / totalQtyNeeded : 0;
+    expect(plan.percentComplete).toBeCloseTo(expected, 5);
+    // Also verify it's strictly > 0 (proves we're not using the material-count formula,
+    // which would yield exactly 0 in this scenario).
     expect(plan.percentComplete).toBeGreaterThan(0);
-    expect(plan.percentComplete).toBeLessThan(1);
   });
 
   it('reports percentComplete = 1 when everything is owned', () => {

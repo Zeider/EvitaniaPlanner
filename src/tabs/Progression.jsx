@@ -150,9 +150,12 @@ export function Progression() {
               </div>
               {expandedPieces[piece.name] && (
                 <div class="progression__piece-mats">
+                  <div class="progression__piece-mats-hint">
+                    Materials needed for this piece (see Shopping List below for your shared inventory and ETAs):
+                  </div>
                   {piece.materials.map(m => (
                     <div key={m.name}>
-                      {m.name}: {m.owned}/{m.needed} {m.remaining > 0 && `(need ${m.remaining})`}
+                      {m.name}: {m.needed}
                     </div>
                   ))}
                 </div>

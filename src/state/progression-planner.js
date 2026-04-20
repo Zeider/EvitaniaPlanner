@@ -114,8 +114,17 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
   }
 
   if (source.vendor) {
-    const dailyLimit = source.dailyLimit || 1;
-    const days = Math.ceil(remainingQty / dailyLimit);
+    if (!source.dailyLimit || source.dailyLimit <= 0) {
+      // Known vendor but no daily purchase cap data — don't pretend to know the rate.
+      return {
+        etaHrs: Infinity,
+        source: 'vendor',
+        location: source.note || 'Vendor',
+        isRough: true,
+        reason: `vendor dailyLimit unknown for "${materialName}"`,
+      };
+    }
+    const days = Math.ceil(remainingQty / source.dailyLimit);
     return {
       etaHrs: days * 24,
       source: 'vendor',
