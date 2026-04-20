@@ -10,6 +10,7 @@ import { Crafting } from './tabs/Crafting.jsx';
 import { RunePlanner } from './tabs/RunePlanner.jsx';
 import { AltAdvisor } from './tabs/AltAdvisor.jsx';
 import { ReleaseNotes } from './tabs/ReleaseNotes.jsx';
+import { Progression } from './tabs/Progression.jsx';
 import { useEffect } from 'preact/hooks';
 import { activeTab, theme, lightMode } from './state/store.js';
 
@@ -33,7 +34,8 @@ export function App() {
         {activeTab.value === 'runes' && <RunePlanner />}
         {activeTab.value === 'alt-advisor' && <AltAdvisor />}
         {activeTab.value === 'release-notes' && <ReleaseNotes />}
-        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && activeTab.value !== 'skills' && activeTab.value !== 'crafting' && activeTab.value !== 'runes' && activeTab.value !== 'alt-advisor' && activeTab.value !== 'release-notes' && (
+        {activeTab.value === 'progression' && <Progression />}
+        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && activeTab.value !== 'skills' && activeTab.value !== 'crafting' && activeTab.value !== 'runes' && activeTab.value !== 'alt-advisor' && activeTab.value !== 'release-notes' && activeTab.value !== 'progression' && (
           <div class="placeholder-tab"><p>{activeTab.value} — coming soon</p></div>
         )}
       </main>
