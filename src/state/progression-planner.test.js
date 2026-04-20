@@ -36,7 +36,7 @@ describe('expandTargetToMaterials — gearPiece', () => {
 });
 
 describe('expandTargetToMaterials — gearSet', () => {
-  it('expands a full Thorium set for a rogue (sword piece = Thorium Bow)', () => {
+  it('expands a full Thorium set for a rogue (weapon piece = Thorium Bow)', () => {
     const target = { type: 'gearSet', value: 'Thorium' };
     const result = expandTargetToMaterials(target, { class: 'rogue' });
     expect(result.length).toBeGreaterThan(0);
@@ -53,9 +53,12 @@ describe('expandTargetToMaterials — gearSet', () => {
   it('filters weapon by class: warrior picks Thorium Sword', () => {
     const target = { type: 'gearSet', value: 'Thorium' };
     const result = expandTargetToMaterials(target, { class: 'warrior' });
+    expect(result.length).toBeGreaterThan(0);
     const byName = Object.fromEntries(result.map(r => [r.material, r.totalNeeded]));
-    // Artisan's Frame expands to different materials, so check for a material it provides
-    // For now, just check that we don't have Rogue/Mage specific materials
+    // Artisan's Frame expands to Chadcoal and Steel Bar; Chadcoal fully expands to Ironwood Log
+    expect(byName['Ironwood Log']).toBeGreaterThan(0);
+    expect(byName['Thorium Ore']).toBeGreaterThan(0);
+    // Should NOT have Rogue/Mage specific materials
     expect(byName['Yellow Feather']).toBeUndefined();
     expect(byName['Carrot']).toBeUndefined();
   });
@@ -63,6 +66,7 @@ describe('expandTargetToMaterials — gearSet', () => {
   it('filters weapon by class: mage picks Thorium Staff', () => {
     const target = { type: 'gearSet', value: 'Thorium' };
     const result = expandTargetToMaterials(target, { class: 'mage' });
+    expect(result.length).toBeGreaterThan(0);
     const byName = Object.fromEntries(result.map(r => [r.material, r.totalNeeded]));
     // Cryolite expands to Cryolite Ore, Norse Essence, Carrot
     expect(byName['Carrot']).toBeGreaterThan(0);
