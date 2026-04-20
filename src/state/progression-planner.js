@@ -30,6 +30,45 @@ function expandRecipe(recipeName, qty, accum = {}) {
   return accum;
 }
 
+/** Resolve target to recipe names (internal helper shared by orchestrators). */
+function resolveRecipeNames(target, profile) {
+  if (target.type === 'gearPiece') {
+    return recipeLookup[target.value] ? [target.value] : [];
+  }
+  if (target.type === 'gearSet') {
+    const tier = target.value;
+    const classWeaponSuffix = {
+      warrior: ['Sword', 'Longsword'],
+      rogue: ['Bow'],
+      mage: ['Staff'],
+    };
+    const allowedWeapons = new Set(
+      (classWeaponSuffix[profile.class] || []).map(s => `${tier} ${s}`)
+    );
+    const weaponSuffixes = new Set(['Sword', 'Longsword', 'Bow', 'Staff']);
+    return Object.keys(recipeLookup).filter(name => {
+      if (!name.startsWith(tier + ' ')) return false;
+      const suffix = name.slice(tier.length + 1);
+      if (weaponSuffixes.has(suffix)) return allowedWeapons.has(name);
+      return true;
+    });
+  }
+  if (target.type === 'autoNextTier') {
+    // Placeholder — implemented in Task 3b (follow-up) or a later pass
+    return [];
+  }
+  return [];
+}
+
+/** Check if a recipe piece is already owned (in gear slots). */
+function checkPieceOwned(recipeName, profile) {
+  if (!profile.gear) return false;
+  for (const slotData of Object.values(profile.gear)) {
+    if (slotData?.name === recipeName) return true;
+  }
+  return false;
+}
+
 /**
  * Expand a progression target into a flat base-material list.
  *
@@ -43,33 +82,7 @@ function expandRecipe(recipeName, qty, accum = {}) {
 export function expandTargetToMaterials(target, profile) {
   if (!target) return [];
 
-  let recipeNames = [];
-  if (target.type === 'gearPiece') {
-    if (recipeLookup[target.value]) recipeNames = [target.value];
-  } else if (target.type === 'gearSet') {
-    const tier = target.value;
-    const classWeaponSuffix = {
-      warrior: ['Sword', 'Longsword'],
-      rogue: ['Bow'],
-      mage: ['Staff'],
-    };
-    const allowedWeapons = new Set(
-      (classWeaponSuffix[profile.class] || []).map(s => `${tier} ${s}`)
-    );
-    const weaponSuffixes = new Set(['Sword', 'Longsword', 'Bow', 'Staff']);
-    recipeNames = Object.keys(recipeLookup).filter(name => {
-      if (!name.startsWith(tier + ' ')) return false;
-      const suffix = name.slice(tier.length + 1);
-      if (weaponSuffixes.has(suffix)) {
-        return allowedWeapons.has(name);
-      }
-      return true;
-    });
-  } else if (target.type === 'autoNextTier') {
-    // Placeholder — implemented in Task 3b (follow-up) or a later pass
-    return [];
-  }
-
+  const recipeNames = resolveRecipeNames(target, profile);
   const accum = {};
   for (const name of recipeNames) {
     expandRecipe(name, 1, accum);
@@ -151,4 +164,84 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
 
   return { etaHrs: Infinity, source: 'unknown', location: '', isRough: true,
            reason: 'unrecognized source shape' };
+}
+
+/** Orchestrate: expand target → subtract inventory → compute ETAs → aggregate. */
+export function buildProgressionPlan(profile) {
+  const target = profile.progressionTarget;
+  const empty = {
+    target: target?.value ?? null,
+    pieces: [],
+    aggregateMaterials: [],
+    totalEtaHrs: 0,
+    percentComplete: 0,
+  };
+  if (!target) return empty;
+
+  // Determine the recipe names being built (for per-piece breakdown)
+  const recipeNames = resolveRecipeNames(target, profile);
+  if (recipeNames.length === 0) return { ...empty, target: target.value };
+
+  const inventory = profile.inventory || {};
+
+  // Per-piece breakdown: expand each piece separately
+  const pieces = recipeNames.map(name => {
+    const materials = expandRecipe(name, 1, {});
+    const ownedThisPiece = checkPieceOwned(name, profile);
+    const pieceMats = Object.entries(materials).map(([matName, needed]) => {
+      const owned = inventory[matName] || 0;
+      const remaining = Math.max(0, needed - owned);
+      const eta = estimateMaterialEta(matName, remaining, profile);
+      return { name: matName, needed, owned, remaining, eta };
+    });
+    const pieceEtaHrs = pieceMats
+      .filter(m => isFinite(m.eta.etaHrs))
+      .reduce((s, m) => s + m.eta.etaHrs, 0);
+    return { name, owned: ownedThisPiece, materials: pieceMats, pieceEtaHrs };
+  });
+
+  // Aggregate across pieces, deduplicating by material name
+  const aggregateMap = {};
+  for (const piece of pieces) {
+    for (const m of piece.materials) {
+      if (!aggregateMap[m.name]) {
+        aggregateMap[m.name] = { name: m.name, totalNeeded: 0 };
+      }
+      aggregateMap[m.name].totalNeeded += m.needed;
+    }
+  }
+  const aggregateMaterials = Object.values(aggregateMap).map(m => {
+    const owned = inventory[m.name] || 0;
+    const remaining = Math.max(0, m.totalNeeded - owned);
+    const eta = estimateMaterialEta(m.name, remaining, profile);
+    return {
+      name: m.name,
+      totalNeeded: m.totalNeeded,
+      owned,
+      remaining,
+      etaHrs: eta.etaHrs,
+      source: eta.source,
+      location: eta.location,
+      isRough: eta.isRough,
+      reason: eta.reason,
+    };
+  });
+
+  const totalEtaHrs = aggregateMaterials
+    .filter(m => isFinite(m.etaHrs))
+    .reduce((s, m) => s + m.etaHrs, 0);
+
+  // percentComplete: fraction of aggregate materials where remaining === 0
+  const satisfied = aggregateMaterials.filter(m => m.remaining === 0).length;
+  const percentComplete = aggregateMaterials.length > 0
+    ? satisfied / aggregateMaterials.length
+    : 0;
+
+  return {
+    target: target.value,
+    pieces,
+    aggregateMaterials,
+    totalEtaHrs,
+    percentComplete,
+  };
 }

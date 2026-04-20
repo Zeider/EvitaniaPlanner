@@ -140,3 +140,54 @@ describe('estimateMaterialEta', () => {
     expect(r.source).toBe('none');
   });
 });
+
+import { buildProgressionPlan } from './progression-planner.js';
+
+describe('buildProgressionPlan', () => {
+  const profile = {
+    class: 'rogue',
+    miningLevel: 42,
+    woodcuttingLevel: 1,
+    farmingRates: { killsPerHour: 1000, xpPerHour: 0, goldPerHour: 0 },
+    observedRates: { 'Thorium Ore': 420 },
+    inventory: { 'Thorium Ore': 500 },
+    progressionTarget: { type: 'gearPiece', value: 'Thorium Boots' },
+    gear: {},
+  };
+
+  it('returns null-shaped result when target is null', () => {
+    const plan = buildProgressionPlan({ ...profile, progressionTarget: null });
+    expect(plan.target).toBeNull();
+    expect(plan.pieces).toEqual([]);
+    expect(plan.aggregateMaterials).toEqual([]);
+  });
+
+  it('subtracts inventory before computing ETA', () => {
+    const plan = buildProgressionPlan(profile);
+    const thoriumOre = plan.aggregateMaterials.find(m => m.name === 'Thorium Ore');
+    expect(thoriumOre.owned).toBe(500);
+    expect(thoriumOre.remaining).toBe(thoriumOre.totalNeeded - 500);
+    expect(thoriumOre.etaHrs).toBeCloseTo(thoriumOre.remaining / 420, 1);
+  });
+
+  it('deduplicates materials across pieces in aggregateMaterials', () => {
+    const setTarget = { type: 'gearSet', value: 'Thorium' };
+    const plan = buildProgressionPlan({ ...profile, progressionTarget: setTarget, inventory: {} });
+    const thoriumBarOccurrences = plan.aggregateMaterials.filter(m => m.name === 'Thorium Ore');
+    expect(thoriumBarOccurrences.length).toBe(1);
+  });
+
+  it('reports totalEtaHrs as sum of aggregate ETAs', () => {
+    const plan = buildProgressionPlan(profile);
+    const expected = plan.aggregateMaterials
+      .filter(m => isFinite(m.etaHrs))
+      .reduce((s, m) => s + m.etaHrs, 0);
+    expect(plan.totalEtaHrs).toBeCloseTo(expected, 1);
+  });
+
+  it('reports percentComplete between 0 and 1', () => {
+    const plan = buildProgressionPlan(profile);
+    expect(plan.percentComplete).toBeGreaterThanOrEqual(0);
+    expect(plan.percentComplete).toBeLessThanOrEqual(1);
+  });
+});
