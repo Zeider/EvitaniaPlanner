@@ -3,13 +3,14 @@ import { activeProfile, activeProfileKey, saveProfile } from '../state/store.js'
 import { buildProgressionPlan } from '../state/progression-planner.js';
 import recipesData from '../data/recipes.json';
 
-/** Extract gear set tier names from recipes (e.g. "Copper", "Bronze", ...). */
+/** Extract gear set tier names from recipes (e.g. "Copper", "Bronze", "Thorium", ...). */
 function getAvailableSets() {
-  const crafting = recipesData.crafting || {};
   const tiers = new Set();
-  for (const name of Object.keys(crafting)) {
-    const match = name.match(/^(\w+)\s+(Helmet|Chestplate|Boots|Gloves)$/);
-    if (match) tiers.add(match[1]);
+  for (const category of Object.values(recipesData)) {
+    for (const name of Object.keys(category)) {
+      const match = name.match(/^(\w+)\s+(Helmet|Chestplate|Boots|Gloves)$/);
+      if (match) tiers.add(match[1]);
+    }
   }
   return Array.from(tiers);
 }
@@ -44,6 +45,18 @@ export function Progression() {
   const sets = useMemo(() => getAvailableSets(), []);
   const pieces = useMemo(() => getAvailablePieces(), []);
   const target = profile.progressionTarget;
+
+  if (!activeProfileKey.value) {
+    return (
+      <div class="progression">
+        <section class="progression__panel">
+          <p class="progression__empty">
+            Import a save file or create a profile to start planning a progression target.
+          </p>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div class="progression">
