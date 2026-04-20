@@ -122,6 +122,13 @@ describe('estimateMaterialEta', () => {
     expect(r.isRough).toBe(true);
   });
 
+  it('returns small ETA with source "quest" for quest-reward materials', () => {
+    const r = estimateMaterialEta('Animal Bone', 1, profile);
+    expect(r.source).toBe('quest');
+    expect(r.etaHrs).toBeLessThan(1);
+    expect(r.isRough).toBe(true);
+  });
+
   it('returns Infinity with reason for unmapped materials', () => {
     const r = estimateMaterialEta('No Such Material', 1, profile);
     expect(r.etaHrs).toBe(Infinity);

@@ -124,6 +124,17 @@ export function estimateMaterialEta(materialName, remainingQty, profile) {
     };
   }
 
+  if (source.quest) {
+    // One-time quest rewards — negligible time to claim, but limited to the
+    // quest's single drop so high remaining qty isn't actually achievable.
+    return {
+      etaHrs: remainingQty > 0 ? 0.1 : 0,
+      source: 'quest',
+      location: `Quest reward (${source.quest})`,
+      isRough: true,
+    };
+  }
+
   // NOTE: must precede the `zone && rate` branch below — boss entries also carry `rate`.
   if (source.boss) {
     return {

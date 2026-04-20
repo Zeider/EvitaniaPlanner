@@ -500,6 +500,7 @@
     "Sunstone Ore": { "activity": "mining", "minLevel": 30, "note": "Act 3 Fez zone ore" },
     "Grassy Stone I": { "zone": "hard-1", "rate": 20, "note": "Act 1 Hard dungeon drop" },
     "Icy Stone I": { "zone": "hard-2", "rate": 20, "note": "Act 2 Hard dungeon drop" },
-    "Crystallized Blue Substance": { "vendor": true, "note": "presumed Act 3 town shop NPC — like Crystalized Yellow for T2 (unverified)" }
+    "Crystallized Blue Substance": { "vendor": true, "note": "presumed Act 3 town shop NPC — like Crystalized Yellow for T2 (unverified)" },
+    "Animal Bone": { "quest": "boar-kill", "note": "quest reward from killing Boars in Act 1" }
   }
 }
