@@ -59,6 +59,11 @@ export function Progression() {
     saveProfile(activeProfileKey.value, { ...profile, inventory: inv });
   }, [profile]);
 
+  const updateObservedRate = useCallback((matName, rate) => {
+    const rates = { ...profile.observedRates, [matName]: Math.max(0, Number(rate) || 0) };
+    saveProfile(activeProfileKey.value, { ...profile, observedRates: rates });
+  }, [profile]);
+
   // One-time migration from Crafting tab's legacy inventory on first visit
   useEffect(() => {
     if (!activeProfileKey.value) return;
@@ -185,7 +190,22 @@ export function Progression() {
                     <td>{m.name}</td>
                     <td>{m.owned} / {m.totalNeeded}</td>
                     <td>{m.remaining === 0 ? '✓' : fmtHours(m.etaHrs)}{m.isRough ? ' (rough)' : ''}</td>
-                    <td title={m.reason || ''}>{m.location || (m.reason ? '⚠ ' + m.reason : '—')}</td>
+                    <td title={m.reason || ''}>
+                      {m.location || (m.reason ? '⚠ ' + m.reason : '—')}
+                      {(m.source === 'mining' || m.source === 'woodcutting') &&
+                        !(profile.observedRates?.[m.name] > 0) && (
+                        <span class="progression__observed-prompt">
+                          {' [rate/hr: '}
+                          <input
+                            type="number"
+                            class="progression__inv-input"
+                            min="0"
+                            onBlur={(e) => e.target.value && updateObservedRate(m.name, e.target.value)}
+                          />
+                          {']'}
+                        </span>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
