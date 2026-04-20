@@ -103,6 +103,44 @@ export function Progression() {
           </div>
         )}
       </section>
+
+      <section class="progression__panel">
+        <h2 class="progression__panel-title">Shopping List</h2>
+        {!target ? (
+          <p class="progression__empty">—</p>
+        ) : plan.aggregateMaterials.length === 0 ? (
+          <p class="progression__empty">No materials required.</p>
+        ) : (
+          <table class="progression__shopping-list">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Owned / Needed</th>
+                <th>ETA</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...plan.aggregateMaterials]
+                .sort((a, b) => (b.etaHrs || 0) - (a.etaHrs || 0))
+                .map(m => {
+                  let className = '';
+                  if (m.remaining === 0) className = 'progression__mat-complete';
+                  else if (m.source === 'unknown') className = 'progression__mat-unknown';
+                  else if (m.isRough) className = 'progression__mat-rough';
+                  return (
+                    <tr key={m.name} class={className}>
+                      <td>{m.name}</td>
+                      <td>{m.owned} / {m.totalNeeded}</td>
+                      <td>{m.remaining === 0 ? '✓' : fmtHours(m.etaHrs)}{m.isRough && m.remaining > 0 ? ' (rough)' : ''}</td>
+                      <td title={m.reason || ''}>{m.location || (m.reason ? '⚠ ' + m.reason : '—')}</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        )}
+      </section>
     </div>
   );
 }
