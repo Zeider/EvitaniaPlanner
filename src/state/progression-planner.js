@@ -1,5 +1,4 @@
 import recipesData from '../data/recipes.json';
-import gearData from '../data/gear.json';
 
 /** Build a flat recipe lookup: recipeName → recipe object (from any category). */
 function buildRecipeLookup() {
@@ -47,8 +46,24 @@ export function expandTargetToMaterials(target, profile) {
   if (target.type === 'gearPiece') {
     if (recipeLookup[target.value]) recipeNames = [target.value];
   } else if (target.type === 'gearSet') {
-    // Placeholder — implemented in Task 3
-    return [];
+    const tier = target.value;
+    const classWeaponSuffix = {
+      warrior: ['Sword', 'Longsword'],
+      rogue: ['Bow'],
+      mage: ['Staff'],
+    };
+    const allowedWeapons = new Set(
+      (classWeaponSuffix[profile.class] || []).map(s => `${tier} ${s}`)
+    );
+    const weaponSuffixes = new Set(['Sword', 'Longsword', 'Bow', 'Staff']);
+    recipeNames = Object.keys(recipeLookup).filter(name => {
+      if (!name.startsWith(tier + ' ')) return false;
+      const suffix = name.slice(tier.length + 1);
+      if (weaponSuffixes.has(suffix)) {
+        return allowedWeapons.has(name);
+      }
+      return true;
+    });
   } else if (target.type === 'autoNextTier') {
     // Placeholder — implemented in Task 3b (follow-up) or a later pass
     return [];
