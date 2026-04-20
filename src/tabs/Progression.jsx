@@ -1,5 +1,5 @@
-import { useMemo, useCallback } from 'preact/hooks';
-import { activeProfile, activeProfileKey, saveProfile } from '../state/store.js';
+import { useMemo, useCallback, useState, useEffect } from 'preact/hooks';
+import { activeProfile, activeProfileKey, saveProfile, migrateCraftingInventory } from '../state/store.js';
 import { buildProgressionPlan } from '../state/progression-planner.js';
 import recipesData from '../data/recipes.json';
 
@@ -50,6 +50,24 @@ export function Progression() {
     () => [...plan.aggregateMaterials].sort((a, b) => (b.etaHrs || 0) - (a.etaHrs || 0)),
     [plan.aggregateMaterials]
   );
+
+  const [expandedPieces, setExpandedPieces] = useState({});
+  const toggleExpand = (name) => setExpandedPieces(p => ({ ...p, [name]: !p[name] }));
+
+  const updateInventory = useCallback((matName, qty) => {
+    const inv = { ...profile.inventory, [matName]: Math.max(0, qty | 0) };
+    saveProfile(activeProfileKey.value, { ...profile, inventory: inv });
+  }, [profile]);
+
+  // One-time migration from Crafting tab's legacy inventory on first visit
+  useEffect(() => {
+    if (!activeProfileKey.value) return;
+    if (Object.keys(profile.inventory || {}).length > 0) return;
+    const migrated = migrateCraftingInventory({ ...profile, inventory: {} });
+    if (Object.keys(migrated.inventory).length > 0) {
+      saveProfile(activeProfileKey.value, { ...profile, inventory: migrated.inventory });
+    }
+  }, []);
 
   if (!activeProfileKey.value) {
     return (
@@ -110,6 +128,36 @@ export function Progression() {
       </section>
 
       <section class="progression__panel">
+        <h2 class="progression__panel-title">Pieces</h2>
+        {!target ? (
+          <p class="progression__empty">—</p>
+        ) : plan.pieces.length === 0 ? (
+          <p class="progression__empty">No pieces in this target.</p>
+        ) : (
+          plan.pieces.map(piece => (
+            <div key={piece.name} class="progression__piece">
+              <div class="progression__piece-header" onClick={() => toggleExpand(piece.name)}>
+                <span>
+                  {piece.owned ? <span class="progression__piece-owned">✓ </span> : '☐ '}
+                  {piece.name}
+                </span>
+                <span>{piece.owned ? 'owned' : fmtHours(piece.pieceEtaHrs)}</span>
+              </div>
+              {expandedPieces[piece.name] && (
+                <div class="progression__piece-mats">
+                  {piece.materials.map(m => (
+                    <div key={m.name}>
+                      {m.name}: {m.owned}/{m.needed} {m.remaining > 0 && `(need ${m.remaining})`}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </section>
+
+      <section class="progression__panel">
         <h2 class="progression__panel-title">Shopping List</h2>
         {!target ? (
           <p class="progression__empty">—</p>
@@ -141,6 +189,35 @@ export function Progression() {
                   </tr>
                 );
               })}
+            </tbody>
+          </table>
+        )}
+      </section>
+
+      <section class="progression__panel">
+        <h2 class="progression__panel-title">Inventory</h2>
+        {!target ? (
+          <p class="progression__empty">Pick a target to see required materials here.</p>
+        ) : (
+          <table class="progression__shopping-list">
+            <thead>
+              <tr><th scope="col">Material</th><th scope="col">Owned</th></tr>
+            </thead>
+            <tbody>
+              {plan.aggregateMaterials.map(m => (
+                <tr key={m.name}>
+                  <td>{m.name}</td>
+                  <td>
+                    <input
+                      type="number"
+                      class="progression__inv-input"
+                      min="0"
+                      value={m.owned}
+                      onChange={(e) => updateInventory(m.name, Number(e.target.value))}
+                    />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}
