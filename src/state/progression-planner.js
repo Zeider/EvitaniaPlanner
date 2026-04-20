@@ -1,4 +1,5 @@
 import recipesData from '../data/recipes.json';
+import dropsData from '../data/drops.json';
 
 /** Build a flat recipe lookup: recipeName → recipe object (from any category). */
 function buildRecipeLookup() {
@@ -78,4 +79,75 @@ export function expandTargetToMaterials(target, profile) {
     material,
     totalNeeded,
   }));
+}
+
+const ROUGH_MINING_RATE = 100;       // fallback nodes/hr
+const ROUGH_BOSS_HOURS_PER_DROP = 2; // fallback boss hours per drop
+
+/** Estimate farming hours for a single material and remaining qty. */
+export function estimateMaterialEta(materialName, remainingQty, profile) {
+  if (remainingQty <= 0) return { etaHrs: 0, source: 'none', location: '', isRough: false };
+
+  const source = dropsData.resources?.[materialName];
+  if (!source) {
+    return { etaHrs: Infinity, source: 'unknown', location: '', isRough: true,
+             reason: `no entry in drops.json resources for "${materialName}"` };
+  }
+
+  if (source.vendor) {
+    const dailyLimit = source.dailyLimit || 1;
+    const days = Math.ceil(remainingQty / dailyLimit);
+    return {
+      etaHrs: days * 24,
+      source: 'vendor',
+      location: source.note || 'Vendor',
+      isRough: false,
+    };
+  }
+
+  if (source.boss) {
+    return {
+      etaHrs: remainingQty * ROUGH_BOSS_HOURS_PER_DROP,
+      source: 'boss',
+      location: String(source.boss).replace(/^boss:/, 'Boss: '),
+      isRough: true,
+    };
+  }
+
+  if (source.activity === 'mining' || source.activity === 'woodcutting') {
+    const observedRate = profile.observedRates?.[materialName];
+    const kind = source.activity; // 'mining' or 'woodcutting'
+    if (observedRate && observedRate > 0) {
+      return {
+        etaHrs: remainingQty / observedRate,
+        source: kind,
+        location: `${kind} (observed ${observedRate}/hr)`,
+        isRough: false,
+      };
+    }
+    return {
+      etaHrs: remainingQty / ROUGH_MINING_RATE,
+      source: kind,
+      location: `${kind} (rough estimate — enter observed rate to refine)`,
+      isRough: true,
+    };
+  }
+
+  if (source.zone && source.rate) {
+    const kph = profile.farmingRates?.killsPerHour || 0;
+    if (kph <= 0) {
+      return { etaHrs: Infinity, source: 'zone', location: `Zone ${source.zone}`,
+               isRough: true, reason: 'kills/hour is 0 — import save to populate' };
+    }
+    const dropsPerHour = kph / source.rate;
+    return {
+      etaHrs: remainingQty / dropsPerHour,
+      source: 'zone',
+      location: `Zone ${source.zone}`,
+      isRough: false,
+    };
+  }
+
+  return { etaHrs: Infinity, source: 'unknown', location: '', isRough: true,
+           reason: 'unrecognized source shape' };
 }
