@@ -444,7 +444,7 @@
     "Fire Essence": { "zone": "1.13", "rate": 4 },
     "Coin": { "zone": "any", "rate": 1, "note": "gold drops" },
     "Yellow Substance": { "vendor": true, "dailyLimit": 50, "cost": 10000, "note": "50/day from vendor at 10k each" },
-    "Crystalized Yellow Substance": { "vendor": true, "note": "Act 2 town shop NPC" },
+    "Crystalized Yellow Substance": { "vendor": true, "dailyLimit": 50, "note": "Act 2 town shop NPC, 50/day" },
     "Steel Ingot": { "craft": true, "note": "smelted from Iron Ore" },
     "Copper Ore": { "activity": "mining", "minLevel": 1 },
     "Tin Ore": { "activity": "mining", "minLevel": 5, "note": "zone 1.5 mining node" },
@@ -500,7 +500,6 @@
     "Sunstone Ore": { "activity": "mining", "minLevel": 30, "note": "Act 3 Fez zone ore" },
     "Grassy Stone I": { "zone": "hard-1", "rate": 20, "note": "Act 1 Hard dungeon drop" },
     "Icy Stone I": { "zone": "hard-2", "rate": 20, "note": "Act 2 Hard dungeon drop" },
-    "Mammoth Bitusk": { "boss": "boss:mammoth", "rate": 1, "note": "alias — likely a typo in recipes.json for Mammoth Tusk" },
-    "Crystallized Blue Substance": { "vendor": true, "note": "presumed Act 3 town shop NPC — like Crystalized Yellow for T2" }
+    "Crystallized Blue Substance": { "vendor": true, "note": "presumed Act 3 town shop NPC — like Crystalized Yellow for T2 (unverified)" }
   }
 }
