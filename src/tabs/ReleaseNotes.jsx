@@ -4,6 +4,33 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.1.0 <span class="release-notes__date">April 19, 2026</span></h3>
+
+        <h4>New: Progression Tab</h4>
+        <ul>
+          <li><strong>Target Picker</strong> — Pick a gear set (Copper / Bronze / Iron / Thorium / Sunstone) or any single piece as your goal. Weapon is auto-filtered by class.</li>
+          <li><strong>Summary</strong> — Quantity-weighted progress bar and total farming ETA.</li>
+          <li><strong>Pieces List</strong> — Per-piece ETA plus expandable material breakdown.</li>
+          <li><strong>Shopping List</strong> — Every base material needed, sorted by longest farming time first, with source (zone / vendor / mining / woodcutting / boss / quest) and color-coded rough-estimate flags.</li>
+          <li><strong>Inventory Editor</strong> — Inline material counts persist to profile. First visit pulls in whatever you had typed into the Crafting tab.</li>
+          <li><strong>Observed-Rate Prompt</strong> — For mining/woodcutting materials, enter your in-game per-hour readout to refine the ETA from a placeholder.</li>
+        </ul>
+
+        <h4>Data: drops.json</h4>
+        <ul>
+          <li><strong>30+ New Material Sources</strong> — Synced from the community spreadsheet. Coverage went from 37 recipe ingredients missing in drops.json to zero.</li>
+          <li><strong>Name Fixes</strong> — Ash Log, Pyrewood Log, Ironwood Log, Jotunn Eye, Mini Plants, Stoney Mcstoneface now match recipe ingredient spellings. "Mammoth Bitusk" in Thorium Axe recipe corrected to "Mammoth Tusk".</li>
+          <li><strong>New Source Types</strong> — Quest rewards (e.g. Animal Bone from the Act 1 Boar quest) now have a dedicated ETA path.</li>
+        </ul>
+
+        <h4>Warrior Talent Tree</h4>
+        <ul>
+          <li><strong>Critical Damage maxPoints</strong> — T9 Critical Damage corrected from 2 to 10 (verified against in-game screenshot).</li>
+          <li><strong>Hub Connection Lines</strong> — Intra-tier connections (e.g. Crit Chance → Dragon Soul / Movespeed) now render as a visible side bracket instead of confusing backward diagonals.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.0.6 <span class="release-notes__date">April 18, 2026</span></h3>
 
         <h4>Community Feedback</h4>
