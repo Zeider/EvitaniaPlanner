@@ -80,9 +80,11 @@ const GEAR_MAP = {
   'c6d360e1-1c30-454c-bb63-935e67761d8b': 'Iron Boots',
   '36737f24-0684-4744-a032-6feb29cd39dd': 'Steam Belt',
   '4d02a095-fe8b-4a12-a7c3-6d1ef2ab5107': 'Boss Amulet',
+  'b62ce843-0d7f-4a03-8680-62545e79a873': 'Nordic Amulet',
   '2c1d48e6-875a-4530-8080-f017bac70e99': 'Mammoth Ring',
   'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
   'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
+  '8500b653-61a3-42b3-9a60-af782562e9e6': 'Thorium Pickaxe',
   '95fbcc3e-b5f2-48cd-adc7-42a187ae4179': 'Iron Axe',
 };
 function findItem(name) {

@@ -37,6 +37,7 @@ const GEAR_GUID_MAP = {
   '8e42e15e-c3de-4471-8d40-19fccf9d0a23': 'Belt of Love',
   // Amulets
   '4d02a095-fe8b-4a12-a7c3-6d1ef2ab5107': 'Boss Amulet',
+  'b62ce843-0d7f-4a03-8680-62545e79a873': 'Nordic Amulet',
   // Rings
   '2c1d48e6-875a-4530-8080-f017bac70e99': 'Mammoth Ring',
   // Swords
@@ -48,6 +49,7 @@ const GEAR_GUID_MAP = {
   'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Steel Staff',
   // Pickaxes
   'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
+  '8500b653-61a3-42b3-9a60-af782562e9e6': 'Thorium Pickaxe',
   // Axes
   '95fbcc3e-b5f2-48cd-adc7-42a187ae4179': 'Iron Axe',
   '08cd484a-023b-4bae-93c9-465683d681ed': 'Thorium Axe',
