@@ -1,11 +1,13 @@
 node_modules/
 dist/
 .superpowers/
-docs/superpowers/
+docs/
 *.log
 .env
 .DS_Store
 Thumbs.db
 data.sav
+*-data.sav
+Player Saves/
 .vite/
 test-results/
