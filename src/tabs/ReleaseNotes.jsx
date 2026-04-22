@@ -4,6 +4,29 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.0 <span class="release-notes__date">April 22, 2026</span></h3>
+
+        <h4>Rune Planner</h4>
+        <ul>
+          <li><strong>Socketable Right Now</strong> — New panel at the top of the Rune Planner lists the runewords you can assemble from your current rune inventory, with bonus summaries. Click <em>Plan</em> on any entry to jump to that combo's progress view.</li>
+          <li><strong>Auto-Populated Inventory</strong> — When you import a save, rune counts fill in automatically across every combo's inputs. Values are still editable for what-if planning.</li>
+          <li><strong>Smarter Rune Detection</strong> — Equipped runes across multi-row setups now decode correctly; previously some rows were missed when runes occupied non-contiguous slot positions.</li>
+        </ul>
+
+        <h4>Save Import</h4>
+        <ul>
+          <li><strong>More Gear Auto-Detected</strong> — 7 new gear GUID mappings: Thorium Boots, Steel Longsword, Tower Ring, Ring of STR, Straw Hat, Copper Boots, Copper Pickaxe.</li>
+          <li><strong>Rune Inventory Loaded from Save</strong> — Unequipped runes in your rune bag are now read into the planner automatically, not just the equipped ones.</li>
+          <li><strong>Runeword Recognition</strong> — Save import identifies your active and discovered runewords (currently mapped: PRE x 6 and GOR MU HAS; more as they're found).</li>
+        </ul>
+
+        <h4>Data</h4>
+        <ul>
+          <li><strong>Straw Hat</strong> — Quest reward helmet added to gear data with stats (STR +1, CON +2, Def 5).</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.1.0 <span class="release-notes__date">April 19, 2026</span></h3>
 
         <h4>New: Progression Tab</h4>
