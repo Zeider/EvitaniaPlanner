@@ -1,5 +1,7 @@
-import { useState, useMemo, useCallback } from 'preact/hooks';
+import { useState, useMemo, useCallback, useEffect } from 'preact/hooks';
 import runeData from '../data/runes.json';
+import { activeProfile } from '../state/store.js';
+import { recommendSocketableRunewords } from '../state/runeword-recommender.js';
 
 // ── localStorage (backwards-compatible with legacy) ──
 const LS_KEY = 'ic-rune-inv-v1';
@@ -89,6 +91,36 @@ const RUNE_COMBOS = [
 const TIER_LABELS = ['T1 (Gray)', 'T2 (Blue)', 'T3 (Purple)', 'T4 (Gold)'];
 const TIER_KEYS   = ['t1', 't2', 't3', 't4'];
 
+// Lookup: sorted rune list → combo id. Built at module load so the Socketable panel
+// can find the matching combo selector entry for each recommendation.
+const COMBO_ID_BY_RUNES_KEY = Object.fromEntries(
+  (runeData.runeWords || []).map((rw, i) => [
+    [...rw.runes].sort().join('|'),
+    RUNE_COMBOS[i]?.id,
+  ]).filter(([_, id]) => id),
+);
+
+function runesToComboId(runes) {
+  return COMBO_ID_BY_RUNES_KEY[[...runes].sort().join('|')];
+}
+
+// Formatting helper for the bonus object on a runeword recommendation.
+const BONUS_LABELS = {
+  atk: 'ATK', atkMulti: 'ATK x', hp: 'HP', allExp: 'All EXP',
+  allXp: 'All XP', offline: 'Offline', goldMulti: 'Gold x',
+  magicFind: 'MF', critChance: 'Crit Chance', critDamage: 'Crit Dmg',
+  miningPower: 'Mining Power', wcPower: 'WC Power',
+  multiloot: 'Multiloot', portalKills: 'Portal Kills',
+};
+function formatBonuses(bonuses) {
+  return Object.entries(bonuses)
+    .map(([k, v]) => {
+      const label = BONUS_LABELS[k] || k;
+      return `${label} +${v}`;
+    })
+    .join(', ');
+}
+
 // ── Helpers ──
 function getT1Total(inv, comboId, familyId) {
   const fInv = (inv[comboId] || {})[familyId] || {};
@@ -154,10 +186,79 @@ function ResultRow({ fam, have, need }) {
   );
 }
 
+// ── Socketable-now panel ──
+function SocketableNowPanel({ profile, onSelect }) {
+  if (!profile) {
+    return (
+      <div class="rune-planner__card">
+        <div class="rune-planner__card-title">Socketable Right Now</div>
+        <div class="rune-empty-hint">Import your save to see runewords you can assemble from your current inventory.</div>
+      </div>
+    );
+  }
+  const recommendations = recommendSocketableRunewords({
+    runeInventory: profile.runeInventory,
+    equippedRunes: profile.equippedRunes,
+    runeSlots: profile.runeSlots,
+  });
+  return (
+    <div class="rune-planner__card">
+      <div class="rune-planner__card-title">Socketable Right Now</div>
+      {recommendations.length === 0 ? (
+        <div class="rune-empty-hint">None of your runewords can be assembled from current inventory.</div>
+      ) : (
+        recommendations.map((rw, i) => {
+          const name = rw.runes.join(' · ');
+          const comboId = runesToComboId(rw.runes);
+          return (
+            <div class="socketable-row" key={i}>
+              <div class="socketable-row__name">{name}</div>
+              <div class="socketable-row__bonuses">{'✨ '}{formatBonuses(rw.bonuses)}</div>
+              {comboId && (
+                <button class="socketable-row__select" onClick={() => onSelect(comboId)}>
+                  Plan
+                </button>
+              )}
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+}
+
 // ── Main component ──
 export function RunePlanner() {
+  const profile = activeProfile.value;
   const [inventory, setInventory] = useState(() => loadLS(LS_KEY) || {});
   const [selectedComboId, setSelectedComboId] = useState(RUNE_COMBOS[0].id);
+
+  // Auto-populate the inventory inputs when a profile is imported or changed.
+  // The user's owned runes (inventory + currently-equipped) become the starting
+  // values across every combo. Users can still edit the inputs afterward.
+  useEffect(() => {
+    if (!profile) return;
+    const ownedCounts = { ...(profile.runeInventory || {}) };
+    for (const rune of profile.equippedRunes || []) {
+      ownedCounts[rune] = (ownedCounts[rune] || 0) + 1;
+    }
+    setInventory(() => {
+      const next = {};
+      for (const combo of RUNE_COMBOS) {
+        next[combo.id] = {};
+        for (const fam of combo.families) {
+          next[combo.id][fam.id] = { t1: 0, t2: 0, t3: 0, t4: 0 };
+          fam.tiers.forEach((runeName, tIdx) => {
+            if (!runeName) return;
+            const count = ownedCounts[runeName] || 0;
+            if (count) next[combo.id][fam.id][TIER_KEYS[tIdx]] = count;
+          });
+        }
+      }
+      saveLS(LS_KEY, next);
+      return next;
+    });
+  }, [profile?.runeInventory, profile?.equippedRunes]);
 
   const combo = useMemo(
     () => RUNE_COMBOS.find((c) => c.id === selectedComboId) || RUNE_COMBOS[0],
@@ -190,6 +291,9 @@ export function RunePlanner() {
 
   return (
     <div class="rune-planner">
+      {/* Socketable-now recommendations (driven by imported save) */}
+      <SocketableNowPanel profile={profile} onSelect={setSelectedComboId} />
+
       {/* Combo selector */}
       <div class="rune-planner__card">
         <div class="rune-planner__card-title">Rune Word Combo</div>

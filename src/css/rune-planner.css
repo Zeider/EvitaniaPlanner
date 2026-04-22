@@ -191,3 +191,40 @@
     min-width: 60px;
   }
 }
+
+/* ── Socketable-now recommendations ────────────────── */
+.socketable-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 0.5rem;
+}
+.socketable-row__name {
+  font-weight: 600;
+  min-width: 200px;
+}
+.socketable-row__bonuses {
+  flex: 1;
+  opacity: 0.85;
+  font-size: 0.9rem;
+}
+.socketable-row__select {
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(100,180,255,0.15);
+  color: inherit;
+  cursor: pointer;
+  font-weight: 600;
+}
+.socketable-row__select:hover {
+  background: rgba(100,180,255,0.3);
+}
+.rune-empty-hint {
+  opacity: 0.6;
+  font-style: italic;
+  font-size: 0.95rem;
+}

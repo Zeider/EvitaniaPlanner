@@ -16,6 +16,7 @@ const CLASS_MAP = {
  */
 const GEAR_GUID_MAP = {
   // Helmets
+  'a2d4e836-c10f-414e-8662-5ef40f24556b': 'Straw Hat',
   'ebc99fd6-a250-4a20-a4a5-0815f796148c': 'Bronze Helmet',
   '25f97961-90f6-4f18-9f7b-76e20c54e845': 'Iron Helmet',
   'cdd7ffa7-dd6e-499c-8fec-107ad960042e': 'Thorium Helmet',
@@ -29,8 +30,10 @@ const GEAR_GUID_MAP = {
   '99528be3-8b4f-4067-88d8-662d72b3d578': 'Iron Gloves',
   '3c9065ee-7794-4e2c-8d08-6c88ae394040': 'Thorium Gloves',
   // Boots
+  '0764c550-b308-4365-9271-8bf8dbfe949a': 'Copper Boots',
   '6fa4b8c7-adc0-42c7-98e5-7c5963f46f66': 'Bronze Boots',
   'c6d360e1-1c30-454c-bb63-935e67761d8b': 'Iron Boots',
+  'd0686aa5-f77e-49a3-8232-adff3802b073': 'Thorium Boots',
   '666c26e3-2516-4204-9055-e1c4947275ce': 'Summer Boots',
   // Belts
   '36737f24-0684-4744-a032-6feb29cd39dd': 'Steam Belt',
@@ -39,15 +42,19 @@ const GEAR_GUID_MAP = {
   '4d02a095-fe8b-4a12-a7c3-6d1ef2ab5107': 'Boss Amulet',
   'b62ce843-0d7f-4a03-8680-62545e79a873': 'Nordic Amulet',
   // Rings
+  'd095a977-8554-4dff-9a8d-e66558fba0da': 'Ring of STR',
   '2c1d48e6-875a-4530-8080-f017bac70e99': 'Mammoth Ring',
+  '9bb15e82-d4cd-4a4d-92b9-227d0b30c0a6': 'Tower Ring',
   // Swords
   '5279b9a3-3ac1-44e2-8306-1374d6351c10': 'Essence Sword',
+  'bd3cfbe4-d754-410f-916b-db2a4241977b': 'Steel Longsword',
   'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Sword',
   // Bows
   'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
   // Staffs
   'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Steel Staff',
   // Pickaxes
+  'a36efc3c-9678-4613-8cda-b102e55fe714': 'Copper Pickaxe',
   'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
   '8500b653-61a3-42b3-9a60-af782562e9e6': 'Thorium Pickaxe',
   // Axes
@@ -56,6 +63,15 @@ const GEAR_GUID_MAP = {
 };
 
 const HEX_PAIR = /^[0-9A-Fa-f]*$/;
+
+/**
+ * Known runeword GUID → runeword name mappings.
+ * Runewords are combinations of runes that grant bonus effects when fully socketed.
+ */
+const RUNEWORD_GUID_MAP = {
+  'bd05c016-3be5-4b90-aba3-12078a64ee4c': 'PRE x 6',
+  'cffcf31c-e6e7-48d3-87ac-0fe75025994b': 'GOR MU HAS',
+};
 
 /**
  * Known rune GUID → rune name mappings.
@@ -119,26 +135,46 @@ export function extractProfiles(saveData) {
   // Extract pet data
   const petSaveData = saveData.Pets?.petSaveData ?? [];
 
-  // Extract equipped runes from RuneSystem (shared across all characters)
+  // Extract rune system state from RuneSystem (shared across all characters)
   // Gem shop unlocks (GemshopRuneSlotUnlock) add slots beyond the base UnlockedSlots
   const gemSlotUnlocks = progressEnhancements.GemshopRuneSlotUnlock || 0;
   const equippedRunes = [];
+  const runeSlotsByRow = [];
+  const activeRunewords = {};
   const runeSystem = saveData.RuneSystem;
   if (runeSystem?.Rows) {
     for (const row of runeSystem.Rows) {
       const baseSlots = row.UnlockedSlots || 0;
       // Gem shop unlocks apply to the first row
       const totalSlots = row.RowIndex === 0 ? baseSlots + gemSlotUnlocks : baseSlots;
-      const slotted = row.SlottedRunes || {};
-      for (let i = 0; i < totalSlots; i++) {
-        const guid = slotted[String(i)];
-        if (guid) {
-          const name = RUNE_GUID_MAP[guid];
-          if (name) equippedRunes.push(name);
-        }
+      runeSlotsByRow[row.RowIndex] = totalSlots;
+      if (row.ActiveRunewordId) {
+        activeRunewords[row.RowIndex] = RUNEWORD_GUID_MAP[row.ActiveRunewordId] || row.ActiveRunewordId;
+      }
+      // Iterate actual slotted entries rather than 0..totalSlots — the game
+      // stores slot positions that can be non-contiguous (e.g. a 3-slot row can
+      // have its runes at indices 3/4/5 rather than 0/1/2).
+      for (const guid of Object.values(row.SlottedRunes || {})) {
+        if (!guid) continue;
+        const name = RUNE_GUID_MAP[guid];
+        if (name) equippedRunes.push(name);
       }
     }
   }
+
+  // Count unequipped runes in the rune bag (RuneSystem.Inventory.SlotEntries)
+  const runeInventory = {};
+  const slotEntries = runeSystem?.Inventory?.SlotEntries ?? [];
+  for (const entry of slotEntries) {
+    if (!entry?.ItemId || !entry.Count) continue;
+    const name = RUNE_GUID_MAP[entry.ItemId];
+    if (!name) continue;
+    runeInventory[name] = (runeInventory[name] || 0) + entry.Count;
+  }
+
+  // Discovered runewords (the list of runewords the player has ever assembled)
+  const discoveredRunewords = (runeSystem?.CollectedRunewordIds ?? [])
+    .map((id) => RUNEWORD_GUID_MAP[id] || id);
 
   // Shared upgrades extracted once from ProgressProfile.Enhancements
   const hunterUpgrades = {};
@@ -204,6 +240,15 @@ export function extractProfiles(saveData) {
       sacrificeUpgrades,
       cards: { ...cards },
       equippedRunes: [...equippedRunes],
+      runeInventory: { ...runeInventory },
+      runeSlots: {
+        total: runeSlotsByRow.reduce((sum, n) => sum + (n || 0), 0),
+        byRow: [...runeSlotsByRow],
+      },
+      runewords: {
+        discovered: [...discoveredRunewords],
+        active: { ...activeRunewords },
+      },
       farmingRates: {
         killsPerHour: op.KillsPerHour ?? 0,
         xpPerHour: op.XpPerHour ?? 0,

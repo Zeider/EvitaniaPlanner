@@ -234,6 +234,14 @@
   "armor": {
     "helmets": [
       {
+        "name": "Straw Hat",
+        "slot": "helmet",
+        "def": 5,
+        "stats": { "str": 1, "con": 2 },
+        "source": "Quest (Leafs)",
+        "obtainable": true
+      },
+      {
         "name": "Copper Helmet",
         "slot": "helmet",
         "def": 17,

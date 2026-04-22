@@ -126,16 +126,37 @@ const MOCK_SAVE = {
     },
   },
   RuneSystem: {
-    Rows: [{
-      RowIndex: 0,
-      UnlockedSlots: 3,
-      SlottedRunes: {
-        '0': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
-        '1': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
-        '2': '5a4efab8-a86a-4d9c-9edc-ba67cdce1b08',
-        '3': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
+    Rows: [
+      {
+        RowIndex: 0,
+        UnlockedSlots: 3,
+        SlottedRunes: {
+          '0': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
+          '1': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
+          '2': '5a4efab8-a86a-4d9c-9edc-ba67cdce1b08',
+          '3': 'd90f7d7a-76ee-4209-875d-ba17f094d0e1',
+        },
+        ActiveRunewordId: 'bd05c016-3be5-4b90-aba3-12078a64ee4c',
       },
-    }],
+      {
+        RowIndex: 1,
+        UnlockedSlots: 3,
+        SlottedRunes: {},
+      },
+    ],
+    CollectedRunewordIds: [
+      'cffcf31c-e6e7-48d3-87ac-0fe75025994b',
+      'bd05c016-3be5-4b90-aba3-12078a64ee4c',
+    ],
+    Inventory: {
+      SlotEntries: [
+        { ItemId: '8a3a86f3-e84c-444f-a47d-61dec9d5a396', Count: 1 },  // RYS
+        { ItemId: '8a3a86f3-e84c-444f-a47d-61dec9d5a396', Count: 1 },  // RYS (stacks)
+        { ItemId: '6268da07-03bb-47f7-80b7-03bb199093f6', Count: 1 },  // NIL
+        { Count: 0 },  // empty slot — should be ignored
+        { ItemId: 'unknown-guid', Count: 1 },  // unmapped — should be ignored
+      ],
+    },
   },
 };
 
@@ -240,12 +261,36 @@ describe('extractProfiles', () => {
     });
   });
 
-  it('extracts equipped runes from RuneSystem (shared, only unlocked slots)', () => {
+  it('extracts equipped runes from all SlottedRunes entries (shared across heroes)', () => {
     const zeider = profiles[0];
-    // 3 unlocked slots: slot 0=PRE, slot 1=PRE, slot 2=OLU (slot 3 is locked)
-    expect(zeider.equippedRunes).toEqual(['PRE', 'PRE', 'OLU']);
+    // All 4 SlottedRunes entries are extracted — the game sometimes stores runes
+    // at non-contiguous indices (e.g. 3-slot rows with entries at positions 3/4/5).
+    expect(zeider.equippedRunes).toEqual(['PRE', 'PRE', 'OLU', 'PRE']);
     // Shared across all characters
-    expect(profiles[1].equippedRunes).toEqual(['PRE', 'PRE', 'OLU']);
+    expect(profiles[1].equippedRunes).toEqual(['PRE', 'PRE', 'OLU', 'PRE']);
+  });
+
+  it('aggregates unequipped rune inventory from RuneSystem.Inventory.SlotEntries', () => {
+    const zeider = profiles[0];
+    // RYS appears in 2 slot entries with Count 1 each → total 2
+    // NIL appears in 1 slot entry → total 1
+    // Empty slots and unmapped GUIDs are ignored
+    expect(zeider.runeInventory).toEqual({ RYS: 2, NIL: 1 });
+    expect(profiles[1].runeInventory).toEqual({ RYS: 2, NIL: 1 });
+  });
+
+  it('extracts rune slot capacity including gem-shop unlocks on row 0', () => {
+    const zeider = profiles[0];
+    // Row 0: UnlockedSlots=3, no GemshopRuneSlotUnlock in this fixture → 3 slots
+    // Row 1: UnlockedSlots=3 → 3 slots
+    expect(zeider.runeSlots).toEqual({ total: 6, byRow: [3, 3] });
+  });
+
+  it('maps active and discovered runeword GUIDs to names', () => {
+    const zeider = profiles[0];
+    expect(zeider.runewords.active).toEqual({ 0: 'PRE x 6' });
+    // CollectedRunewordIds resolves GUIDs to names in the same order
+    expect(zeider.runewords.discovered).toEqual(['GOR MU HAS', 'PRE x 6']);
   });
 });
 
