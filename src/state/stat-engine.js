@@ -9,6 +9,13 @@ import cardsData from '../data/cards.json';
 import runesData from '../data/runes.json';
 import petsData from '../data/pets.json';
 import curiosData from '../data/curios.json';
+import professionSkillsData from '../data/profession-skills.json';
+
+const professionSkillLookup = (() => {
+  const m = {};
+  for (const node of professionSkillsData) m[node.id] = node;
+  return m;
+})();
 
 /**
  * Build a flat lookup of all gear items by name.
@@ -181,6 +188,16 @@ function isRuneWordActive(equipped, required) {
 /**
  * Map sacrifice stat names to canonical stat keys.
  */
+/**
+ * Linearly interpolate a curio value between its level-1 and level-50 amounts.
+ * If no max is defined, returns the level-1 value unchanged (level scaling unknown).
+ */
+function scaleCurioValue(level1Value, level50Value, level) {
+  if (level50Value == null || level <= 1) return level1Value;
+  if (level >= 50) return level50Value;
+  return level1Value + (level50Value - level1Value) * ((level - 1) / 49);
+}
+
 function sacStatToKey(stat) {
   const map = {
     atk: 'atk', hp: 'hp', def: 'def',
@@ -367,6 +384,24 @@ export function computeStats(profile) {
     }
   }
 
+  // Profession skills (mining/woodcutting trees). Most contribute to mining/wc-only
+  // stats which addStat silently drops, but the "Damage" nodes in tier 4 add ATK
+  // scaled by mining/woodcutting level — important for combat builds that lean on them.
+  if (profile.professionSkills) {
+    const miningLvl = profile.miningLevel || 1;
+    const wcLvl = profile.woodcuttingLevel || 1;
+    for (const [id, points] of Object.entries(profile.professionSkills)) {
+      const node = professionSkillLookup[id];
+      if (!node || points <= 0) continue;
+      let value = node.perRank * points;
+      if (node.scalesWith === 'str') value = value * (stats.str || 0);
+      else if (node.scalesWith === 'dex') value = value * (stats.dex || 0);
+      else if (node.scalesWith === 'miningLevel') value = value * miningLvl;
+      else if (node.scalesWith === 'wcLevel') value = value * wcLvl;
+      addStat(stats, node.stat, value);
+    }
+  }
+
   // --- Layer 3: Apply formula: Final = SUM(Base) × SUM(Additive%) × PRODUCT(Multiplicative) ---
 
   // Bonfire buffs add to additive pools
@@ -403,9 +438,10 @@ export function computeStats(profile) {
         }
       }
 
-      // Percentage-based primary (e.g., goldMulti 25%) — additive
+      // Percentage-based primary (e.g., goldMulti 25%) — additive, scaled by level if max known
       if (!curio.isMultiplier && curio.primaryValue) {
-        addStat(stats, curio.primaryStat, curio.primaryValue);
+        const value = scaleCurioValue(curio.primaryValue, curio.primaryValueMax, curioEntry.level || 1);
+        addStat(stats, curio.primaryStat, value);
       }
     }
   }
@@ -479,17 +515,18 @@ export function computeStats(profile) {
     for (const curioEntry of profile.equippedCurios) {
       const curio = curioLookup[curioEntry.name];
       if (!curio) continue;
+      const level = curioEntry.level || 1;
 
       if (curio.isMultiplier && curio.primaryValue) {
         const key = sacStatToKey(curio.primaryStat);
         if (key in stats) {
-          stats[key] *= curio.primaryValue;
+          stats[key] *= scaleCurioValue(curio.primaryValue, curio.primaryValueMax, level);
         }
       }
 
       const atkData = curiosData.atkBonusByRarity?.[curio.rarity];
       if (atkData) {
-        const atkMulti = atkData.level1 || 1;
+        const atkMulti = scaleCurioValue(atkData.level1 || 1, atkData.level50, level);
         stats.totalAtk *= atkMulti;
         stats.atk *= atkMulti;
       }

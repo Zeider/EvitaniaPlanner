@@ -4,6 +4,22 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.3 <span class="release-notes__date">April 28, 2026</span></h3>
+
+        <h4>Stat Engine</h4>
+        <ul>
+          <li><strong>Profession Skills</strong> — Mining and woodcutting skill trees now contribute to stats. New <code>profession-skills.json</code> data file with tiers 0–4 (43 nodes). Higher tiers (5+) are present in saves but not yet documented in the spreadsheet — engine ignores them silently for now.</li>
+          <li><strong>Curio Level Scaling</strong> — Equipped curios now interpolate <code>primaryValue</code> and rarity-based ATK bonus from level 1 to 50 when the L50 value is known. Currently only Orange ATK rarity (1.15→1.30) and Ever Eclipsed Sun (50→200%) have L50 values; others held at L1 until learned.</li>
+          <li><strong>Hardmode Detection</strong> — Save's <code>ActDifficulty</code> map now extracted into profile. Boss Readiness scales boss HP/ATK by difficulty (Hard ≈ ×16) and shows the difficulty next to the boss subtitle.</li>
+        </ul>
+
+        <h4>Save Import</h4>
+        <ul>
+          <li><strong>Gem Shop Upgrades</strong> documented in <code>gemshop.json</code>. Most are crafting/economy buffs (smeltery speed, fuel efficiency, librarian discount) — not combat stats — so they don't yet affect computeStats. Surfaced as data for future UI.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.2 <span class="release-notes__date">April 28, 2026</span></h3>
 
         <h4>New: Cards Tab</h4>

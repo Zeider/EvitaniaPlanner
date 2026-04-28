@@ -1,0 +1,53 @@
+[
+  { "id": "profession_mining_0_0", "skill": "mining", "tier": 0, "col": 0, "name": "Mining Power", "stat": "miningPower", "perRank": 2, "maxRank": 2 },
+  { "id": "profession_mining_0_1", "skill": "mining", "tier": 0, "col": 1, "name": "Mining Proficiency", "stat": "miningPower", "scalesWith": "str", "perRank": 0.001, "maxRank": 2 },
+  { "id": "profession_mining_0_2", "skill": "mining", "tier": 0, "col": 2, "name": "Mining Power", "stat": "miningPower", "perRank": 5, "maxRank": 5 },
+  { "id": "profession_mining_0_3", "skill": "mining", "tier": 0, "col": 3, "name": "Mining Power %", "stat": "miningPowerPercent", "perRank": 10, "maxRank": 3 },
+
+  { "id": "profession_mining_1_0", "skill": "mining", "tier": 1, "col": 0, "name": "Mining Proficiency", "stat": "miningPower", "scalesWith": "str", "perRank": 0.001, "maxRank": 3 },
+  { "id": "profession_mining_1_1", "skill": "mining", "tier": 1, "col": 1, "name": "Mining Power", "stat": "miningPower", "perRank": 5, "maxRank": 5 },
+  { "id": "profession_mining_1_2", "skill": "mining", "tier": 1, "col": 2, "name": "Mining Power %", "stat": "miningPowerPercent", "perRank": 10, "maxRank": 4 },
+  { "id": "profession_mining_1_3", "skill": "mining", "tier": 1, "col": 3, "name": "Mining Proficiency", "stat": "miningPower", "scalesWith": "str", "perRank": 0.001, "maxRank": 5 },
+
+  { "id": "profession_mining_2_0", "skill": "mining", "tier": 2, "col": 0, "name": "Mining Power", "stat": "miningPower", "perRank": 1, "maxRank": 3 },
+  { "id": "profession_mining_2_1", "skill": "mining", "tier": 2, "col": 1, "name": "Mining Multiloot", "stat": "miningMultiloot", "perRank": 10, "maxRank": 2 },
+  { "id": "profession_mining_2_2", "skill": "mining", "tier": 2, "col": 2, "name": "Mining Crit Chance", "stat": "miningCritChance", "perRank": 4, "maxRank": 3 },
+  { "id": "profession_mining_2_3", "skill": "mining", "tier": 2, "col": 3, "name": "Mining Speed", "stat": "miningSpeed", "perRank": 2, "maxRank": 4 },
+  { "id": "profession_mining_2_4", "skill": "mining", "tier": 2, "col": 4, "name": "Mining Crit Damage", "stat": "miningCritDamage", "perRank": 4, "maxRank": 4 },
+
+  { "id": "profession_mining_3_0", "skill": "mining", "tier": 3, "col": 0, "name": "Mining Multiloot", "stat": "miningMultiloot", "perRank": 10, "maxRank": 5 },
+  { "id": "profession_mining_3_1", "skill": "mining", "tier": 3, "col": 1, "name": "Mining Crit Damage", "stat": "miningCritDamage", "perRank": 12, "maxRank": 5 },
+  { "id": "profession_mining_3_2", "skill": "mining", "tier": 3, "col": 2, "name": "Mining Crit Chance", "stat": "miningCritChance", "perRank": 6, "maxRank": 4 },
+  { "id": "profession_mining_3_3", "skill": "mining", "tier": 3, "col": 3, "name": "Mining Speed", "stat": "miningSpeed", "perRank": 4, "maxRank": 5 },
+
+  { "id": "profession_mining_4_0", "skill": "mining", "tier": 4, "col": 0, "name": "Mining XP", "stat": "miningXp", "perRank": 10, "maxRank": 4 },
+  { "id": "profession_mining_4_1", "skill": "mining", "tier": 4, "col": 1, "name": "Damage", "stat": "atk", "scalesWith": "miningLevel", "perRank": 0.15, "maxRank": 2 },
+  { "id": "profession_mining_4_2", "skill": "mining", "tier": 4, "col": 2, "name": "Mining XP", "stat": "miningXp", "perRank": 20, "maxRank": 8 },
+  { "id": "profession_mining_4_3", "skill": "mining", "tier": 4, "col": 3, "name": "Damage", "stat": "atk", "scalesWith": "miningLevel", "perRank": 0.2, "maxRank": 5 },
+
+  { "id": "profession_woodcutting_0_0", "skill": "woodcutting", "tier": 0, "col": 0, "name": "Woodcutting Power", "stat": "wcPower", "perRank": 2, "maxRank": 2 },
+  { "id": "profession_woodcutting_0_1", "skill": "woodcutting", "tier": 0, "col": 1, "name": "Woodcutting Proficiency", "stat": "wcPower", "scalesWith": "dex", "perRank": 0.001, "maxRank": 2 },
+  { "id": "profession_woodcutting_0_2", "skill": "woodcutting", "tier": 0, "col": 2, "name": "Woodcutting Power", "stat": "wcPower", "perRank": 5, "maxRank": 5 },
+  { "id": "profession_woodcutting_0_3", "skill": "woodcutting", "tier": 0, "col": 3, "name": "Woodcutting Power %", "stat": "wcPowerPercent", "perRank": 10, "maxRank": 3 },
+
+  { "id": "profession_woodcutting_1_0", "skill": "woodcutting", "tier": 1, "col": 0, "name": "Woodcutting Proficiency", "stat": "wcPower", "scalesWith": "dex", "perRank": 0.001, "maxRank": 3 },
+  { "id": "profession_woodcutting_1_1", "skill": "woodcutting", "tier": 1, "col": 1, "name": "Woodcutting Power", "stat": "wcPower", "perRank": 5, "maxRank": 5 },
+  { "id": "profession_woodcutting_1_2", "skill": "woodcutting", "tier": 1, "col": 2, "name": "Woodcutting Power %", "stat": "wcPowerPercent", "perRank": 10, "maxRank": 4 },
+  { "id": "profession_woodcutting_1_3", "skill": "woodcutting", "tier": 1, "col": 3, "name": "Woodcutting Proficiency", "stat": "wcPower", "scalesWith": "dex", "perRank": 0.001, "maxRank": 5 },
+
+  { "id": "profession_woodcutting_2_0", "skill": "woodcutting", "tier": 2, "col": 0, "name": "Woodcutting Power", "stat": "wcPower", "perRank": 1, "maxRank": 3 },
+  { "id": "profession_woodcutting_2_1", "skill": "woodcutting", "tier": 2, "col": 1, "name": "Woodcutting Multiloot", "stat": "wcMultiloot", "perRank": 10, "maxRank": 2 },
+  { "id": "profession_woodcutting_2_2", "skill": "woodcutting", "tier": 2, "col": 2, "name": "Woodcutting Crit Chance", "stat": "wcCritChance", "perRank": 4, "maxRank": 3 },
+  { "id": "profession_woodcutting_2_3", "skill": "woodcutting", "tier": 2, "col": 3, "name": "Woodcutting Speed", "stat": "wcSpeed", "perRank": 2, "maxRank": 4 },
+  { "id": "profession_woodcutting_2_4", "skill": "woodcutting", "tier": 2, "col": 4, "name": "Woodcutting Crit Damage", "stat": "wcCritDamage", "perRank": 4, "maxRank": 4 },
+
+  { "id": "profession_woodcutting_3_0", "skill": "woodcutting", "tier": 3, "col": 0, "name": "Woodcutting Crit Damage", "stat": "wcCritDamage", "perRank": 12, "maxRank": 5 },
+  { "id": "profession_woodcutting_3_1", "skill": "woodcutting", "tier": 3, "col": 1, "name": "Woodcutting Speed", "stat": "wcSpeed", "perRank": 4, "maxRank": 5 },
+  { "id": "profession_woodcutting_3_2", "skill": "woodcutting", "tier": 3, "col": 2, "name": "Woodcutting Multiloot", "stat": "wcMultiloot", "perRank": 10, "maxRank": 5 },
+  { "id": "profession_woodcutting_3_3", "skill": "woodcutting", "tier": 3, "col": 3, "name": "Woodcutting Crit Chance", "stat": "wcCritChance", "perRank": 6, "maxRank": 4 },
+
+  { "id": "profession_woodcutting_4_0", "skill": "woodcutting", "tier": 4, "col": 0, "name": "Woodcutting XP", "stat": "wcXp", "perRank": 10, "maxRank": 4 },
+  { "id": "profession_woodcutting_4_1", "skill": "woodcutting", "tier": 4, "col": 1, "name": "Damage", "stat": "atk", "scalesWith": "wcLevel", "perRank": 0.15, "maxRank": 2 },
+  { "id": "profession_woodcutting_4_2", "skill": "woodcutting", "tier": 4, "col": 2, "name": "Damage", "stat": "atk", "scalesWith": "wcLevel", "perRank": 0.2, "maxRank": 5 },
+  { "id": "profession_woodcutting_4_3", "skill": "woodcutting", "tier": 4, "col": 3, "name": "Woodcutting XP", "stat": "wcXp", "perRank": 20, "maxRank": 8 }
+]

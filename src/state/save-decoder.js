@@ -358,6 +358,9 @@ export function extractProfiles(saveData) {
         goldPerHour: op.GoldPerHour ?? 0,
       },
       currentZone: hero.Progress?.scene ?? '',
+      // Per-act difficulty: 0=Normal, 1=Hard, 2=Nightmare, 3=Hell.
+      // Save stores only non-Normal levels (e.g. {"1": 1} = Act 1 on Hard).
+      actDifficulty: { ...(hero.Progress?.ActDifficulty ?? {}) },
       bonfireHeat,
       activePet: (() => {
         const heroIndex = heroes.indexOf(hero);

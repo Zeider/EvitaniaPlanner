@@ -1,0 +1,121 @@
+{
+  "_note": "Gem Shop upgrades. Account-wide. Most affect crafting/economy, not combat stats.",
+  "upgrades": [
+    {
+      "id": "GemshopSmelterySpeed",
+      "name": "Smeltery Speed",
+      "stat": "smelterySpeed",
+      "perRank": 25,
+      "maxRank": 8,
+      "isPercent": true,
+      "category": "smeltery",
+      "firstUpgradeGems": 120
+    },
+    {
+      "id": "GemshopSmelteryCapacity",
+      "name": "Smeltery Capacity",
+      "stat": "smelteryCapacity",
+      "perRank": 1,
+      "maxRank": 2,
+      "category": "smeltery",
+      "firstUpgradeGems": 300
+    },
+    {
+      "id": "GemshopSmelteryMulticraft",
+      "name": "Smeltery Multicraft",
+      "stat": "smelteryMulticraft",
+      "perRank": 1,
+      "maxRank": null,
+      "category": "smeltery"
+    },
+    {
+      "id": "GemshopLibrarianCostCruncher",
+      "name": "Librarian Cost Cruncher",
+      "stat": "librarianDiscount",
+      "perRank": 2,
+      "maxRank": 5,
+      "isPercent": true,
+      "category": "librarian",
+      "firstUpgradeGems": 300,
+      "note": "Stacks daily up to 99% discount; resets to 0 on Librarian purchase."
+    },
+    {
+      "id": "gemshop_bonfire_fuel_eff",
+      "name": "Fuel Efficiency",
+      "stat": "fuelEfficiency",
+      "perRank": 25,
+      "maxRank": 5,
+      "isPercent": true,
+      "category": "bonfire",
+      "firstUpgradeGems": 450
+    },
+    {
+      "id": "gemshop_ash_t1",
+      "name": "Basic Ash Collection",
+      "stat": "ashCollection",
+      "perRank": 20,
+      "maxRank": 8,
+      "isPercent": true,
+      "category": "bonfire",
+      "firstUpgradeGems": 700
+    },
+    {
+      "id": "gemshop_bonfire_max_fuel",
+      "name": "Bonfire Capacity",
+      "stat": "fuelCapacity",
+      "perRank": 10000,
+      "maxRank": 4,
+      "category": "bonfire",
+      "firstUpgradeGems": 800
+    },
+    {
+      "id": "GemshopRuneSlotUnlock",
+      "name": "Rune Slot Unlock",
+      "stat": "runeSlots",
+      "perRank": 1,
+      "maxRank": null,
+      "category": "rune"
+    },
+    {
+      "id": "GemshopRuneInventoryUnlock",
+      "name": "Rune Inventory Unlock",
+      "stat": "runeInventorySize",
+      "perRank": 1,
+      "maxRank": null,
+      "category": "rune"
+    },
+    {
+      "id": "GemshopPremiumRune",
+      "name": "Premium Rune (PRE)",
+      "stat": "premiumRunes",
+      "perRank": 1,
+      "maxRank": null,
+      "category": "rune",
+      "note": "Each rank grants 1 PRE rune."
+    },
+    {
+      "id": "GemshopCurioFateSpiral",
+      "name": "Curio Fate Spiral",
+      "stat": "curioFateSpiral",
+      "perRank": 1,
+      "maxRank": null,
+      "category": "curio"
+    },
+    {
+      "id": "GemshopCurioInventoryUnlock",
+      "name": "Curio Inventory Unlock",
+      "stat": "curioInventorySize",
+      "perRank": 1,
+      "maxRank": null,
+      "category": "curio"
+    },
+    {
+      "id": "GemshopCurioPendingPower",
+      "name": "Curio Pending Power",
+      "stat": "curioPendingPower",
+      "perRank": 1,
+      "maxRank": null,
+      "category": "curio"
+    }
+  ]
+}

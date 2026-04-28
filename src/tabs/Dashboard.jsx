@@ -336,6 +336,7 @@ function buildBossList() {
       list.push({
         id: BOSS_DEFEATED_KEY[boss.name] || boss.name,
         name: boss.name,
+        act: actNum,
         subtitle: `Act ${actNum} Boss ${idx + 1}`,
         hp: boss.hp,
         atk: boss.atk || 0,
@@ -348,6 +349,25 @@ function buildBossList() {
 }
 
 const BOSS_LIST = buildBossList();
+
+// Approximate difficulty multipliers per spreadsheet "Base material Drop X16" + observed
+// monster HP/ATK ranges. Refine when in-game data is available.
+const DIFFICULTY_MULTIPLIERS = {
+  0: { name: 'Normal', hp: 1, atk: 1 },
+  1: { name: 'Hard', hp: 16, atk: 16 },
+  2: { name: 'Nightmare', hp: 64, atk: 32 },  // unconfirmed
+  3: { name: 'Hell', hp: 256, atk: 64 },      // unconfirmed
+};
+
+function applyDifficulty(enemy, difficulty) {
+  const m = DIFFICULTY_MULTIPLIERS[difficulty];
+  if (!m || difficulty === 0) return enemy;
+  return {
+    ...enemy,
+    hp: enemy.hp * m.hp,
+    atk: (enemy.atk || 0) * m.atk,
+  };
+}
 
 function fmtTime(seconds) {
   if (!isFinite(seconds) || seconds <= 0) return '\u2014';
@@ -362,15 +382,19 @@ function BossReadinessPanel() {
   const profile = activeProfile.value;
   const stats = computeStats(profile);
   const defeated = profile.defeatedBosses || [];
+  const actDifficulty = profile.actDifficulty || {};
 
   return (
     <div class="buffs-panel boss-readiness">
       <div class="buffs-panel__title">Boss Readiness</div>
       <div class="boss-readiness__list">
         {BOSS_LIST.map((boss) => {
+          const difficulty = actDifficulty[boss.act] || 0;
+          const scaled = applyDifficulty(boss, difficulty);
+          const diffName = DIFFICULTY_MULTIPLIERS[difficulty]?.name || 'Normal';
           const isDefeated = defeated.includes(boss.id);
-          const dps = computeEffectiveDPS(stats, boss);
-          const ttk = dps > 0 ? boss.hp / dps : Infinity;
+          const dps = computeEffectiveDPS(stats, scaled);
+          const ttk = dps > 0 ? scaled.hp / dps : Infinity;
           const isReady = isFinite(ttk) && ttk <= BOSS_READY_TTK_SECONDS;
           const statusClass = isDefeated
             ? 'boss-readiness__status--defeated'
@@ -380,13 +404,14 @@ function BossReadinessPanel() {
           const icon = isDefeated ? '\u2605' : isReady ? '\u2713' : '\u2717';
           const ttkLabel = fmtTime(ttk);
           const label = isDefeated ? `Killed \u00b7 ${ttkLabel}` : ttkLabel;
+          const subtitle = difficulty > 0 ? `${boss.subtitle} \u00b7 ${diffName}` : boss.subtitle;
 
           return (
             <div key={boss.id} class={`boss-readiness__row ${statusClass}`}>
               <span class="boss-readiness__icon">{icon}</span>
               <div class="boss-readiness__info">
                 <span class="boss-readiness__name">{boss.name}</span>
-                <span class="boss-readiness__subtitle">{boss.subtitle}</span>
+                <span class="boss-readiness__subtitle">{subtitle}</span>
               </div>
               <span class="boss-readiness__label">{label}</span>
             </div>
@@ -394,7 +419,7 @@ function BossReadinessPanel() {
         })}
       </div>
       <div class="buffs-panel__hint" style="margin-top: 6px;">
-        TTK = boss HP \u00f7 effective DPS. Ready \u2264 5min.
+        TTK = boss HP \u00f7 effective DPS. Ready \u2264 5min. Hard mode scales HP/ATK \u00d716 (approx).
       </div>
     </div>
   );
