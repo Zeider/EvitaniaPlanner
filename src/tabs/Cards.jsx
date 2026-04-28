@@ -1,4 +1,4 @@
-import { activeProfile } from '../state/store.js';
+import { activeProfile, cardOverrides, setCardOverride, clearAllCardOverrides } from '../state/store.js';
 import { computeStats, computeEffectiveDPS, computeFarmingRates } from '../state/stat-engine.js';
 import enemies from '../data/enemies.json';
 import cardsData from '../data/cards.json';
@@ -121,7 +121,10 @@ function timeToNextTier(card, count, thresholds, stats) {
   return cardsRemaining / cph;
 }
 
-function CardRow({ card, count, thresholds, stats }) {
+function CardRow({ card, importedCount, overrides, thresholds, stats }) {
+  const name = card.enemy || card.resource || card.name;
+  const isOverridden = overrides[name] != null;
+  const count = isOverridden ? overrides[name] : importedCount;
   const tier = tierOf(count, thresholds);
   const tierLabel = tier >= 0 ? `T${tier + 1}` : '—';
   const activeBonus = tier >= 0 ? formatTierValue(card.tierValues[tier], card) : '—';
@@ -130,8 +133,12 @@ function CardRow({ card, count, thresholds, stats }) {
   const ttn = timeToNextTier(card, count, thresholds, stats);
   const ttnLabel = ttn != null ? fmtDuration(ttn) : (tier >= thresholds.length - 1 ? '★ Max' : '—');
   const cphLabel = cph > 0 ? fmtCount(cph) + '/hr' : '—';
-  const name = card.enemy || card.resource || card.name;
   const zone = card.zone === 'boss' ? `boss · ${card.bossZone || ''}` : (card.zone || '—');
+
+  const onCountChange = (e) => {
+    const v = e.target.value.trim();
+    setCardOverride(name, v === '' ? null : v);
+  };
 
   return (
     <tr class={tier >= 0 ? 'cards-tab__row cards-tab__row--active' : 'cards-tab__row'}>
@@ -140,7 +147,16 @@ function CardRow({ card, count, thresholds, stats }) {
       <td class="cards-tab__stat">{stat}</td>
       <td class="cards-tab__bonus">{activeBonus}</td>
       <td class="cards-tab__progression">{formatProgression(card)}</td>
-      <td class="cards-tab__count">{count}</td>
+      <td class="cards-tab__count">
+        <input
+          type="number"
+          min="0"
+          class={`cards-tab__count-input ${isOverridden ? 'cards-tab__count-input--overridden' : ''}`}
+          value={count}
+          onInput={onCountChange}
+          title={isOverridden ? `Override (save value: ${importedCount})` : 'Click to override'}
+        />
+      </td>
       <td class={`cards-tab__tier cards-tab__tier--${tier + 1}`}>{tierLabel}</td>
       <td class="cards-tab__cph">{cphLabel}</td>
       <td class="cards-tab__ttn">{ttnLabel}</td>
@@ -148,7 +164,7 @@ function CardRow({ card, count, thresholds, stats }) {
   );
 }
 
-function CardSection({ title, cards, thresholds, profileCards, stats }) {
+function CardSection({ title, cards, thresholds, profileCards, overrides, stats }) {
   if (!cards || cards.length === 0) return null;
   return (
     <section class="cards-tab__section">
@@ -175,7 +191,8 @@ function CardSection({ title, cards, thresholds, profileCards, stats }) {
                 <CardRow
                   key={key}
                   card={c}
-                  count={profileCards[key] || 0}
+                  importedCount={profileCards[key] || 0}
+                  overrides={overrides}
                   thresholds={thresholds}
                   stats={stats}
                 />
@@ -192,13 +209,27 @@ export function Cards() {
   const profile = activeProfile.value;
   const stats = computeStats(profile);
   const profileCards = profile.cards || {};
+  const overrides = cardOverrides.value;
   const t = cardsData.tierThresholds;
+  const overrideCount = Object.keys(overrides).length;
 
   return (
     <div class="cards-tab">
       <div class="cards-tab__intro">
-        Each card grants a stat bonus that scales by tier. Cards/hr estimated from your effective DPS at the drop zone.
-        Boss-card rates assume keyless farming kill rate; in practice 3 keys/day caps boss kills.
+        <div>
+          Each card grants a stat bonus that scales by tier. Cards/hr estimated from your effective DPS at the drop zone.
+          Boss-card rates assume keyless farming kill rate; in practice 3 keys/day caps boss kills.
+        </div>
+        <div style="margin-top: 8px; font-size: 0.78rem;">
+          Save imports often miss cards (server-side data). <strong>Click any count to override</strong> — your edits persist locally and win over imports.
+          {overrideCount > 0 && (
+            <>
+              {' '}<span style="color: #fa0;">({overrideCount} override{overrideCount > 1 ? 's' : ''} active)</span>
+              {' '}
+              <button class="cards-tab__clear-btn" onClick={clearAllCardOverrides}>Clear all</button>
+            </>
+          )}
+        </div>
       </div>
 
       <CardSection
@@ -206,6 +237,7 @@ export function Cards() {
         cards={cardsData.act1Cards}
         thresholds={t.act1}
         profileCards={profileCards}
+        overrides={overrides}
         stats={stats}
       />
       <CardSection
@@ -213,6 +245,7 @@ export function Cards() {
         cards={cardsData.act2Cards}
         thresholds={t.act2}
         profileCards={profileCards}
+        overrides={overrides}
         stats={stats}
       />
       <CardSection
@@ -220,6 +253,7 @@ export function Cards() {
         cards={cardsData.act3Cards}
         thresholds={t.act3}
         profileCards={profileCards}
+        overrides={overrides}
         stats={stats}
       />
 
@@ -248,7 +282,8 @@ export function Cards() {
                   <CardRow
                     key={key}
                     card={c}
-                    count={profileCards[key] || 0}
+                    importedCount={profileCards[key] || 0}
+                    overrides={overrides}
                     thresholds={thresholds}
                     stats={stats}
                   />
@@ -276,7 +311,9 @@ export function Cards() {
             <tbody>
               {(cardsData.hardCards || []).map((c) => {
                 const key = c.name;
-                const count = profileCards[key] || 0;
+                const importedCount = profileCards[key] || 0;
+                const isOverridden = overrides[key] != null;
+                const count = isOverridden ? overrides[key] : importedCount;
                 const tier = tierOf(count, t.hard);
                 const tierLabel = tier >= 0 ? `T${tier + 1}` : '—';
                 const activeBonus = tier >= 0 ? formatTierValue(c.tierValues[tier], c) : '—';
@@ -286,7 +323,16 @@ export function Cards() {
                     <td class="cards-tab__stat">{statLabel(c.stat)}</td>
                     <td class="cards-tab__bonus">{activeBonus}</td>
                     <td class="cards-tab__progression">{formatProgression(c)}</td>
-                    <td class="cards-tab__count">{count}</td>
+                    <td class="cards-tab__count">
+                      <input
+                        type="number"
+                        min="0"
+                        class={`cards-tab__count-input ${isOverridden ? 'cards-tab__count-input--overridden' : ''}`}
+                        value={count}
+                        onInput={(e) => setCardOverride(key, e.target.value.trim() === '' ? null : e.target.value.trim())}
+                        title={isOverridden ? `Override (save value: ${importedCount})` : 'Click to override'}
+                      />
+                    </td>
                     <td class={`cards-tab__tier cards-tab__tier--${tier + 1}`}>{tierLabel}</td>
                   </tr>
                 );

@@ -90,6 +90,49 @@ export function setLightMode(on) {
   lightMode.value = on;
 }
 
+// ── Card overrides ─────────────────────────────────────────────────────────
+// Save's Currency.cards is incomplete (server-side storage for many mobs).
+// User can manually override card counts; overrides persist to localStorage
+// and win over save-imported counts in the Cards tab.
+const CARD_OVERRIDES_KEY = 'ic-card-overrides-v1';
+
+function loadCardOverrides() {
+  try {
+    const raw = localStorage.getItem(CARD_OVERRIDES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+export const cardOverrides = signal(loadCardOverrides());
+
+export function setCardOverride(cardName, count) {
+  const next = { ...cardOverrides.value };
+  if (count == null || count === '' || Number.isNaN(Number(count))) {
+    delete next[cardName];
+  } else {
+    next[cardName] = Math.max(0, Math.floor(Number(count)));
+  }
+  cardOverrides.value = next;
+  localStorage.setItem(CARD_OVERRIDES_KEY, JSON.stringify(next));
+}
+
+export function clearCardOverride(cardName) {
+  setCardOverride(cardName, null);
+}
+
+export function clearAllCardOverrides() {
+  cardOverrides.value = {};
+  localStorage.removeItem(CARD_OVERRIDES_KEY);
+}
+
+/** Resolve a card's effective count: override (if set) wins over save-imported. */
+export function resolveCardCount(cardName, importedCount) {
+  const override = cardOverrides.value[cardName];
+  return override != null ? override : (importedCount || 0);
+}
+
 /** Normalize old capitalized gear slot keys to lowercase IDs. */
 const SLOT_MIGRATE = {
   Helmet: 'helmet', Chest: 'chest', Legs: 'gloves', Boots: 'boots',

@@ -4,6 +4,16 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.4 <span class="release-notes__date">April 28, 2026</span></h3>
+
+        <h4>Cards Tab</h4>
+        <ul>
+          <li><strong>Manual Card Count Override</strong> — Click any card's count to type your in-game value. Overrides persist to localStorage and win over save-imported counts. Shown in amber when overridden; tooltip shows the underlying save value. <em>"Clear all"</em> button when any overrides are active.</li>
+          <li><strong>Why?</strong> The save's <code>Currency.cards</code> map is incomplete — most Act 1 zone cards are stored server-side and don't appear locally. Manual overrides bridge the gap so Cards/hr and Time-to-next-tier estimates are accurate.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.3 <span class="release-notes__date">April 28, 2026</span></h3>
 
         <h4>Stat Engine</h4>
