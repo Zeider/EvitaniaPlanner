@@ -15,6 +15,7 @@ import './css/rune-planner.css';
 import './css/alt-advisor.css';
 import './css/release-notes.css';
 import './css/progression.css';
+import './css/cards.css';
 
 // Decode shared build from URL hash
 const hash = location.hash;

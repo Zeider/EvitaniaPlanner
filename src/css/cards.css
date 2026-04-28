@@ -1,0 +1,119 @@
+/* ── CARDS TAB ───────────────────────────────────── */
+.cards-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cards-tab__intro {
+  font-size: 0.85rem;
+  color: var(--text-dim, #aaa);
+  background: var(--card-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--card-border, rgba(255,255,255,0.08));
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.cards-tab__section {
+  background: var(--card-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--card-border, rgba(255,255,255,0.08));
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.cards-tab__section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+  color: var(--accent, #8af);
+}
+
+.cards-tab__table-wrap {
+  overflow-x: auto;
+}
+
+.cards-tab__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.cards-tab__table th {
+  text-align: left;
+  padding: 4px 8px;
+  font-weight: 600;
+  color: var(--text-dim, #aaa);
+  border-bottom: 1px solid var(--card-border, rgba(255,255,255,0.1));
+  white-space: nowrap;
+}
+
+.cards-tab__table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.cards-tab__row {
+  opacity: 0.5;
+}
+
+.cards-tab__row--active {
+  opacity: 1;
+}
+
+.cards-tab__name {
+  font-weight: 600;
+  color: var(--text, #eee);
+  white-space: nowrap;
+}
+
+.cards-tab__zone {
+  color: var(--text-dim, #aaa);
+  white-space: nowrap;
+}
+
+.cards-tab__stat {
+  color: var(--text-dim, #aaa);
+}
+
+.cards-tab__bonus {
+  color: #8f8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cards-tab__progression {
+  color: var(--text-dim, #888);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.cards-tab__count {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text, #eee);
+}
+
+.cards-tab__tier {
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+.cards-tab__tier--0 { color: var(--text-dim, #666); }
+.cards-tab__tier--1 { color: #aaa; }
+.cards-tab__tier--2 { color: #6af; }
+.cards-tab__tier--3 { color: #c6f; }
+.cards-tab__tier--4 { color: #fa0; }
+
+.cards-tab__cph {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim, #aaa);
+  white-space: nowrap;
+}
+
+.cards-tab__ttn {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim, #aaa);
+  white-space: nowrap;
+}

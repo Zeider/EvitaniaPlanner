@@ -4,6 +4,34 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.2 <span class="release-notes__date">April 28, 2026</span></h3>
+
+        <h4>New: Cards Tab</h4>
+        <ul>
+          <li><strong>All Cards in One Place</strong> — Act 1 / 2 / 3 / Resource / Hard Mode cards with their stat, drop zone, your count, current tier, active bonus, estimated cards/hr, and time to next tier. Cards/hr is computed from your effective DPS at the drop zone.</li>
+          <li><strong>cards.json Rebuilt from Spreadsheet</strong> — Act 1 zone/stat misalignments fixed (Wasp now Mana, Pebble now Mining Power, etc.), 4 new Act 3 cards added (Ciphered Bilding, Mummy, Djinn, Horus), every card now has a <code>dropRate</code> field, and Glass/Bringer of Death stats corrected.</li>
+        </ul>
+
+        <h4>Boss Readiness — Reworked</h4>
+        <ul>
+          <li><strong>All 7 Bosses</strong> across Act 1 / 2 / 3 (was Act 2 only).</li>
+          <li><strong>TTK-Based Readiness</strong> — boss HP ÷ effective DPS. Killed / Ready (≤5min) / Far instead of arbitrary kills/hour thresholds.</li>
+          <li><strong>Killed Detection Fixed</strong> — Maevath previously misdetected because the save uses scene name <code>2.bossBlueDragon</code>, not <code>2.boss-3</code>. All 7 boss scenes now matched via multi-pattern lookup.</li>
+          <li><strong>Boss ATK Filled In</strong> — Maevath (1.9K) and Kangaroo Boss (5K) added to enemies.json.</li>
+        </ul>
+
+        <h4>Save Import</h4>
+        <ul>
+          <li><strong>Card Key Normalization</strong> — Save uses inconsistent casing/diacritics (<code>BossCrab</code>, <code>ice-mammoth</code>, <code>jotunn</code>, <code>BlueDragon</code>). Normalized at decode to canonical cards.json names so Card Bonuses and the new Cards tab resolve correctly.</li>
+        </ul>
+
+        <h4>Navigation</h4>
+        <ul>
+          <li><strong>DPS Sim</strong> — renamed and moved to last position in tab nav. Functionality unchanged.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.1 <span class="release-notes__date">April 28, 2026</span></h3>
 
         <h4>Save Import</h4>

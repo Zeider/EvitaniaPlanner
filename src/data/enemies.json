@@ -40,7 +40,7 @@
     "bosses": [
       { "name": "Ice Mammoth", "hp": 2400000, "atk": 700, "evasion": 200, "accuracy": 200, "gold": 39, "xp": 100000 },
       { "name": "Jotunn", "hp": 4800000, "atk": 900, "evasion": 200, "accuracy": 200, "gold": 39, "xp": 150000 },
-      { "name": "Maevath", "hp": 50000000, "atk": 0, "evasion": 90, "accuracy": 90, "gold": 39, "xp": 200000 }
+      { "name": "Maevath", "hp": 50000000, "atk": 1900, "evasion": 90, "accuracy": 90, "gold": 39, "xp": 200000 }
     ]
   },
   "act3": {
@@ -55,7 +55,7 @@
       { "zone": "3.8", "name": "Beetleman", "hp": 31500000, "atk": 3100, "evasion": 275, "accuracy": 1900, "gold": 34, "xp": 10300000 }
     ],
     "bosses": [
-      { "name": "Kangaroo Boss", "hp": 400000000, "atk": 0, "evasion": 90, "accuracy": 90, "gold": 44, "xp": 300000 }
+      { "name": "Kangaroo Boss", "hp": 400000000, "atk": 5000, "evasion": 90, "accuracy": 90, "gold": 44, "xp": 300000 }
     ]
   }
 }

@@ -317,31 +317,69 @@ function ActivePetPanel() {
 
 // ── Boss Readiness Panel ──
 
-const BOSS_THRESHOLDS = [
-  { id: 'Mammoth', name: 'Ice Mammoth', subtitle: 'Act 2 Boss 1', killsPerHour: 500 },
-  { id: 'Jotunn', name: 'Jotunn', subtitle: 'Act 2 Boss 2', killsPerHour: 1000 },
-  { id: 'Maevath', name: 'Maevath / Blue Dragon', subtitle: 'Act 2 Boss 3', killsPerHour: 1000 },
-];
+/**
+ * Build a flat list of all bosses across acts, in order, with positional labels.
+ */
+// Short keys used in profile.defeatedBosses (must match save-decoder's BOSS_SCENE_PATTERNS keys).
+const BOSS_DEFEATED_KEY = {
+  'Ice Mammoth': 'Mammoth',
+  'Yrsainir (Fire Elemental)': 'Yrsainir',
+};
+
+function buildBossList() {
+  const list = [];
+  let actNum = 0;
+  for (const actData of Object.values(enemies)) {
+    actNum++;
+    const bosses = actData.bosses || [];
+    bosses.forEach((boss, idx) => {
+      list.push({
+        id: BOSS_DEFEATED_KEY[boss.name] || boss.name,
+        name: boss.name,
+        subtitle: `Act ${actNum} Boss ${idx + 1}`,
+        hp: boss.hp,
+        atk: boss.atk || 0,
+        evasion: boss.evasion || 0,
+        accuracy: boss.accuracy || 0,
+      });
+    });
+  }
+  return list;
+}
+
+const BOSS_LIST = buildBossList();
+
+function fmtTime(seconds) {
+  if (!isFinite(seconds) || seconds <= 0) return '\u2014';
+  if (seconds < 60) return seconds.toFixed(0) + 's';
+  if (seconds < 3600) return (seconds / 60).toFixed(1) + 'm';
+  return (seconds / 3600).toFixed(1) + 'h';
+}
+
+const BOSS_READY_TTK_SECONDS = 300;
 
 function BossReadinessPanel() {
   const profile = activeProfile.value;
-  const kph = profile.farmingRates?.killsPerHour || 0;
+  const stats = computeStats(profile);
   const defeated = profile.defeatedBosses || [];
 
   return (
     <div class="buffs-panel boss-readiness">
       <div class="buffs-panel__title">Boss Readiness</div>
       <div class="boss-readiness__list">
-        {BOSS_THRESHOLDS.map((boss) => {
+        {BOSS_LIST.map((boss) => {
           const isDefeated = defeated.includes(boss.id);
-          const isReady = kph >= boss.killsPerHour;
+          const dps = computeEffectiveDPS(stats, boss);
+          const ttk = dps > 0 ? boss.hp / dps : Infinity;
+          const isReady = isFinite(ttk) && ttk <= BOSS_READY_TTK_SECONDS;
           const statusClass = isDefeated
             ? 'boss-readiness__status--defeated'
             : isReady
               ? 'boss-readiness__status--ready'
               : 'boss-readiness__status--not-ready';
           const icon = isDefeated ? '\u2605' : isReady ? '\u2713' : '\u2717';
-          const label = isDefeated ? 'Defeated' : isReady ? 'Ready' : `Need ${fmt(boss.killsPerHour)} k/hr`;
+          const ttkLabel = fmtTime(ttk);
+          const label = isDefeated ? `Killed \u00b7 ${ttkLabel}` : ttkLabel;
 
           return (
             <div key={boss.id} class={`boss-readiness__row ${statusClass}`}>
@@ -356,7 +394,7 @@ function BossReadinessPanel() {
         })}
       </div>
       <div class="buffs-panel__hint" style="margin-top: 6px;">
-        Current: {fmt(kph)} kills/hr
+        TTK = boss HP \u00f7 effective DPS. Ready \u2264 5min.
       </div>
     </div>
   );

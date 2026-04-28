@@ -123,6 +123,11 @@ const MOCK_SAVE = {
       'Bringer Of Death': 12.0,
       'Fire Worm': 3.0,
       'Ash Tree': 2.0,
+      'ice-mammoth': 5.0,
+      'jotunn': 7.0,
+      'BossCrab': 2.0,
+      'BlueDragon': 4.0,
+      'difficulty1-act1': 30.0,
     },
   },
   RuneSystem: {
@@ -252,12 +257,17 @@ describe('extractProfiles', () => {
     expect(zeider.gear.potion).toBeNull();
   });
 
-  it('extracts cards from Currency', () => {
+  it('extracts cards from Currency, normalizing keys to cards.json canonical names', () => {
     const zeider = profiles[0];
     expect(zeider.cards).toEqual({
-      'Bringer Of Death': 12.0,
-      'Fire Worm': 3.0,
-      'Ash Tree': 2.0,
+      'Bringer of Death': 12.0,  // case fix: 'Bringer Of Death' -> 'Bringer of Death'
+      'Fire Worm': 3.0,           // unchanged: not in cards.json, kept as-is
+      'Ash Tree': 2.0,            // unchanged: not in cards.json, kept as-is
+      'Ice Mammoth': 5.0,         // dash + case: 'ice-mammoth' -> 'Ice Mammoth'
+      'Jötunn': 7.0,              // diacritic: 'jotunn' -> 'Jötunn'
+      'The Crab': 2.0,            // explicit alias: 'BossCrab' -> 'The Crab'
+      'Maevath': 4.0,             // explicit alias: 'BlueDragon' -> 'Maevath'
+      'Act 1 Hard': 30.0,         // explicit alias: 'difficulty1-act1' -> 'Act 1 Hard'
     });
   });
 

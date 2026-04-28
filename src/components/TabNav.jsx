@@ -5,11 +5,12 @@ const TABS = [
   { id: 'advisor', label: 'Upgrade Advisor' },
   { id: 'gear', label: 'Gear Planner' },
   { id: 'skills', label: 'Skill Trees' },
-  { id: 'dps', label: 'DPS Simulator' },
   { id: 'crafting', label: 'Crafting' },
   { id: 'runes', label: 'Rune Planner' },
   { id: 'alt-advisor', label: 'Alt Advisor' },
   { id: 'progression', label: 'Progression' },
+  { id: 'cards', label: 'Cards' },
+  { id: 'dps', label: 'DPS Sim' },
 ];
 
 export function TabNav() {

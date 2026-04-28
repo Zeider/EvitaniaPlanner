@@ -3,6 +3,7 @@
  *
  * The file is ASCII hex (each pair XOR'd with 0xFF) that decodes to UTF-8 JSON.
  */
+import cardsData from '../data/cards.json';
 
 const CLASS_MAP = {
   1: 'warrior',
@@ -74,6 +75,66 @@ const CURIO_GUID_MAP = {
   'd400737a-2802-4e02-9559-b31e43c1bbd4': 'Entomed Mask',
   '01d9ca35-48b6-4a62-bf8a-33785df36275': 'Swirling Tear',
   '5e0c5fda-7215-4934-a368-8302316021b6': "Necromancer's Hand",
+};
+
+/**
+ * Save's `Currency.cards` map keys mob names with inconsistent casing/diacritics
+ * (e.g. "Bringer Of Death", "ice-mammoth", "jotunn", "BossCrab"). Normalize them
+ * to the canonical names used in cards.json so downstream stat-engine and the
+ * Cards tab can resolve them.
+ */
+function normalizeCardName(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+}
+
+const CARD_CANONICAL_BY_NORMALIZED = (() => {
+  const map = {};
+  const visit = (list, key) => {
+    for (const c of (list || [])) {
+      const name = c[key];
+      if (name) map[normalizeCardName(name)] = name;
+    }
+  };
+  visit(cardsData.act1Cards, 'enemy');
+  visit(cardsData.act2Cards, 'enemy');
+  visit(cardsData.act3Cards, 'enemy');
+  visit(cardsData.resourceCards, 'resource');
+  visit(cardsData.hardCards, 'name');
+  return map;
+})();
+
+/**
+ * Save keys that don't match any cards.json name even after normalization.
+ * Add new entries as they're discovered.
+ */
+const CARD_NAME_ALIASES = {
+  'BossCrab': 'The Crab',
+  'BlueDragon': 'Maevath',
+  'difficulty1-act1': 'Act 1 Hard',
+  'difficulty1-act2': 'Act 2 Hard',
+};
+
+function resolveCardName(saveKey) {
+  if (CARD_NAME_ALIASES[saveKey]) return CARD_NAME_ALIASES[saveKey];
+  const canonical = CARD_CANONICAL_BY_NORMALIZED[normalizeCardName(saveKey)];
+  return canonical || saveKey;
+}
+
+/**
+ * Boss-name → list of `visitedScenes` IDs that indicate the boss has been killed.
+ * Multiple patterns per boss because the game uses inconsistent naming
+ * (e.g. Maevath is `2.bossBlueDragon`, Mammoth is `2.boss-1`).
+ * Patterns for unfamiliar bosses (Bringer of Death, Kangaroo Boss) are guesses
+ * until confirmed in a save where they've been defeated.
+ */
+const BOSS_SCENE_PATTERNS = {
+  'Bringer of Death': ['1.bossbringer', '1.bossplant', '1.5.bossplant', '1.5.boss'],
+  'The Crab': ['1.17.bossCrab', '1.bosscrab', '1.9.bossCrab'],
+  'Yrsainir': ['1.bossdragon', '1.14.bossdragon', '1.bossfire'],
+  'Mammoth': ['2.boss-1'],
+  'Jotunn': ['2.boss-2'],
+  'Maevath': ['2.boss-3', '2.bossBlueDragon'],
+  'Kangaroo Boss': ['3.boss-1', '3.4.bossKangaroo', '3.bossKangaroo', '3.bossZhaiHalud'],
 };
 
 const HEX_PAIR = /^[0-9A-Fa-f]*$/;
@@ -272,7 +333,14 @@ export function extractProfiles(saveData) {
       hunterUpgrades,
       ashUpgrades,
       sacrificeUpgrades,
-      cards: { ...cards },
+      cards: (() => {
+        const out = {};
+        for (const [k, v] of Object.entries(cards)) {
+          const canonical = resolveCardName(k);
+          out[canonical] = (out[canonical] || 0) + (v || 0);
+        }
+        return out;
+      })(),
       equippedCurios: [...equippedCurios],
       equippedRunes: [...equippedRunes],
       runeInventory: { ...runeInventory },
@@ -296,16 +364,16 @@ export function extractProfiles(saveData) {
         const pet = petSaveData.find(p => p.characterId === heroIndex && p.petSlot === 0);
         return pet ? { name: pet.petName, level: pet.level, tier: pet.tier } : null;
       })(),
-      // Determine which sacrifice bosses have been defeated
+      // Bosses defeated across all acts. Used by Boss Readiness panel and
+      // for sacrifice unlock detection (Mammoth/Jotunn/Maevath gate Act 2 sacrifices).
       defeatedBosses: (() => {
         const visited = hero.Progress?.visitedScenes ?? [];
         const bosses = [];
-        // 2.boss-1 = Mammoth (Ice Mammoth), unlocks sacrifices 0-4
-        if (visited.includes('2.boss-1')) bosses.push('Mammoth');
-        // 2.boss-2 = Jotunn, unlocks sacrifices 5-9
-        if (visited.includes('2.boss-2')) bosses.push('Jotunn');
-        // 2.boss-3 = Maevath, unlocks sacrifices 10-14
-        if (visited.includes('2.boss-3')) bosses.push('Maevath');
+        for (const [bossName, patterns] of Object.entries(BOSS_SCENE_PATTERNS)) {
+          if (patterns.some((p) => visited.includes(p))) {
+            bosses.push(bossName);
+          }
+        }
         return bosses;
       })(),
       // Derive max unlocked zone from visitedScenes — find highest combat zone
