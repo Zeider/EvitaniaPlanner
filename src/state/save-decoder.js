@@ -51,6 +51,7 @@ const GEAR_GUID_MAP = {
   'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Sword',
   // Bows
   'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
+  'f61790b8-c673-41ed-9b5f-0f3a5d3993de': 'Thorium Bow',
   // Staffs
   'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Steel Staff',
   // Pickaxes
@@ -60,6 +61,19 @@ const GEAR_GUID_MAP = {
   // Axes
   '95fbcc3e-b5f2-48cd-adc7-42a187ae4179': 'Iron Axe',
   '08cd484a-023b-4bae-93c9-465683d681ed': 'Thorium Axe',
+};
+
+/**
+ * Known curio DefinitionId GUID → curio name mappings.
+ * Add new entries as they're discovered from save files.
+ */
+const CURIO_GUID_MAP = {
+  '961b2e57-cffb-4969-9efd-a8ecb863086b': 'Pandemonium Egg',
+  '428e363e-0d31-472c-9eb0-364ca82650cf': 'Ceremonial Dagger',
+  'ee7c4afc-2b5f-4ee6-9965-5f8988799fc1': 'Century Tome',
+  'd400737a-2802-4e02-9559-b31e43c1bbd4': 'Entomed Mask',
+  '01d9ca35-48b6-4a62-bf8a-33785df36275': 'Swirling Tear',
+  '5e0c5fda-7215-4934-a368-8302316021b6': "Necromancer's Hand",
 };
 
 const HEX_PAIR = /^[0-9A-Fa-f]*$/;
@@ -96,6 +110,8 @@ const RUNE_GUID_MAP = {
   '8a3a86f3-e84c-444f-a47d-61dec9d5a396': 'RYS',
   // Thorium Ore (Crit Damage)
   '9fe2cd59-b50f-49f0-8e07-d7a498435953': 'WOM',
+  // Phys DEF
+  'bd30b89c-11ee-4fc7-9edd-7ef31897f558': 'KI',
 };
 
 /**
@@ -176,6 +192,24 @@ export function extractProfiles(saveData) {
   const discoveredRunewords = (runeSystem?.CollectedRunewordIds ?? [])
     .map((id) => RUNEWORD_GUID_MAP[id] || id);
 
+  // Extract equipped curios from CurioSystem (shared across heroes).
+  // EquippedSlots maps slot index → InstanceId; resolve via Inventory to DefinitionId, then to name.
+  const equippedCurios = [];
+  const curioSystem = saveData.CurioSystem;
+  if (curioSystem?.EquippedSlots && Array.isArray(curioSystem.Inventory)) {
+    const byInstance = {};
+    for (const c of curioSystem.Inventory) {
+      if (c?.InstanceId) byInstance[c.InstanceId] = c;
+    }
+    for (const instanceId of Object.values(curioSystem.EquippedSlots)) {
+      const c = byInstance[instanceId];
+      if (!c) continue;
+      const name = CURIO_GUID_MAP[c.DefinitionId];
+      if (!name) continue;
+      equippedCurios.push({ name, level: c.Level || 1, tier: c.Tier || 0 });
+    }
+  }
+
   // Shared upgrades extracted once from ProgressProfile.Enhancements
   const hunterUpgrades = {};
   const ashUpgrades = {};
@@ -239,6 +273,7 @@ export function extractProfiles(saveData) {
       ashUpgrades,
       sacrificeUpgrades,
       cards: { ...cards },
+      equippedCurios: [...equippedCurios],
       equippedRunes: [...equippedRunes],
       runeInventory: { ...runeInventory },
       runeSlots: {

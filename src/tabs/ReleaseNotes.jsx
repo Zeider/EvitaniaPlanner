@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.1 <span class="release-notes__date">April 28, 2026</span></h3>
+
+        <h4>Save Import</h4>
+        <ul>
+          <li><strong>Curio System Decoded</strong> — Equipped curios are now read from save and contribute to stats (rarity-based ATK multiplier, primary stat bonuses, tier bonuses). Previously the engine had the math but the decoder never populated it, leaving 5+ slots' worth of power off the calculation. Initial GUID mappings: Pandemonium Egg, Ceremonial Dagger, Century Tome, Entomed Mask, Swirling Tear, Necromancer's Hand.</li>
+          <li><strong>New Gear GUID</strong> — Thorium Bow now auto-equips on import.</li>
+          <li><strong>New Rune GUID</strong> — KI (Phys DEF t1) added to inventory recognition.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.0 <span class="release-notes__date">April 22, 2026</span></h3>
 
         <h4>Rune Planner</h4>
