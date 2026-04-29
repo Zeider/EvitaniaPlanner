@@ -200,10 +200,14 @@ function scaleCurioValue(level1Value, level50Value, level) {
 }
 
 function sacStatToKey(stat) {
+  // Canonical stat mapping shared by sacrifice and curio multiplicative paths.
+  // Must align with addStat's mapping for the additive path.
   const map = {
     atk: 'atk', hp: 'hp', def: 'def',
+    physDef: 'def', magicDef: 'def',
     wcPower: 'woodcuttingPower', miningPower: 'miningPower',
-    xp: 'xpMulti',
+    xp: 'xpMulti', allXp: 'xpMulti', allExp: 'xpMulti',
+    critDamage: 'critDmg',
   };
   return map[stat] || stat;
 }

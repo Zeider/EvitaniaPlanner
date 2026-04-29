@@ -4,6 +4,28 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.7 <span class="release-notes__date">April 29, 2026</span></h3>
+
+        <h4>Curio Level Scaling — Real Endpoints</h4>
+        <ul>
+          <li><strong>4 curios calibrated</strong> from in-game level-N readings:
+            <ul>
+              <li>Pandemonium Egg primaryValueMax 89 (L1=20 → L12=35.5%)</li>
+              <li>Century Tome primaryValueMax 57 (L1=19.8 → L10=26.6%)</li>
+              <li>Necromancer's Hand primaryValueMax 90 (L1=31.2 → L10=42%)</li>
+              <li>Entomed Mask primaryValueMax 1.54 (L1=1.20 → L11=1.27)</li>
+            </ul>
+          </li>
+          <li><strong>ATK rarity L50 endpoints added</strong>: blue 1.21, purple 1.26 (from in-game observation; orange 1.30 was already documented).</li>
+        </ul>
+
+        <h4>Curio physDef Multiplier Bug</h4>
+        <ul>
+          <li><code>sacStatToKey</code> didn't have <code>physDef → def</code>, so Entomed Mask + Ceremonial Dagger physDef×N multipliers were silently dropped on the curio multiplicative path. Added that mapping plus <code>magicDef → def</code>, <code>critDamage → critDmg</code>, and <code>allXp/allExp → xpMulti</code> for consistency with addStat.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.6 <span class="release-notes__date">April 29, 2026</span></h3>
 
         <h4>Bonfire Bug Fix</h4>

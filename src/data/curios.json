@@ -3,8 +3,8 @@
   "atkBonusByRarity": {
     "gray": { "level1": 1.06 },
     "green": { "level1": 1.08 },
-    "blue": { "level1": 1.10 },
-    "purple": { "level1": 1.13 },
+    "blue": { "level1": 1.10, "level50": 1.21 },
+    "purple": { "level1": 1.13, "level50": 1.26 },
     "orange": { "level1": 1.15, "level50": 1.30 }
   },
   "earningsPerHour": {
@@ -70,7 +70,7 @@
     },
     {
       "name": "Entomed Mask", "rarity": "blue",
-      "primaryStat": "physDef", "primaryValue": 1.20, "isMultiplier": true,
+      "primaryStat": "physDef", "primaryValue": 1.20, "primaryValueMax": 1.54, "isMultiplier": true,
       "tierBonuses": {
         "t3": { "stat": "offlineGains", "value": 3, "isPercent": true },
         "t7": { "stat": "combatOffline", "value": 3, "isPercent": true }
@@ -78,7 +78,7 @@
     },
     {
       "name": "Century Tome", "rarity": "blue",
-      "primaryStat": "goldMulti", "primaryValue": 19.8, "isPercent": true,
+      "primaryStat": "goldMulti", "primaryValue": 19.8, "primaryValueMax": 57, "isPercent": true,
       "tierBonuses": {
         "t3": { "stat": "magicFind", "value": 15 },
         "t7": { "stat": "mobSpawnReduction", "value": 3, "isPercent": true }
@@ -122,7 +122,7 @@
     },
     {
       "name": "Pandemonium Egg", "rarity": "purple",
-      "primaryStat": "critDamage", "primaryValue": 20, "isPercent": true,
+      "primaryStat": "critDamage", "primaryValue": 20, "primaryValueMax": 89, "isPercent": true,
       "tierBonuses": {
         "t3": { "stat": "portalKills", "value": 3 },
         "t7": { "stat": "atkSpeed", "value": 6, "isPercent": true },
@@ -158,7 +158,7 @@
     },
     {
       "name": "Necromancer's Hand", "rarity": "orange",
-      "primaryStat": "goldMulti", "primaryValue": 31.2, "isPercent": true,
+      "primaryStat": "goldMulti", "primaryValue": 31.2, "primaryValueMax": 90, "isPercent": true,
       "tierBonuses": {
         "t3": { "stat": "magicFind", "value": 15 },
         "t7": { "stat": "mobSpawnReduction", "value": 3, "isPercent": true },
