@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.5 <span class="release-notes__date">April 29, 2026</span></h3>
+
+        <h4>Stat Engine — Sacrifice Coefficients (in-game verified)</h4>
+        <ul>
+          <li><strong>HP gap closed +56% → +3%</strong> by correcting Food Donation's perRank from 0.08 to 0.03 (in-game observation: rank 15 = 1.45×, rank 16 = 1.48×).</li>
+          <li><strong>Three more sacrifice perRanks corrected</strong>: Mining Edge Technology 0.14 → 0.10, Wish for Knowledge 0.07 → 0.03, Wish for Hardness 0.09 → 0.05. All four now match the in-game sacrifice menu's displayed multipliers.</li>
+          <li><strong>Pattern</strong>: spreadsheet values for sacrifice multipliers are systematically inflated (1.4× to 2.7×). Trust the in-game sacrifice menu, not the community sheet, for these coefficients.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.4 <span class="release-notes__date">April 28, 2026</span></h3>
 
         <h4>Cards Tab</h4>
