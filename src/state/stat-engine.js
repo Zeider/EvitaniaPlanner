@@ -62,6 +62,7 @@ function defaultStats() {
     hpRegen: 0, str: 0, dex: 0, int: 0, con: 0, men: 0,
     mobSpawnReduction: 0, goldMulti: 0, xpMulti: 0, offlineGains: 0,
     miningPower: 0, woodcuttingPower: 0, defPercent: 0,
+    miningPowerPercent: 0, wcPowerPercent: 0,
     totalAtk: 0,
   };
 }
@@ -467,6 +468,8 @@ export function computeStats(profile) {
   // --- Step B: Additive % (sum all, apply once) ---
   stats.totalAtk = stats.atk * (1 + stats.atkPercent / 100);
   stats.def = stats.def * (1 + stats.defPercent / 100);
+  stats.miningPower = stats.miningPower * (1 + stats.miningPowerPercent / 100);
+  stats.woodcuttingPower = stats.woodcuttingPower * (1 + stats.wcPowerPercent / 100);
 
   // --- Step C: Multiplicative (chain-multiply after additive) ---
 

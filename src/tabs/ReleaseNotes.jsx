@@ -4,6 +4,16 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.6 <span class="release-notes__date">April 29, 2026</span></h3>
+
+        <h4>Bonfire Bug Fix</h4>
+        <ul>
+          <li><strong>Mining/WC bonfire buffs now apply.</strong> The +100% Mining Power (heat 1400) and +100% Woodcutting Power (heat 900) bonuses were silently dropped because <code>miningPowerPercent</code> and <code>wcPowerPercent</code> weren't in <code>defaultStats</code>. Added them and the additive→final-value step.</li>
+          <li><strong>Note:</strong> Bonfire heat isn't stored in the save (only fuel/rate). Set heat manually in the Bonfire panel to see these buffs apply.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.5 <span class="release-notes__date">April 29, 2026</span></h3>
 
         <h4>Stat Engine — Sacrifice Coefficients (in-game verified)</h4>
