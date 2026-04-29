@@ -82,6 +82,10 @@ function addStat(stats, statName, value) {
     physDef: 'def',
     magicDef: 'def', // simplified: fold magic def into def
     wcPower: 'woodcuttingPower',
+    // Hunter trainings use these legacy stat names; fold them into the
+    // *Percent fields the bonfire / additive-finalize step understand.
+    miningPercent: 'miningPowerPercent',
+    woodcuttingPercent: 'wcPowerPercent',
   };
 
   const key = mapping[statName] || statName;

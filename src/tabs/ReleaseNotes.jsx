@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.8 <span class="release-notes__date">April 29, 2026</span></h3>
+
+        <h4>Hunter Mining/Woodcutting Trainings — Were Silently Dropped</h4>
+        <ul>
+          <li><strong>Major bug</strong>: <code>hunter-upgrades.json</code>'s Mining Training and Woodcutting Training entries used stat names <code>miningPercent</code> / <code>woodcuttingPercent</code> that weren't in <code>defaultStats</code>. <code>addStat</code> dropped them silently. With each rank giving +3% Power and players easily hitting 26+ ranks each (+78% per stat), this was an enormous mining/wc undercount.</li>
+          <li>Fix: aliased <code>miningPercent</code> → <code>miningPowerPercent</code> and <code>woodcuttingPercent</code> → <code>wcPowerPercent</code> in <code>addStat</code>'s mapping table.</li>
+          <li>Verified: Zeider's mining power moved 662 → 877, woodcutting 610 → 848. Remaining gap to in-game (1782 / 2119) is consistent with profession-skill tiers 5-8 not yet documented.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.7 <span class="release-notes__date">April 29, 2026</span></h3>
 
         <h4>Curio Level Scaling — Real Endpoints</h4>
