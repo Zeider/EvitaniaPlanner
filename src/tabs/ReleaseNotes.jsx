@@ -4,6 +4,30 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.10 <span class="release-notes__date">May 1, 2026</span></h3>
+
+        <h4>Storage Tab — Read Your In-Game Stash</h4>
+        <ul>
+          <li>New <strong>Storage</strong> tab surfaces the player's shared stash from save imports — gear (with enhancement + durability) and resources, sorted by enhancement and amount respectively.</li>
+          <li><code>extractStash</code> in <code>save-decoder.js</code> walks <code>Inventory.stash</code>, filters empty slots, and discriminates gear vs. resource by presence of the <code>Durability</code> field (gear has it even when 0; resources never do).</li>
+          <li>Names resolve via <code>GEAR_GUID_MAP</code>; resource GUIDs are unmapped today and surface as truncated GUIDs — fill in a future <code>RESOURCE_GUID_MAP</code> as you identify them.</li>
+        </ul>
+
+        <h4>Engineer Tab — Patch 0.310.0 Mechanic Support</h4>
+        <ul>
+          <li>New <strong>Engineer</strong> tab decodes the Act 2 Engineer system added in patch 0.310.0: 4 production slots (enabled/disabled/stalled), per-slot upgrade levels, shared stockpile, and the <code>engineer_slot_upgrade</code> gem-shop rank.</li>
+          <li><code>extractEngineer</code> in <code>save-decoder.js</code> returns null for pre-0.310.0 saves (no <code>Engineer</code> block) and buckets every <code>engineer_*</code> key from <code>ProgressProfile.Enhancements</code> for forward-compat with future unlocks (already saw <code>engineer_unlock_item2</code> in live saves).</li>
+          <li>Last-produced timestamps decoded from .NET <code>DateTime.ToBinary()</code> (Kind=Local) and rendered as relative time. Number-precision loss near 2^62 (~10µs) is harmless at second resolution.</li>
+          <li>Upgrade GUIDs and recipe outputs aren't yet mapped to names — surfaced as raw GUIDs with rank counts so you can correlate against in-game observation.</li>
+        </ul>
+
+        <h4>Dashboard Tooltip Fix</h4>
+        <ul>
+          <li>The Boss Readiness footnote was leaking the literal text <code>{'\\u00f7'}</code>/<code>{'\\u2264'}</code>/<code>{'\\u00d7'}</code> instead of rendering as <code>÷</code>/<code>≤</code>/<code>×</code>. JSX text content doesn't interpret JavaScript escape sequences (only string literals do). Fixed by using the actual Unicode characters directly.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.9 <span class="release-notes__date">May 1, 2026</span></h3>
 
         <h4>Progression Tab — Infinite Set Was Missing</h4>

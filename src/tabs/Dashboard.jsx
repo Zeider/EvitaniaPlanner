@@ -419,7 +419,7 @@ function BossReadinessPanel() {
         })}
       </div>
       <div class="buffs-panel__hint" style="margin-top: 6px;">
-        TTK = boss HP \u00f7 effective DPS. Ready \u2264 5min. Hard mode scales HP/ATK \u00d716 (approx).
+        TTK = boss HP ÷ effective DPS. Ready ≤ 5min. Hard mode scales HP/ATK ×16 (approx).
       </div>
     </div>
   );

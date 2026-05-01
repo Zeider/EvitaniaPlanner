@@ -10,6 +10,8 @@ const TABS = [
   { id: 'alt-advisor', label: 'Alt Advisor' },
   { id: 'progression', label: 'Progression' },
   { id: 'cards', label: 'Cards' },
+  { id: 'storage', label: 'Storage' },
+  { id: 'engineer', label: 'Engineer' },
   { id: 'dps', label: 'DPS Sim' },
 ];
 

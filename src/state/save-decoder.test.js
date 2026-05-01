@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { decodeSaveHex, extractProfiles, loadSaveFile } from './save-decoder.js';
+import { decodeSaveHex, extractProfiles, extractStash, extractEngineer, loadSaveFile } from './save-decoder.js';
 
 /** Helper: encode a string the same way the game does (UTF-8 -> XOR 0xFF -> hex pairs). */
 function encodeSaveHex(str) {
@@ -116,6 +116,7 @@ const MOCK_SAVE = {
       'act-2-sacrifice-1': 3,
       GemshopSmelterySpeed: 4,
       GemshopSmelteryMulticraft: 4,
+      engineer_slot_upgrade: 4,
     },
   },
   Currency: {
@@ -129,6 +130,40 @@ const MOCK_SAVE = {
       'BlueDragon': 4.0,
       'difficulty1-act1': 30.0,
     },
+  },
+  Inventory: {
+    stashSlotsOpened: 70,
+    stash: [
+      // Resource: no Durability field, large Amount
+      { itemGuid: 'res-thorium-ore', Amount: 423068, Level: 0, EnhancementLevel: 0 },
+      // Gear: has Durability (even when 0)
+      { itemGuid: '19d55c7a-3354-4c01-9f7d-8b8a9620066f', Amount: 1, Level: 0, EnhancementLevel: 7, Durability: 80 },
+      { itemGuid: 'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a', Amount: 1, Level: 0, EnhancementLevel: 11, Durability: 0 },
+      // Empty slots in the middle of the array — should be filtered out
+      null,
+      { itemGuid: '', Amount: 0 },
+      // Unknown resource GUID — should still be extracted with name = null
+      { itemGuid: 'res-mystery', Amount: 1, Level: 0, EnhancementLevel: 0 },
+    ],
+  },
+  Engineer: {
+    Slots: [
+      {
+        Enabled: true,
+        LastProduced: 5250818776934678000,
+        Stalled: false,
+        Upgrades: {
+          'a322ac20-d3e8-4edd-9bdb-e7d09439c9b4': 15,
+          'e31ae6a0-9609-4b3a-a716-9daa5f739094': 3,
+        },
+      },
+      { Enabled: true, LastProduced: 5250818776934898000, Stalled: false, Upgrades: {} },
+      { Enabled: false, LastProduced: 0, Stalled: true, Upgrades: {} },
+      { Enabled: true, LastProduced: 5250818776934898000, Stalled: false, Upgrades: {} },
+    ],
+    Stockpile: { 'fb8ec77b-7539-4ca7-9273-8992341f849e': 1404 },
+    LastSelectedSlot: 0,
+    HasBeenOpened: true,
   },
   RuneSystem: {
     Rows: [
@@ -301,6 +336,100 @@ describe('extractProfiles', () => {
     expect(zeider.runewords.active).toEqual({ 0: 'PRE x 6' });
     // CollectedRunewordIds resolves GUIDs to names in the same order
     expect(zeider.runewords.discovered).toEqual(['GOR MU HAS', 'PRE x 6']);
+  });
+});
+
+describe('extractStash', () => {
+  it('filters empty slots and reports the opened-slot count', () => {
+    const stash = extractStash(MOCK_SAVE);
+    // 4 entries: 1 resource + 2 gear + 1 mystery resource. Null and empty-guid filtered.
+    expect(stash.items).toHaveLength(4);
+    expect(stash.slotsOpened).toBe(70);
+    expect(stash.totalSlots).toBe(6); // raw slot array length, including nulls
+  });
+
+  it('discriminates gear from resource by presence of Durability field', () => {
+    const stash = extractStash(MOCK_SAVE);
+    const byGuid = Object.fromEntries(stash.items.map(i => [i.guid, i]));
+
+    const ironChest = byGuid['19d55c7a-3354-4c01-9f7d-8b8a9620066f'];
+    expect(ironChest.isGear).toBe(true);
+    expect(ironChest.durability).toBe(80);
+    expect(ironChest.enhancementLevel).toBe(7);
+    expect(ironChest.name).toBe('Iron Chestplate');
+
+    // Steel Bow: gear with Durability=0 — must still be classified as gear
+    const steelBow = byGuid['a30e858e-5429-4c2a-9175-8a6cfd0f5c7a'];
+    expect(steelBow.isGear).toBe(true);
+    expect(steelBow.durability).toBe(0);
+    expect(steelBow.name).toBe('Steel Bow');
+
+    // Resource: no Durability field on either input or output
+    const ore = byGuid['res-thorium-ore'];
+    expect(ore.isGear).toBe(false);
+    expect(ore).not.toHaveProperty('durability');
+    expect(ore.amount).toBe(423068);
+  });
+
+  it('returns null name for unmapped GUIDs (no resource map yet)', () => {
+    const stash = extractStash(MOCK_SAVE);
+    const mystery = stash.items.find(i => i.guid === 'res-mystery');
+    expect(mystery.name).toBeNull();
+  });
+
+  it('returns empty result for saves with no Inventory block', () => {
+    const stash = extractStash({});
+    expect(stash).toEqual({ items: [], slotsOpened: 0, totalSlots: 0 });
+  });
+});
+
+describe('extractEngineer', () => {
+  it('preserves slot states (enabled, stalled, lastProduced, upgrades)', () => {
+    const eng = extractEngineer(MOCK_SAVE);
+    expect(eng.slots).toHaveLength(4);
+    expect(eng.slots[0]).toEqual({
+      index: 0,
+      enabled: true,
+      stalled: false,
+      lastProduced: 5250818776934678000,
+      upgrades: {
+        'a322ac20-d3e8-4edd-9bdb-e7d09439c9b4': 15,
+        'e31ae6a0-9609-4b3a-a716-9daa5f739094': 3,
+      },
+    });
+    // Slot 2 in the fixture is disabled + stalled — surface both flags.
+    expect(eng.slots[2].enabled).toBe(false);
+    expect(eng.slots[2].stalled).toBe(true);
+  });
+
+  it('extracts stockpile and ui state', () => {
+    const eng = extractEngineer(MOCK_SAVE);
+    expect(eng.stockpile).toEqual({ 'fb8ec77b-7539-4ca7-9273-8992341f849e': 1404 });
+    expect(eng.lastSelectedSlot).toBe(0);
+    expect(eng.hasBeenOpened).toBe(true);
+  });
+
+  it('buckets engineer_* enhancements from ProgressProfile (currently just engineer_slot_upgrade)', () => {
+    const eng = extractEngineer(MOCK_SAVE);
+    expect(eng.enhancements).toEqual({ engineer_slot_upgrade: 4 });
+    // Should NOT include sibling enhancements like Gemshop* or LeBabka_*
+    expect(eng.enhancements).not.toHaveProperty('GemshopSmelterySpeed');
+  });
+
+  it('returns null when the save predates the Engineer feature', () => {
+    // Patch < 0.310.0 has no Engineer block at all — distinct from "present but empty".
+    const eng = extractEngineer({ Heroes: { Heroes: [] } });
+    expect(eng).toBeNull();
+  });
+});
+
+describe('extractProfiles — stash and engineer attached to each profile', () => {
+  it('attaches the same shared stash + engineer to every hero', () => {
+    const profiles = extractProfiles(MOCK_SAVE);
+    expect(profiles[0].stash).toEqual(profiles[1].stash);
+    expect(profiles[0].engineer).toEqual(profiles[1].engineer);
+    expect(profiles[0].stash.items.length).toBe(4);
+    expect(profiles[0].engineer.slots).toHaveLength(4);
   });
 });
 

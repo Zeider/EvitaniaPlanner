@@ -271,6 +271,10 @@ export function extractProfiles(saveData) {
     }
   }
 
+  // Shared (across all heroes) state — stash/engineer are single global instances.
+  const stash = extractStash(saveData);
+  const engineer = extractEngineer(saveData);
+
   // Shared upgrades extracted once from ProgressProfile.Enhancements
   const hunterUpgrades = {};
   const ashUpgrades = {};
@@ -333,6 +337,8 @@ export function extractProfiles(saveData) {
       hunterUpgrades,
       ashUpgrades,
       sacrificeUpgrades,
+      stash,
+      engineer,
       cards: (() => {
         const out = {};
         for (const [k, v] of Object.entries(cards)) {
@@ -403,6 +409,87 @@ export function extractProfiles(saveData) {
       })(),
     };
   });
+}
+
+/**
+ * Extract the player's shared stash (in-game "Storage" tab) from save JSON.
+ *
+ * The save's `Inventory.stash` is a fixed-length 150-slot array — null/empty
+ * slots are dropped. Each kept entry is normalized to:
+ *   { guid, name, amount, level, enhancementLevel, durability?, isGear }
+ *
+ * Discriminator: presence of `Durability` field marks a gear item (Steel Bow
+ * with `Durability: 0` still has the field; resources never do). Names are
+ * resolved via `GEAR_GUID_MAP`; resources don't have a name map yet, so
+ * `name` will be `null` for them — surface raw GUID in UI.
+ *
+ * @param {object} saveData - Parsed save JSON
+ * @returns {{ items: Array<object>, slotsOpened: number, totalSlots: number }}
+ */
+export function extractStash(saveData) {
+  const inv = saveData.Inventory || {};
+  const slots = Array.isArray(inv.stash) ? inv.stash : [];
+  const items = [];
+  for (const entry of slots) {
+    if (!entry || !entry.itemGuid) continue;
+    const isGear = Object.prototype.hasOwnProperty.call(entry, 'Durability');
+    items.push({
+      guid: entry.itemGuid,
+      name: GEAR_GUID_MAP[entry.itemGuid] || null,
+      amount: entry.Amount ?? 0,
+      level: entry.Level ?? 0,
+      enhancementLevel: entry.EnhancementLevel ?? 0,
+      ...(isGear ? { durability: entry.Durability ?? 0 } : {}),
+      isGear,
+    });
+  }
+  return {
+    items,
+    slotsOpened: inv.stashSlotsOpened ?? 0,
+    totalSlots: slots.length,
+  };
+}
+
+/**
+ * Extract the Engineer system state (Act 2 mechanic introduced in patch 0.310.0).
+ *
+ * Returns null for saves predating the Engineer (patch < 0.310.0 has no
+ * `Engineer` block). The Engineer is a 4-slot idle production system where
+ * each slot produces an item over a cycle, deposits it into a shared
+ * `Stockpile`, and can be boosted by per-slot upgrades.
+ *
+ * Slot upgrade GUIDs map to four hidden upgrade categories (designer-defined
+ * in `EngineerUpgradeCategoryConfig`); names are not in the save and would
+ * need to be observed in-game to map.
+ *
+ * @param {object} saveData - Parsed save JSON
+ * @returns {object|null} Engineer state, or null if absent.
+ */
+export function extractEngineer(saveData) {
+  const eng = saveData.Engineer;
+  if (!eng) return null;
+  const slots = Array.isArray(eng.Slots) ? eng.Slots : [];
+  // Engineer-related gem-shop enhancements live in ProgressProfile.Enhancements
+  // alongside other shop unlocks. Bucket every engineer_* key — there's only
+  // engineer_slot_upgrade today, but future enhancements likely follow the
+  // pattern (cf. GemshopRuneSlotUnlock, GemshopCurioInventoryUnlock).
+  const enhancements = {};
+  for (const [key, value] of Object.entries(saveData.ProgressProfile?.Enhancements || {})) {
+    if (key.startsWith('engineer_')) enhancements[key] = value;
+  }
+  return {
+    slots: slots.map((s, idx) => ({
+      index: idx,
+      enabled: !!s?.Enabled,
+      stalled: !!s?.Stalled,
+      lastProduced: s?.LastProduced ?? 0,
+      upgrades: { ...(s?.Upgrades || {}) },
+    })),
+    stockpile: { ...(eng.Stockpile || {}) },
+    lastSelectedSlot: eng.LastSelectedSlot ?? 0,
+    hasBeenOpened: !!eng.HasBeenOpened,
+    enhancements,
+  };
 }
 
 /**

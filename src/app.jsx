@@ -12,6 +12,8 @@ import { AltAdvisor } from './tabs/AltAdvisor.jsx';
 import { ReleaseNotes } from './tabs/ReleaseNotes.jsx';
 import { Progression } from './tabs/Progression.jsx';
 import { Cards } from './tabs/Cards.jsx';
+import { Storage } from './tabs/Storage.jsx';
+import { Engineer } from './tabs/Engineer.jsx';
 import { useEffect } from 'preact/hooks';
 import { activeTab, theme, lightMode } from './state/store.js';
 
@@ -37,7 +39,9 @@ export function App() {
         {activeTab.value === 'release-notes' && <ReleaseNotes />}
         {activeTab.value === 'progression' && <Progression />}
         {activeTab.value === 'cards' && <Cards />}
-        {activeTab.value !== 'dashboard' && activeTab.value !== 'dps' && activeTab.value !== 'gear' && activeTab.value !== 'advisor' && activeTab.value !== 'skills' && activeTab.value !== 'crafting' && activeTab.value !== 'runes' && activeTab.value !== 'alt-advisor' && activeTab.value !== 'release-notes' && activeTab.value !== 'progression' && activeTab.value !== 'cards' && (
+        {activeTab.value === 'storage' && <Storage />}
+        {activeTab.value === 'engineer' && <Engineer />}
+        {!['dashboard','dps','gear','advisor','skills','crafting','runes','alt-advisor','release-notes','progression','cards','storage','engineer'].includes(activeTab.value) && (
           <div class="placeholder-tab"><p>{activeTab.value} — coming soon</p></div>
         )}
       </main>

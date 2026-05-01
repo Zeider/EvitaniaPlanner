@@ -16,6 +16,8 @@ import './css/alt-advisor.css';
 import './css/release-notes.css';
 import './css/progression.css';
 import './css/cards.css';
+import './css/storage.css';
+import './css/engineer.css';
 
 // Decode shared build from URL hash
 const hash = location.hash;

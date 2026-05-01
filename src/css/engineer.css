@@ -1,0 +1,42 @@
+.engineer { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.engineer__summary,
+.engineer__stockpile {
+  background: var(--card-bg, rgba(255,255,255,0.05));
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.engineer__panel-title { margin: 0 0 10px; font-size: 0.95rem; color: var(--muted, #aab); text-transform: uppercase; letter-spacing: 0.05em; }
+.engineer__hint { color: var(--muted, #aab); font-size: 0.8rem; }
+.engineer__hint code { background: rgba(0,0,0,0.3); padding: 1px 4px; border-radius: 3px; }
+.engineer__empty { color: var(--muted, #aab); margin: 0; font-style: italic; font-size: 0.85rem; }
+.engineer__slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.engineer__slot {
+  background: var(--card-bg, rgba(255,255,255,0.05));
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.engineer__slot--disabled { opacity: 0.55; }
+.engineer__slot--stalled { border-color: var(--warn, #fb8); }
+.engineer__slot--selected { border-color: var(--accent, #8af); }
+.engineer__slot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+.engineer__slot-index { font-weight: 600; }
+.engineer__slot-state { color: var(--muted, #aab); font-size: 0.8rem; }
+.engineer__slot-marker { color: var(--accent, #8af); }
+.engineer__slot-meta { color: var(--muted, #aab); font-size: 0.82rem; }
+.engineer__slot-upgrades-summary { font-size: 0.82rem; color: var(--muted, #aab); margin-bottom: 4px; }
+.engineer__upgrade-table,
+.engineer__stockpile-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.engineer__upgrade-table th, .engineer__upgrade-table td,
+.engineer__stockpile-table th, .engineer__stockpile-table td {
+  padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--border, rgba(255,255,255,0.06));
+}
+.engineer__upgrade-table th, .engineer__stockpile-table th { color: var(--muted, #aab); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
+.engineer__guid { font-family: monospace; font-size: 0.78rem; color: var(--muted, #aab); }
