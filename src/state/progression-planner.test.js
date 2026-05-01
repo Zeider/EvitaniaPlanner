@@ -75,6 +75,61 @@ describe('expandTargetToMaterials — gearSet', () => {
   });
 });
 
+describe('expandTargetToMaterials — Infinite gen-I tier', () => {
+  // Regression: Infinite recipes are named "Infinite <Slot> I" (Roman-numeral
+  // generation suffix), so the tier label is "Infinite I" — distinguishing
+  // gen I from any future "Infinite II" set. Before the suffix-aware fix, this
+  // resolved to zero pieces.
+  it('expands a full Infinite I set for a rogue (weapon piece = Infinite Bow I)', () => {
+    const target = { type: 'gearSet', value: 'Infinite I' };
+    const result = expandTargetToMaterials(target, { class: 'rogue' });
+    expect(result.length).toBeGreaterThan(0);
+    const byName = Object.fromEntries(result.map(r => [r.material, r.totalNeeded]));
+    // Bow-specific material (Cactus appears only in Infinite Bow I, qty 450000)
+    expect(byName['Cactus']).toBe(450000);
+    // Bow-only stone (Icy Stone I qty 300000)
+    expect(byName['Icy Stone I']).toBe(300000);
+    // Aggregated across the 4 armor pieces
+    // Helmet 30 + Chestplate 10 + Gloves 10 + Boots 10
+    expect(byName['Crystallized Blue Substance']).toBe(60);
+    // Helmet 72000 + Chestplate 24000 + Gloves 24000 + Boots 24000
+    expect(byName['Grassy Stone I']).toBe(144000);
+    // Bow 2000 + Helmet 1000 + Boots 1000
+    expect(byName["The Crab's Pickaxe"]).toBe(4000);
+    // Should NOT include other classes' weapon-only materials
+    expect(byName['Kangaroo Boomerang']).toBeUndefined(); // Longsword
+    expect(byName['Poop Ball']).toBeUndefined();          // Staff
+  });
+
+  it('filters weapon by class: warrior picks Infinite Longsword I', () => {
+    const target = { type: 'gearSet', value: 'Infinite I' };
+    const result = expandTargetToMaterials(target, { class: 'warrior' });
+    const byName = Object.fromEntries(result.map(r => [r.material, r.totalNeeded]));
+    expect(byName['Kangaroo Boomerang']).toBe(450000);
+    expect(byName['Cactus']).toBeUndefined();
+    expect(byName['Poop Ball']).toBeUndefined();
+  });
+
+  it('filters weapon by class: mage picks Infinite Staff I', () => {
+    const target = { type: 'gearSet', value: 'Infinite I' };
+    const result = expandTargetToMaterials(target, { class: 'mage' });
+    const byName = Object.fromEntries(result.map(r => [r.material, r.totalNeeded]));
+    expect(byName['Poop Ball']).toBe(450000);
+    expect(byName['Cactus']).toBeUndefined();
+    expect(byName['Kangaroo Boomerang']).toBeUndefined();
+  });
+
+  it('does NOT match Infinite recipes when the bare tier name is given (no gen suffix)', () => {
+    // "Infinite" alone is not a valid tier label; "Infinite I" is. This guards
+    // against accidentally matching all generations when the user picks a
+    // would-be parent tier.
+    const target = { type: 'gearSet', value: 'Infinite' };
+    const result = expandTargetToMaterials(target, { class: 'rogue' });
+    // Suffix check: "Infinite Helmet I" → suffix "Helmet I" ∉ armor set, so 0 pieces.
+    expect(result).toEqual([]);
+  });
+});
+
 describe('estimateMaterialEta', () => {
   const profile = {
     class: 'rogue',

@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.9 <span class="release-notes__date">May 1, 2026</span></h3>
+
+        <h4>Progression Tab — Infinite Set Was Missing</h4>
+        <ul>
+          <li><strong>Bug</strong>: the Progression tab's <em>Set</em> picker dropped Infinite tier entirely. Both the dropdown's tier extractor and the planner's recipe filter required armor names to end at the slot word (e.g. <code>"Infinite Helmet"</code>), but Infinite recipes are named with a Roman-numeral generation suffix (<code>"Infinite Helmet I"</code>), which neither code path tolerated. Result: zero Infinite pieces resolved even though individual-piece selection still worked.</li>
+          <li>Fix: extract tier as <code>"&lt;Name&gt; &lt;Gen&gt;"</code> (e.g. <code>"Infinite I"</code>) when a Roman-numeral suffix is present, and have the planner split that label and gate suffix matching on the generation. Bare tiers (Thorium, Sunstone, …) keep the original code path — no profile migration needed.</li>
+          <li>Forward-compatible with future <code>"Infinite II"</code> / <code>"Infinite III"</code> generations: each gen will surface as its own selectable set rather than silently merging.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.8 <span class="release-notes__date">April 29, 2026</span></h3>
 
         <h4>Hunter Mining/Woodcutting Trainings — Were Silently Dropped</h4>

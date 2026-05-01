@@ -3,13 +3,16 @@ import { activeProfile, activeProfileKey, saveProfile, migrateCraftingInventory 
 import { buildProgressionPlan } from '../state/progression-planner.js';
 import recipesData from '../data/recipes.json';
 
-/** Extract gear set tier names from recipes (e.g. "Copper", "Bronze", "Thorium", ...). */
+/** Extract gear set tier names from recipes (e.g. "Copper", "Bronze", "Thorium",
+ *  "Infinite I", ...). Tiers with a Roman-numeral generation suffix (currently
+ *  only Infinite) are surfaced as "<Tier> <Gen>" so future generations (II, III)
+ *  can be picked independently. */
 function getAvailableSets() {
   const tiers = new Set();
   for (const category of Object.values(recipesData)) {
     for (const name of Object.keys(category)) {
-      const match = name.match(/^(\w+)\s+(Helmet|Chestplate|Boots|Gloves)$/);
-      if (match) tiers.add(match[1]);
+      const match = name.match(/^(\w+)\s+(Helmet|Chestplate|Boots|Gloves)(?:\s+([IVX]+))?$/);
+      if (match) tiers.add(match[3] ? `${match[1]} ${match[3]}` : match[1]);
     }
   }
   return Array.from(tiers);

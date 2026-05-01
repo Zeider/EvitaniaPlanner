@@ -36,14 +36,18 @@ function resolveRecipeNames(target, profile) {
     return recipeLookup[target.value] ? [target.value] : [];
   }
   if (target.type === 'gearSet') {
-    const tier = target.value;
+    // tier may be a bare name ("Thorium") or "<Name> <Gen>" ("Infinite I"). The
+    // generation suffix (only Infinite uses one today) lets us pick a specific
+    // gen out of recipes named "Infinite Helmet I", "Infinite Helmet II", etc.
+    const [tierName, gen = ''] = target.value.split(' ');
+    const genSuffix = gen ? ` ${gen}` : '';
     const classWeaponSuffix = {
       warrior: ['Sword', 'Longsword'],
       rogue: ['Bow'],
       mage: ['Staff'],
     };
     const allowedWeapons = new Set(
-      (classWeaponSuffix[profile.class] || []).map(s => `${tier} ${s}`)
+      (classWeaponSuffix[profile.class] || []).map(s => `${tierName} ${s}${genSuffix}`)
     );
     const weaponSuffixes = new Set(['Sword', 'Longsword', 'Bow', 'Staff']);
     // Only equippable slots belong in a gear set — armor, tools, and the
@@ -53,8 +57,9 @@ function resolveRecipeNames(target, profile) {
       'Pickaxe', 'Axe',
     ]);
     return Object.keys(recipeLookup).filter(name => {
-      if (!name.startsWith(tier + ' ')) return false;
-      const suffix = name.slice(tier.length + 1);
+      if (!name.startsWith(tierName + ' ')) return false;
+      if (gen && !name.endsWith(genSuffix)) return false;
+      const suffix = name.slice(tierName.length + 1, gen ? -genSuffix.length : undefined);
       if (weaponSuffixes.has(suffix)) return allowedWeapons.has(name);
       return armorAndToolSuffixes.has(suffix);
     });
