@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.14 <span class="release-notes__date">May 4, 2026</span></h3>
+
+        <h4>7 More Gear GUIDs + Steam Ring magicFind Fix</h4>
+        <ul>
+          <li>Mapped: Steel Belt, Harvest Gloves, Steam Ring, Sunstone Axe, Christmas Longsword, Second Anniversary Belt. With these, all 4 community-test-save heroes (ProGamer, SenorDabs, Timmay, Graviton) now have every equipped slot identified.</li>
+          <li>Steam Ring's <code>gear.json</code> entry was missing <code>magicFind: 10</code> — added (confirmed at enh+0).</li>
+          <li>Added <code>Second Anniversary Belt</code> to <code>gear.json</code> (mobSpawn -20, offline +3, allXp +10) — the first Anniversary Belt is a different item (positive mobSpawn).</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.13 <span class="release-notes__date">May 4, 2026</span></h3>
 
         <h4>12 New Gear GUID Mappings (Infinite I, Sunstone, Event Items)</h4>

@@ -556,7 +556,7 @@
       {
         "name": "Steam Ring",
         "slot": "ring",
-        "stats": { "atk": 50, "offline": 3, "allXp": 10 },
+        "stats": { "atk": 50, "offline": 3, "allXp": 10, "magicFind": 10 },
         "source": "Steam Shop",
         "obtainable": true
       },
@@ -649,6 +649,13 @@
         "slot": "belt",
         "stats": { "mobSpawn": 20, "magicFind": 10, "allXp": 20 },
         "source": "Anniversary Event",
+        "obtainable": false
+      },
+      {
+        "name": "Second Anniversary Belt",
+        "slot": "belt",
+        "stats": { "mobSpawn": -20, "offline": 3, "allXp": 10 },
+        "source": "Second Anniversary Event",
         "obtainable": false
       },
       {
