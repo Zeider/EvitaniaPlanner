@@ -4,6 +4,16 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.13 <span class="release-notes__date">May 4, 2026</span></h3>
+
+        <h4>12 New Gear GUID Mappings (Infinite I, Sunstone, Event Items)</h4>
+        <ul>
+          <li>Identified and mapped from a community save (tripleog, save version 0.310.2): Infinite Chestplate I, Infinite Gloves I, Infinite Boots I, Infinite Longsword I, Sunstone Longsword, Christmas Gloves, Valentine Belt, Rabbit's Foot, Ashen Ring, Second Anniversary Cap, Second Anniversary Pickaxe, Second Anniversary Axe.</li>
+          <li>Equipped gear for save imports now displays the correct names instead of raw GUIDs in the Gear Planner and the Storage tab. Stat calculations only apply where <code>gear.json</code> already had the item; Second Anniversary tools currently show name-only because we don't have base (enh+0) stat values yet.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.12 <span class="release-notes__date">May 4, 2026</span></h3>
 
         <h4>Grouped Tab Nav + Report Issue Button</h4>

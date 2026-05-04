@@ -21,35 +21,45 @@ const GEAR_GUID_MAP = {
   'ebc99fd6-a250-4a20-a4a5-0815f796148c': 'Bronze Helmet',
   '25f97961-90f6-4f18-9f7b-76e20c54e845': 'Iron Helmet',
   'cdd7ffa7-dd6e-499c-8fec-107ad960042e': 'Thorium Helmet',
+  '8fd20049-372a-4308-84dc-be3f9593a6d6': 'Second Anniversary Cap',
   // Chestplates
   '8a4e9274-0396-415b-ae89-f268a8b9afae': 'Bronze Chestplate',
   '19d55c7a-3354-4c01-9f7d-8b8a9620066f': 'Iron Chestplate',
   '8317c874-94e9-49d7-9eba-72a339f96791': 'Thorium Chestplate',
   '7aa5a7a5-8e6e-4e0d-b0a9-e03b2b9a1ae0': 'Harvest Shirt',
+  'a20b696b-219f-412b-82cf-d6efff7d72bc': 'Infinite Chestplate I',
   // Gloves
   '1d23d781-e7ba-4e85-9c4f-2ddf85a95804': 'Bronze Gloves',
   '99528be3-8b4f-4067-88d8-662d72b3d578': 'Iron Gloves',
   '3c9065ee-7794-4e2c-8d08-6c88ae394040': 'Thorium Gloves',
+  '60d25ebf-c2b8-4323-9231-c818c6e8e61e': 'Infinite Gloves I',
+  '9ccd8c46-9b45-438a-9123-b88c310d1ea8': 'Christmas Gloves',
   // Boots
   '0764c550-b308-4365-9271-8bf8dbfe949a': 'Copper Boots',
   '6fa4b8c7-adc0-42c7-98e5-7c5963f46f66': 'Bronze Boots',
   'c6d360e1-1c30-454c-bb63-935e67761d8b': 'Iron Boots',
   'd0686aa5-f77e-49a3-8232-adff3802b073': 'Thorium Boots',
   '666c26e3-2516-4204-9055-e1c4947275ce': 'Summer Boots',
+  '24b50860-fc4c-4a36-be28-b33491381f7b': 'Infinite Boots I',
   // Belts
   '36737f24-0684-4744-a032-6feb29cd39dd': 'Steam Belt',
   '8e42e15e-c3de-4471-8d40-19fccf9d0a23': 'Belt of Love',
+  '4e99a414-c481-481a-8b28-f05dfecd9c18': 'Valentine Belt',
   // Amulets
   '4d02a095-fe8b-4a12-a7c3-6d1ef2ab5107': 'Boss Amulet',
   'b62ce843-0d7f-4a03-8680-62545e79a873': 'Nordic Amulet',
+  'b1e4a2ea-3dbc-43c0-b82f-393b53cbd828': "Rabbit's Foot",
   // Rings
   'd095a977-8554-4dff-9a8d-e66558fba0da': 'Ring of STR',
   '2c1d48e6-875a-4530-8080-f017bac70e99': 'Mammoth Ring',
   '9bb15e82-d4cd-4a4d-92b9-227d0b30c0a6': 'Tower Ring',
-  // Swords
+  '56b23a59-39bf-47fc-9784-e520f352fbed': 'Ashen Ring',
+  // Swords / Longswords
   '5279b9a3-3ac1-44e2-8306-1374d6351c10': 'Essence Sword',
   'bd3cfbe4-d754-410f-916b-db2a4241977b': 'Steel Longsword',
   'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Sword',
+  '3f98e0fe-9f6b-4bb6-af30-c690f44a20c9': 'Sunstone Longsword',
+  'a4fb1638-2d15-421c-abf5-0f95aed04d66': 'Infinite Longsword I',
   // Bows
   'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
   'f61790b8-c673-41ed-9b5f-0f3a5d3993de': 'Thorium Bow',
@@ -59,9 +69,11 @@ const GEAR_GUID_MAP = {
   'a36efc3c-9678-4613-8cda-b102e55fe714': 'Copper Pickaxe',
   'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
   '8500b653-61a3-42b3-9a60-af782562e9e6': 'Thorium Pickaxe',
+  '2b86c517-ff48-41e2-8be7-ee2cc1a49519': 'Second Anniversary Pickaxe',
   // Axes
   '95fbcc3e-b5f2-48cd-adc7-42a187ae4179': 'Iron Axe',
   '08cd484a-023b-4bae-93c9-465683d681ed': 'Thorium Axe',
+  '4690994f-900e-47e0-9eba-2a57019d4593': 'Second Anniversary Axe',
 };
 
 /**
