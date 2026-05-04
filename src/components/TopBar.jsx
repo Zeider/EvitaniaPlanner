@@ -42,6 +42,35 @@ export function TopBar() {
     setLightMode(!lightMode.value);
   }
 
+  // Open GitHub's "new issue" page with a prefilled template carrying enough
+  // context to triage without a back-and-forth (planner version, browser, the
+  // tab the user was on, whether they had a profile loaded). We deliberately
+  // don't include any save-file contents — that would leak character state
+  // into a public issue tracker without the user's explicit consent.
+  function handleReportIssue() {
+    const tab = activeTab.value || '(unknown)';
+    const profileLoaded = activeProfileKey.value ? `yes — class ${activeProfile.value?.class || '?'}, level ${activeProfile.value?.level ?? '?'}` : 'no';
+    const ua = navigator.userAgent;
+    const title = `[v${version}] `;
+    const body = [
+      `**Planner version:** v${version}`,
+      `**Active tab:** \`${tab}\``,
+      `**Profile loaded:** ${profileLoaded}`,
+      `**Browser:** ${ua}`,
+      '',
+      '## What were you doing?',
+      '<!-- e.g. "Picking Infinite I Set in the Progression tab" -->',
+      '',
+      '## What happened?',
+      '<!-- What you saw — paste a screenshot if useful -->',
+      '',
+      '## What did you expect?',
+      '<!-- What should have happened instead -->',
+    ].join('\n');
+    const url = `https://github.com/Zeider/EvitaniaPlanner/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
   return (
     <header class="top-bar">
       <div class="top-bar-left">
@@ -74,6 +103,9 @@ export function TopBar() {
           title="Release Notes"
         >
           Release Notes
+        </button>
+        <button class="btn btn-sm btn-report" onClick={handleReportIssue} title="Open GitHub issue with prefilled diagnostic context">
+          Report Issue
         </button>
         <button class="btn btn-sm btn-theme" onClick={handleThemeToggle}>
           {lightMode.value ? '🌙' : '☀️'}

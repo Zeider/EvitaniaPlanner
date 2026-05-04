@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.12 <span class="release-notes__date">May 4, 2026</span></h3>
+
+        <h4>Grouped Tab Nav + Report Issue Button</h4>
+        <ul>
+          <li>Tab nav reorganized into 4 categories so it stops scrolling: <strong>Dashboard</strong> · <strong>Character ▾</strong> (Gear, Skills, Cards, Runes, Engineer) · <strong>Inventory ▾</strong> (Storage, Crafting) · <strong>Planning ▾</strong> (Upgrade Advisor, Progression, Alt Advisor) · <strong>DPS Sim</strong>. Group buttons highlight when one of their children is the active tab. Click outside or press Escape to close an open dropdown.</li>
+          <li>Dropdowns render with <code>position: fixed</code> anchored to the trigger's bounding rect, so they escape the nav's <code>overflow-x: auto</code> clipping and remain fully visible on narrow screens where horizontal scroll is still active.</li>
+          <li>New <strong>Report Issue</strong> button in the top bar opens a prefilled GitHub issue with planner version, active tab, profile state, and browser — no API key needed, you edit the template and submit. Save-file contents are deliberately NOT included to avoid leaking character state into a public tracker.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.11 <span class="release-notes__date">May 4, 2026</span></h3>
 
         <h4>Progression — Intermediate Inventory Counts Toward Goals</h4>

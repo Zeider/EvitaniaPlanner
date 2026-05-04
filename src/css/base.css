@@ -799,6 +799,45 @@ input[type="radio"] { accent-color: #6366f1; cursor: pointer; }
   color: var(--text-main, #e5e7eb);
 }
 
+.tab-group { position: relative; display: inline-flex; }
+.tab-btn--group .tab-btn__chevron {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-size: 0.7em;
+  opacity: 0.7;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.tab-btn--open .tab-btn__chevron { transform: rotate(180deg); opacity: 1; }
+
+/* Dropdown rendered with position:fixed so it escapes .tab-nav's overflow
+ * clipping. JS sets left/top from the trigger's boundingClientRect. */
+.tab-group__menu {
+  position: fixed;
+  background: var(--bg-tab-nav, #111127);
+  border: 1px solid var(--border, rgba(255,255,255,0.12));
+  border-radius: 0 0 6px 6px;
+  min-width: 170px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  padding: 4px 0;
+}
+.tab-group__item {
+  padding: 0.55rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #6b7280);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s;
+}
+.tab-group__item:hover { color: var(--text-main, #e5e7eb); background: rgba(255,255,255,0.06); }
+.tab-group__item.active { color: var(--primary, #6366f1); }
+
 .tab-content {
   flex-grow: 1;
   padding: 2rem;
