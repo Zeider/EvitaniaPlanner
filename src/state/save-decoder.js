@@ -35,6 +35,7 @@ const GEAR_GUID_MAP = {
   '60d25ebf-c2b8-4323-9231-c818c6e8e61e': 'Infinite Gloves I',
   '9ccd8c46-9b45-438a-9123-b88c310d1ea8': 'Christmas Gloves',
   'ebf07811-87af-4b64-a65b-9dac251ecaa3': 'Harvest Gloves',
+  '919782a5-4a6a-430b-b4d9-b1fc48651876': 'Sunstone Gloves',
   // Boots
   '0764c550-b308-4365-9271-8bf8dbfe949a': 'Copper Boots',
   '6fa4b8c7-adc0-42c7-98e5-7c5963f46f66': 'Bronze Boots',
