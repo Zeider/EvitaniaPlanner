@@ -49,10 +49,25 @@ export function Progression() {
   const pieces = useMemo(() => getAvailablePieces(), []);
   const target = profile.progressionTarget;
 
-  const sortedMaterials = useMemo(
-    () => [...plan.aggregateMaterials].sort((a, b) => (b.etaHrs || 0) - (a.etaHrs || 0)),
-    [plan.aggregateMaterials]
-  );
+  // Bases first (sorted by ETA desc), then intermediates (alphabetical). Splitting
+  // this way keeps the actionable raw-material rows at the top of the shopping
+  // list and parks crafted intermediates below, where they're informational only.
+  const sortedMaterials = useMemo(() => {
+    const bases = plan.aggregateMaterials.filter(m => !m.isIntermediate);
+    const inters = plan.aggregateMaterials.filter(m => m.isIntermediate);
+    return [
+      ...bases.sort((a, b) => (b.etaHrs || 0) - (a.etaHrs || 0)),
+      ...inters.sort((a, b) => a.name.localeCompare(b.name)),
+    ];
+  }, [plan.aggregateMaterials]);
+  const inventorySorted = useMemo(() => {
+    const bases = plan.aggregateMaterials.filter(m => !m.isIntermediate);
+    const inters = plan.aggregateMaterials.filter(m => m.isIntermediate);
+    return [
+      ...bases.sort((a, b) => a.name.localeCompare(b.name)),
+      ...inters.sort((a, b) => a.name.localeCompare(b.name)),
+    ];
+  }, [plan.aggregateMaterials]);
 
   const [expandedPieces, setExpandedPieces] = useState({});
   const toggleExpand = (name) => setExpandedPieces(p => ({ ...p, [name]: !p[name] }));
@@ -225,19 +240,22 @@ export function Progression() {
             </thead>
             <tbody>
               {sortedMaterials.map(m => {
-                const className =
-                  m.remaining === 0 ? 'progression__mat-complete'
+                const className = m.isIntermediate
+                  ? 'progression__mat-intermediate'
+                  : m.remaining === 0 ? 'progression__mat-complete'
                   : m.source === 'unknown' ? 'progression__mat-unknown'
                   : m.isRough ? 'progression__mat-rough'
                   : '';
                 return (
                   <tr key={m.name} class={className}>
-                    <td>{m.name}</td>
+                    <td>{m.name}{m.isIntermediate && <span class="progression__mat-tag"> craft</span>}</td>
                     <td>{m.owned} / {m.totalNeeded}</td>
-                    <td>{m.remaining === 0 ? '✓' : fmtHours(m.etaHrs)}{m.isRough ? ' (rough)' : ''}</td>
+                    <td>{m.remaining === 0 ? '✓' : m.isIntermediate ? '—' : fmtHours(m.etaHrs)}{m.isRough && !m.isIntermediate ? ' (rough)' : ''}</td>
                     <td title={m.reason || ''}>
-                      {m.location || (m.reason ? '⚠ ' + m.reason : '—')}
-                      {(m.source === 'mining' || m.source === 'woodcutting') && (
+                      {m.isIntermediate
+                        ? 'Crafted from ingredients above'
+                        : (m.location || (m.reason ? '⚠ ' + m.reason : '—'))}
+                      {!m.isIntermediate && (m.source === 'mining' || m.source === 'woodcutting') && (
                         <span class="progression__observed-prompt">
                           {' [rate/hr: '}
                           <input
@@ -270,9 +288,9 @@ export function Progression() {
               <tr><th scope="col">Material</th><th scope="col">Owned</th></tr>
             </thead>
             <tbody>
-              {plan.aggregateMaterials.map(m => (
-                <tr key={m.name}>
-                  <td>{m.name}</td>
+              {inventorySorted.map(m => (
+                <tr key={m.name} class={m.isIntermediate ? 'progression__mat-intermediate' : ''}>
+                  <td>{m.name}{m.isIntermediate && <span class="progression__mat-tag"> craft</span>}</td>
                   <td>
                     <input
                       type="number"

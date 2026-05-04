@@ -266,13 +266,16 @@ describe('buildProgressionPlan', () => {
     expect(plan.totalEtaHrs).toBeCloseTo(expected, 1);
   });
 
-  it('reports quantity-weighted percentComplete (distinguishes from material-count weighting)', () => {
+  it('reports quantity-weighted percentComplete over base materials only (intermediates would double-count)', () => {
     // Thorium Boots needs ~1974 Thorium Ore + other mats, user owns 500 Thorium Ore
-    // and nothing else. Under quantity-weighting the ratio is nonzero (~500/totalNeeded).
+    // and nothing else. Under quantity-weighting over BASES the ratio is nonzero
+    // (~500/totalBaseNeeded). Including intermediates in the denominator would
+    // inflate it (every intermediate is already represented by its base ingredients).
     // Under material-count-weighting it would be 0 (zero materials fully satisfied).
     const plan = buildProgressionPlan(profile);
-    const totalQtyNeeded = plan.aggregateMaterials.reduce((s, m) => s + m.totalNeeded, 0);
-    const totalQtyOwned = plan.aggregateMaterials.reduce(
+    const baseMats = plan.aggregateMaterials.filter(m => !m.isIntermediate);
+    const totalQtyNeeded = baseMats.reduce((s, m) => s + m.totalNeeded, 0);
+    const totalQtyOwned = baseMats.reduce(
       (s, m) => s + Math.min(m.owned, m.totalNeeded), 0
     );
     const expected = totalQtyNeeded > 0 ? totalQtyOwned / totalQtyNeeded : 0;
@@ -302,6 +305,97 @@ describe('buildProgressionPlan', () => {
   it('reports percentComplete = 0 when nothing is owned', () => {
     const plan = buildProgressionPlan({ ...profile, inventory: {} });
     expect(plan.percentComplete).toBe(0);
+  });
+
+  it('credits intermediate inventory: owning Thorium Bars reduces required raw ore', () => {
+    // Thorium Boots wants 47 Thorium Bars. User has 30 → 17 still need crafting.
+    // Each bar costs 42 Thorium Ore + 30 Chadcoal, so raw ore drops from
+    // 47*42=1974 to 17*42=714. The bars also surface as an intermediate row in
+    // aggregateMaterials so the user sees their stockpile in context.
+    const withBars = {
+      ...profile,
+      progressionTarget: { type: 'gearPiece', value: 'Thorium Boots' },
+      inventory: { 'Thorium Bar': 30 },
+    };
+    const plan = buildProgressionPlan(withBars);
+
+    const ore = plan.aggregateMaterials.find(m => m.name === 'Thorium Ore');
+    expect(ore.totalNeeded).toBe(714); // was 1974 with no bar inventory
+    expect(ore.isIntermediate).toBe(false);
+
+    const bar = plan.aggregateMaterials.find(m => m.name === 'Thorium Bar');
+    expect(bar).toBeDefined();
+    expect(bar.isIntermediate).toBe(true);
+    expect(bar.totalNeeded).toBe(47);
+    expect(bar.owned).toBe(30);
+    expect(bar.remaining).toBe(17);
+    // Intermediates have no direct farming source — ETA is skipped (set to 0
+    // with source 'craft') so it doesn't double-count with the ingredient rows.
+    expect(bar.etaHrs).toBe(0);
+    expect(bar.source).toBe('craft');
+  });
+
+  it('fully-stocked intermediate short-circuits its sub-tree', () => {
+    // 50 Thorium Bars covers all 47 needed → no Thorium Ore or Chadcoal sub-tree
+    // gets walked, so those bases shouldn't appear in aggregateMaterials at all.
+    const fullyStocked = {
+      ...profile,
+      progressionTarget: { type: 'gearPiece', value: 'Thorium Boots' },
+      inventory: { 'Thorium Bar': 50 },
+    };
+    const plan = buildProgressionPlan(fullyStocked);
+
+    expect(plan.aggregateMaterials.find(m => m.name === 'Thorium Ore')).toBeUndefined();
+    expect(plan.aggregateMaterials.find(m => m.name === 'Chadcoal')).toBeUndefined();
+    expect(plan.aggregateMaterials.find(m => m.name === 'Ironwood Log')).toBeUndefined();
+
+    const bar = plan.aggregateMaterials.find(m => m.name === 'Thorium Bar');
+    expect(bar.totalNeeded).toBe(47);
+    expect(bar.remaining).toBe(0); // all need is covered by 47 of the 50 owned
+  });
+
+  it('shares intermediate inventory greedily across pieces in a set', () => {
+    // For a set target, two pieces both want Thorium Bars. With 30 bars on
+    // hand and a SHARED consumed pool, they're allocated to the first piece
+    // and the second piece must craft from raw — i.e. intermediate inventory
+    // is not double-spent across pieces.
+    const setTarget = {
+      ...profile,
+      class: 'rogue',
+      progressionTarget: { type: 'gearSet', value: 'Thorium' },
+      inventory: { 'Thorium Bar': 30 },
+    };
+    const planNoBars = buildProgressionPlan({ ...setTarget, inventory: {} });
+    const planWithBars = buildProgressionPlan(setTarget);
+
+    const oreNoBars = planNoBars.aggregateMaterials.find(m => m.name === 'Thorium Ore').totalNeeded;
+    const oreWithBars = planWithBars.aggregateMaterials.find(m => m.name === 'Thorium Ore').totalNeeded;
+    // 30 bars saves exactly 30*42=1260 Thorium Ore, no more (the bars are
+    // greedily allocated; remaining piece-bars are crafted from raw).
+    expect(oreNoBars - oreWithBars).toBe(30 * 42);
+  });
+
+  it('intermediate stockpile counts toward percentComplete via raw-savings credit', () => {
+    // No raw bases owned, but 30 Thorium Bars in stockpile. The bars represent
+    // 30*42=1260 Thorium Ore + 30*30=900 Chadcoal worth of work that's already
+    // been done — percentComplete should reflect that, not be 0%.
+    const withBars = {
+      ...profile,
+      progressionTarget: { type: 'gearPiece', value: 'Thorium Boots' },
+      inventory: { 'Thorium Bar': 30 },
+    };
+    const planEmpty = buildProgressionPlan({ ...withBars, inventory: {} });
+    const planWithBars = buildProgressionPlan(withBars);
+
+    expect(planEmpty.percentComplete).toBe(0);
+    expect(planWithBars.percentComplete).toBeGreaterThan(0);
+    // The credit is the raw work the bars stand in for, divided by total raw work.
+    // Chadcoal expands to ironwood log, so total raw "saved" = 1260 ore + 900*10 logs.
+    const totalRawNeeded = planEmpty.aggregateMaterials
+      .filter(m => !m.isIntermediate)
+      .reduce((s, m) => s + m.totalNeeded, 0);
+    const expectedSavings = 30 * 42 /* ore */ + 30 * 30 * 10 /* chadcoal → ironwood log */;
+    expect(planWithBars.percentComplete).toBeCloseTo(expectedSavings / totalRawNeeded, 5);
   });
 
   it('excludes owned pieces from aggregateMaterials and totalEtaHrs', () => {

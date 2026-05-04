@@ -19,6 +19,8 @@
 .progression__mat-complete { color: var(--success, #8f8); }
 .progression__mat-rough { color: var(--warn, #fb8); }
 .progression__mat-unknown { color: var(--danger, #f88); }
+.progression__mat-intermediate { color: var(--muted, #aab); font-style: italic; }
+.progression__mat-tag { font-size: 0.7rem; opacity: 0.65; margin-left: 6px; padding: 1px 5px; border: 1px solid var(--border, rgba(255,255,255,0.15)); border-radius: 3px; font-style: normal; text-transform: uppercase; letter-spacing: 0.04em; }
 .progression__piece { padding: 8px 0; border-bottom: 1px solid var(--border, rgba(255,255,255,0.06)); }
 .progression__piece-header { display: flex; justify-content: space-between; align-items: center; }
 .progression__piece-name { display: inline-flex; align-items: center; gap: 8px; }

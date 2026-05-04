@@ -4,6 +4,18 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.11 <span class="release-notes__date">May 4, 2026</span></h3>
+
+        <h4>Progression — Intermediate Inventory Counts Toward Goals</h4>
+        <ul>
+          <li>The Progression tab's Inventory now tracks <strong>processed intermediates</strong> (Thorium Bar, Chadcoal, Perfect Fur, etc.) alongside raw materials. Owning 30 Thorium Bars cuts the raw Thorium Ore requirement from 1974 → 714 — fully-stocked intermediates short-circuit their entire sub-tree (no more being told to mine ore for bars you've already smelted).</li>
+          <li>Algorithm: top-down expansion that greedily consumes inventory at each recipe level before recursing. Across pieces in a gear set, intermediates are shared via a single allocation pool so 30 bars can't be double-counted across 5 pieces.</li>
+          <li>Shopping List shows intermediates as italic "craft" rows below the raw materials, with no ETA (their farming time is captured by their ingredient rows). The Inventory section makes them editable so you can punch in your stockpile counts directly.</li>
+          <li><strong>percentComplete</strong> now credits work-already-done via intermediates: covered = (raw saved by intermediates) + (raw owned directly) ÷ (total raw work). Stockpiling bars no longer shows 0% progress when it represents most of the smelting work.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.10 <span class="release-notes__date">May 1, 2026</span></h3>
 
         <h4>Storage Tab — Read Your In-Game Stash</h4>

@@ -30,6 +30,43 @@ function expandRecipe(recipeName, qty, accum = {}) {
   return accum;
 }
 
+/**
+ * Top-down expansion that consumes intermediate inventory greedily. At each
+ * node we deduct what the user already has of THIS item before recursing —
+ * so a fully-stocked intermediate (e.g. 47 Thorium Bars) short-circuits its
+ * sub-tree and doesn't ask the player to farm raw ore for it.
+ *
+ * Two side-effect maps are accumulated:
+ *   - `gross[name]` — total qty needed across the full tree (pre-inventory).
+ *     Includes intermediates AND bases. Used for "owned/needed" display.
+ *   - `consumed[name]` — qty deducted from inventory (capped at what's needed
+ *     at the touching level). Used to compute remaining = gross − consumed.
+ *
+ * Pass a SHARED `consumed` map across multiple top-level calls (e.g. all
+ * pieces of a gear set) to avoid double-spending the same inventory across
+ * pieces. Pass a fresh `consumed` per call for the per-piece optimistic view
+ * where every piece sees the full inventory available to itself.
+ */
+function expandRecipeWithInventory(recipeName, qty, inventory, gross = {}, consumed = {}) {
+  gross[recipeName] = (gross[recipeName] || 0) + qty;
+
+  const available = Math.max(0, (inventory[recipeName] || 0) - (consumed[recipeName] || 0));
+  const useNow = Math.min(qty, available);
+  if (useNow > 0) consumed[recipeName] = (consumed[recipeName] || 0) + useNow;
+  const stillNeed = qty - useNow;
+
+  if (stillNeed === 0) return { gross, consumed };
+  const recipe = recipeLookup[recipeName];
+  if (!recipe) return { gross, consumed };
+
+  const yields = recipe.yields || 1;
+  const runs = Math.ceil(stillNeed / yields);
+  for (const ing of recipe.ingredients || []) {
+    expandRecipeWithInventory(ing.name, ing.qty * runs, inventory, gross, consumed);
+  }
+  return { gross, consumed };
+}
+
 /** Resolve target to recipe names (internal helper shared by orchestrators). */
 function resolveRecipeNames(target, profile) {
   if (target.type === 'gearPiece') {
@@ -248,10 +285,12 @@ export function buildProgressionPlan(profile) {
 
   const inventory = profile.inventory || {};
 
-  // Per-piece breakdown: expand each piece separately. A piece is "done" if it
-  // is either already equipped (detected from profile.gear) or manually checked
-  // off by the user (profile.completedPieces[name]). Done pieces short-circuit
-  // to zero — they contribute nothing to the shopping list or total work.
+  // Per-piece breakdown: expand each piece separately with its OWN consumed
+  // map (optimistic — every piece sees the full inventory). A piece is "done"
+  // if it is either already equipped (detected from profile.gear) or manually
+  // checked off by the user (profile.completedPieces[name]). Done pieces
+  // short-circuit to zero — they contribute nothing to the shopping list or
+  // total work.
   const completedPieces = profile.completedPieces || {};
   const pieces = recipeNames.map(name => {
     const equipped = isPieceOwned(name, profile);
@@ -265,59 +304,102 @@ export function buildProgressionPlan(profile) {
         pieceEtaHrs: 0,
       };
     }
-    const materials = expandRecipe(name, 1, {});
-    const pieceMats = Object.entries(materials).map(([matName, needed]) => {
-      const owned = inventory[matName] || 0;
-      const remaining = Math.max(0, needed - owned);
-      const eta = estimateMaterialEta(matName, remaining, profile);
-      return { name: matName, needed, owned, remaining, eta };
-    });
+    const grossLocal = {};
+    const consumedLocal = {};
+    expandRecipeWithInventory(name, 1, inventory, grossLocal, consumedLocal);
+    // Skip the target itself from per-piece materials (it's the piece, not an ingredient).
+    const pieceMats = Object.entries(grossLocal)
+      .filter(([matName]) => matName !== name)
+      .map(([matName, needed]) => {
+        const owned = inventory[matName] || 0;
+        const usedFromInv = consumedLocal[matName] || 0;
+        const remaining = Math.max(0, needed - usedFromInv);
+        const eta = estimateMaterialEta(matName, remaining, profile);
+        return { name: matName, needed, owned, remaining, eta, isIntermediate: !!recipeLookup[matName] };
+      });
+    // pieceEtaHrs only sums BASES; intermediates' farming time is captured by
+    // their own ingredient rows below them, so summing both would double-count.
     const pieceEtaHrs = pieceMats
-      .filter(m => isFinite(m.eta.etaHrs))
+      .filter(m => !m.isIntermediate && isFinite(m.eta.etaHrs))
       .reduce((s, m) => s + m.eta.etaHrs, 0);
     return { name, owned: false, completedManually: false, materials: pieceMats, pieceEtaHrs };
   });
 
-  // Aggregate across pieces, deduplicating by material name. Owned pieces
-  // contribute nothing (their `materials` is []), so the shopping list and totals
-  // correctly reflect only remaining work.
-  const aggregateMap = {};
+  // Aggregate: walk each non-owned piece with a SHARED consumed map so
+  // inventory is greedily allocated across pieces (no double-counting).
+  // Re-walking is cheap; doing this here rather than reusing per-piece state
+  // gives us correct shared-allocation semantics distinct from the per-piece
+  // optimistic view.
+  const aggregateGross = {};
+  const aggregateConsumed = {};
   for (const piece of pieces) {
-    for (const m of piece.materials) {
-      if (!aggregateMap[m.name]) {
-        aggregateMap[m.name] = { name: m.name, totalNeeded: 0 };
-      }
-      aggregateMap[m.name].totalNeeded += m.needed;
-    }
+    if (piece.owned) continue;
+    expandRecipeWithInventory(piece.name, 1, inventory, aggregateGross, aggregateConsumed);
   }
-  const aggregateMaterials = Object.values(aggregateMap).map(m => {
-    const owned = inventory[m.name] || 0;
-    const remaining = Math.max(0, m.totalNeeded - owned);
-    const eta = estimateMaterialEta(m.name, remaining, profile);
-    return {
-      name: m.name,
-      totalNeeded: m.totalNeeded,
-      owned,
-      remaining,
-      etaHrs: eta.etaHrs,
-      source: eta.source,
-      location: eta.location,
-      isRough: eta.isRough,
-      reason: eta.reason,
-    };
-  });
+  // Strip the piece names themselves — they're targets, not ingredients to
+  // shop for. Their constituent materials are what land in the list.
+  const targetNames = new Set(recipeNames);
+  const aggregateMaterials = Object.entries(aggregateGross)
+    .filter(([name]) => !targetNames.has(name))
+    .map(([name, totalNeeded]) => {
+      const owned = inventory[name] || 0;
+      const usedFromInv = aggregateConsumed[name] || 0;
+      const remaining = Math.max(0, totalNeeded - usedFromInv);
+      const isIntermediate = !!recipeLookup[name];
+      // Intermediates don't have a direct farming source — their cost is
+      // captured by their ingredient rows. Skip ETA estimation for them
+      // (otherwise the same farming hours get counted at every recipe level).
+      const eta = isIntermediate
+        ? { etaHrs: 0, source: 'craft', location: 'Crafted from ingredients below', isRough: false }
+        : estimateMaterialEta(name, remaining, profile);
+      return {
+        name,
+        totalNeeded,
+        owned,
+        remaining,
+        etaHrs: eta.etaHrs,
+        source: eta.source,
+        location: eta.location,
+        isRough: eta.isRough,
+        reason: eta.reason,
+        isIntermediate,
+      };
+    });
 
+  // totalEtaHrs sums BASE materials only. Intermediates are derived from
+  // their ingredients; counting both would double the farming time.
   const totalEtaHrs = aggregateMaterials
-    .filter(m => isFinite(m.etaHrs))
+    .filter(m => !m.isIntermediate && isFinite(m.etaHrs))
     .reduce((s, m) => s + m.etaHrs, 0);
 
-  // percentComplete: quantity-weighted fraction of owned vs. needed
-  const totalQtyNeeded = aggregateMaterials.reduce((s, m) => s + m.totalNeeded, 0);
-  const totalQtyOwned = aggregateMaterials.reduce(
-    (s, m) => s + Math.min(m.owned, m.totalNeeded),
-    0
-  );
-  const percentComplete = totalQtyNeeded > 0 ? totalQtyOwned / totalQtyNeeded : 0;
+  // percentComplete: quantity-weighted over BASE materials, but with a twist
+  // — an intermediate the user has on hand (e.g. 30 Thorium Bars) effectively
+  // satisfies the bases that *would* have been needed to craft it. We compute:
+  //
+  //   covered = (gross_full_base − gross_with_inv_base)   // savings via intermediates
+  //           + consumed_base                              // direct base inventory used
+  //   percentComplete = covered / gross_full_base
+  //
+  // gross_full_base is the no-inventory expansion (the "raw work" denominator).
+  // Without this credit, a player who's stockpiled bars would show 0% even
+  // though they've done most of the smelting work.
+  const grossFullBase = {};
+  for (const piece of pieces) {
+    if (piece.owned) continue;
+    expandRecipe(piece.name, 1, grossFullBase);
+  }
+  let totalRawNeeded = 0;
+  let totalRawCovered = 0;
+  for (const [name, fullQty] of Object.entries(grossFullBase)) {
+    totalRawNeeded += fullQty;
+    const stillNeeded = aggregateGross[name] || 0;
+    const directlyConsumed = aggregateConsumed[name] || 0;
+    const savedViaIntermediates = Math.max(0, fullQty - stillNeeded);
+    // Cap so excess stockpile on one base doesn't offset shortages on another.
+    const coveredForThisMat = Math.min(fullQty, savedViaIntermediates + directlyConsumed);
+    totalRawCovered += coveredForThisMat;
+  }
+  const percentComplete = totalRawNeeded > 0 ? totalRawCovered / totalRawNeeded : 0;
 
   return {
     target: target.value,
