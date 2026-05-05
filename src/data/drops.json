@@ -444,10 +444,10 @@
     "Fire Essence": { "zone": "1.13", "rate": 4 },
     "Coin": { "zone": "any", "rate": 1, "note": "gold drops" },
     "Yellow Substance": { "vendor": true, "dailyLimit": 50, "cost": 10000, "note": "50/day from vendor at 10k each" },
-    "Solid Fuel": { "vendor": true, "act": 1, "note": "Act 1 town vendor — daily limit + cost TBD" },
-    "Enhance Stone 1": { "vendor": true, "act": 1, "note": "Act 1 town vendor — daily limit + cost TBD" },
-    "Crystalized Yellow Substance": { "vendor": true, "act": 2, "dailyLimit": 50, "note": "Act 2 town shop NPC, 50/day" },
-    "Enhance Stone 2": { "vendor": true, "act": 2, "note": "Act 2 town vendor — daily limit + cost TBD" },
+    "Solid Fuel": { "vendor": true, "act": 1, "dailyLimit": 5, "cost": 20000 },
+    "Enhance Stone 1": { "vendor": true, "act": 1, "dailyLimit": 3, "cost": 20000 },
+    "Crystalized Yellow Substance": { "vendor": true, "act": 2, "dailyLimit": 50, "cost": 10000, "note": "Act 2 town shop NPC, 50/day at 10k each" },
+    "Enhance Stone 2": { "vendor": true, "act": 2, "dailyLimit": 3, "cost": 50000 },
     "Steel Ingot": { "craft": true, "note": "smelted from Iron Ore" },
     "Copper Ore": { "activity": "mining", "minLevel": 1 },
     "Tin Ore": { "activity": "mining", "minLevel": 5, "note": "zone 1.5 mining node" },
@@ -503,8 +503,8 @@
     "Sunstone Ore": { "activity": "mining", "minLevel": 30, "note": "Act 3 Fez zone ore" },
     "Grassy Stone I": { "zone": "hard-1", "rate": 20, "note": "Act 1 Hard dungeon drop" },
     "Icy Stone I": { "zone": "hard-2", "rate": 20, "note": "Act 2 Hard dungeon drop" },
-    "Crystallized Blue Substance": { "vendor": true, "act": 3, "note": "Act 3 town shop NPC, daily limit + cost TBD" },
-    "Enhance Stone 3": { "vendor": true, "act": 3, "note": "Act 3 town vendor — daily limit + cost TBD" },
+    "Crystallized Blue Substance": { "vendor": true, "act": 3, "dailyLimit": 3, "cost": 300000, "note": "Act 3 town shop NPC, 3/day at 300k each" },
+    "Enhance Stone 3": { "vendor": true, "act": 3, "dailyLimit": 3, "cost": 400000 },
     "Animal Bone": { "quest": "boar-kill", "note": "quest reward from killing Boars in Act 1" }
   }
 }

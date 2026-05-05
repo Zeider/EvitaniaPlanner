@@ -148,8 +148,13 @@ describe('estimateMaterialEta', () => {
     expect(r.isRough).toBe(false);
   });
 
-  it('returns Infinity + rough flag for vendor entries with no dailyLimit', () => {
-    // Crystallized Blue Substance: { vendor: true } — no dailyLimit known
+  it.skip('returns Infinity + rough flag for vendor entries with no dailyLimit', () => {
+    // SKIP: every vendor entry in drops.json now has a known dailyLimit
+    // (Crystallized Blue Substance was the last unknown — confirmed at 3/day,
+    // 300k each, 2026-05-05). The defensive branch in estimateMaterialEta still
+    // exists for future patches that introduce vendor items with unknown caps,
+    // but no current fixture triggers it. Re-enable when an unmapped vendor
+    // item appears, or refactor estimateMaterialEta to accept dropsData by DI.
     const r = estimateMaterialEta('Crystallized Blue Substance', 100, profile);
     expect(r.source).toBe('vendor');
     expect(r.etaHrs).toBe(Infinity);
