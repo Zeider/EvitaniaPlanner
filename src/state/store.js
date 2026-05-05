@@ -68,16 +68,38 @@ export function saveProfile(key, profile) {
   localStorage.setItem('ic-profiles', JSON.stringify(current));
 }
 
+/** Slug a hero name for use as a profile key (lowercase, spaces → hyphens). */
+function nameSlug(name) {
+  return name.toLowerCase().replace(/\s/g, '-');
+}
+
+/**
+ * Import a save's heroes into the profile map.
+ *
+ * Keys are `<slug>-<heroIndex>` so two heroes with the same name from one save
+ * (or across saves) don't collide and overwrite each other. Hero index is the
+ * position in the save's `Heroes.Heroes[]` array, which the game preserves
+ * across launches — re-importing the same save updates the same key, not a
+ * new one.
+ *
+ * Migration: any pre-existing profile keyed by the bare slug (legacy format
+ * before this change) is removed when its hero is re-imported, so the user
+ * doesn't see a duplicate "Legalize" + "Legalize-0" pair after upgrading.
+ */
 export function importProfiles(extractedProfiles) {
   const current = { ...profiles.value };
-  for (const p of extractedProfiles) {
-    const key = p.name.toLowerCase().replace(/\s/g, '-');
-    current[key] = p;
+  const importedSlugs = new Set(extractedProfiles.map(p => nameSlug(p.name)));
+  // Drop legacy bare-slug entries that match anything we're importing.
+  for (const k of Object.keys(current)) {
+    if (importedSlugs.has(k)) delete current[k];
+  }
+  for (const [i, p] of extractedProfiles.entries()) {
+    current[`${nameSlug(p.name)}-${i}`] = p;
   }
   profiles.value = current;
   localStorage.setItem('ic-profiles', JSON.stringify(current));
   if (extractedProfiles.length > 0) {
-    setActiveProfile(extractedProfiles[0].name.toLowerCase().replace(/\s/g, '-'));
+    setActiveProfile(`${nameSlug(extractedProfiles[0].name)}-0`);
   }
 }
 

@@ -4,6 +4,16 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.15 <span class="release-notes__date">May 4, 2026</span></h3>
+
+        <h4>Same-name Heroes No Longer Collide on Import + How-To Guide</h4>
+        <ul>
+          <li>Profile keys now include the hero's slot index (<code>&lt;name-slug&gt;-&lt;index&gt;</code>), so two heroes with the same name in one save (or across saves) are kept distinct instead of overwriting each other. Re-imports update the same key, not a new one. Legacy bare-slug entries are migrated when their hero is re-imported.</li>
+          <li>Added <code>GUIDE.md</code> at the repo root — a per-feature walkthrough covering every tab, the top-bar buttons, how the calculations work, and known limitations. Will eventually become a Help tab in the app; for now it's discoverable on the GitHub repo.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.14 <span class="release-notes__date">May 4, 2026</span></h3>
 
         <h4>7 More Gear GUIDs + Steam Ring magicFind Fix</h4>
