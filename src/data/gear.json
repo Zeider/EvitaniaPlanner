@@ -11,6 +11,16 @@
         "obtainable": true
       },
       {
+        "name": "Bone Dagger",
+        "slot": "weapon",
+        "subtype": "dagger",
+        "stats": {},
+        "source": "Crafted (Animal Bone quest reward)",
+        "obtainable": true,
+        "recipe": "Bone Dagger",
+        "_note": "stats TBD — placeholder until observed in-game"
+      },
+      {
         "name": "Copper Sword",
         "slot": "weapon",
         "subtype": "sword",

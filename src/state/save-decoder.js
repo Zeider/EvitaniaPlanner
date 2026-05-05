@@ -59,7 +59,8 @@ const GEAR_GUID_MAP = {
   '9bb15e82-d4cd-4a4d-92b9-227d0b30c0a6': 'Tower Ring',
   '56b23a59-39bf-47fc-9784-e520f352fbed': 'Ashen Ring',
   '33281f6e-6f07-485f-8dca-f2bf70903ced': 'Steam Ring',
-  // Swords / Longswords
+  // Swords / Longswords / Daggers
+  'f2bf27ef-f604-4f8d-a10e-4161d7f1d087': 'Bone Dagger',
   '5279b9a3-3ac1-44e2-8306-1374d6351c10': 'Essence Sword',
   'bd3cfbe4-d754-410f-916b-db2a4241977b': 'Steel Longsword',
   'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Sword',
@@ -70,6 +71,7 @@ const GEAR_GUID_MAP = {
   'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
   'f61790b8-c673-41ed-9b5f-0f3a5d3993de': 'Thorium Bow',
   // Staffs
+  '48640cc3-b770-4f91-add7-0ad871dfc7e7': 'Copper Staff',
   'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Steel Staff',
   // Pickaxes
   'a36efc3c-9678-4613-8cda-b102e55fe714': 'Copper Pickaxe',
