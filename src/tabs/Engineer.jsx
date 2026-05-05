@@ -1,4 +1,6 @@
+import { useState } from 'preact/hooks';
 import { activeProfile, activeProfileKey } from '../state/store.js';
+import engineerUpgradesData from '../data/engineer-upgrades.json';
 
 // .NET DateTime.ToBinary() with Kind=Local → JS Date. Top 2 bits encode Kind
 // (10 = Local), low 62 bits are 100ns ticks since 0001-01-01. Number precision
@@ -25,42 +27,107 @@ function shortGuid(guid) {
   return guid ? guid.slice(0, 8) : '';
 }
 
+// Index slots and upgrades from our catalog by slot number for fast lookup.
+const CATALOG_BY_SLOT = (() => {
+  const m = {};
+  for (const slot of engineerUpgradesData.slots) m[slot.index] = { meta: slot, upgrades: [] };
+  for (const u of engineerUpgradesData.upgrades) {
+    (m[u.slot] ||= { meta: { produces: '?' }, upgrades: [] }).upgrades.push(u);
+  }
+  return m;
+})();
+
+function fmtCost(u) {
+  if (!u.costs?.length) return '—';
+  if (u.costs.length === 1) return `${u.costs[0].toLocaleString()}`;
+  if (u.costs.length <= 5) return u.costs.map(c => c.toLocaleString()).join(' / ');
+  // Long progression — show first 3 and last
+  const first = u.costs.slice(0, 3).map(c => c.toLocaleString()).join(' / ');
+  const last = u.costs[u.costs.length - 1].toLocaleString();
+  return `${first} … ${last}`;
+}
+
+function fmtEffect(u) {
+  if (!u.unit) return u.effect;
+  const sign = u.perLevel >= 0 ? '+' : '';
+  const valFmt = u.unit === 'percent' ? `${sign}${u.perLevel}%/lvl` : `${sign}${u.perLevel}/lvl`;
+  return `${u.effect} (${valFmt}, max ${u.maxLevel})`;
+}
+
+function CatalogTable({ upgrades }) {
+  return (
+    <table class="engineer__catalog-table">
+      <thead>
+        <tr>
+          <th scope="col">Upgrade</th>
+          <th scope="col">Effect</th>
+          <th scope="col">Cost ({upgrades[0]?.costItem || '—'})</th>
+        </tr>
+      </thead>
+      <tbody>
+        {upgrades.map((u) => (
+          <tr key={u.name}>
+            <td>{u.name}</td>
+            <td class="engineer__catalog-effect">{fmtEffect(u)}</td>
+            <td class="engineer__catalog-cost">{fmtCost(u)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 function SlotCard({ slot, isSelected }) {
   const upgradeEntries = Object.entries(slot.upgrades);
   const totalRanks = upgradeEntries.reduce((sum, [, level]) => sum + level, 0);
+  const slotIndex = slot.index + 1; // game-facing number
+  const catalog = CATALOG_BY_SLOT[slotIndex] || { meta: { produces: '?' }, upgrades: [] };
+  const [showCatalog, setShowCatalog] = useState(false);
+  const stateLabel = !slot.enabled ? 'disabled' : slot.stalled ? 'stalled' : 'active';
+
   return (
     <div class={`engineer__slot ${slot.enabled ? '' : 'engineer__slot--disabled'} ${slot.stalled ? 'engineer__slot--stalled' : ''} ${isSelected ? 'engineer__slot--selected' : ''}`}>
       <div class="engineer__slot-header">
-        <span class="engineer__slot-index">Slot {slot.index + 1}</span>
+        <span class="engineer__slot-index">Slot {slotIndex}</span>
         <span class="engineer__slot-state">
-          {!slot.enabled ? 'disabled' : slot.stalled ? 'stalled' : 'active'}
+          {stateLabel}
           {isSelected && <span class="engineer__slot-marker"> · selected</span>}
         </span>
       </div>
+      <div class="engineer__slot-produces">
+        Produces <strong>{catalog.meta.produces}</strong> · {catalog.upgrades.length} upgrades available
+      </div>
       <div class="engineer__slot-meta">Last produced: {fmtRelative(slot.lastProduced)}</div>
+
       <div class="engineer__slot-upgrades">
-        {upgradeEntries.length === 0 ? (
-          <span class="engineer__empty">No upgrades.</span>
-        ) : (
-          <>
-            <div class="engineer__slot-upgrades-summary">
-              {upgradeEntries.length} categor{upgradeEntries.length === 1 ? 'y' : 'ies'} upgraded · {totalRanks} total ranks
-            </div>
-            <table class="engineer__upgrade-table">
-              <thead>
-                <tr><th scope="col">Upgrade GUID</th><th scope="col">Level</th></tr>
-              </thead>
-              <tbody>
-                {upgradeEntries.map(([guid, level]) => (
-                  <tr key={guid}>
-                    <td><code class="engineer__guid">{shortGuid(guid)}…</code></td>
-                    <td>{level}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
+        <div class="engineer__slot-upgrades-summary">
+          {upgradeEntries.length === 0
+            ? 'No upgrades invested yet.'
+            : `${upgradeEntries.length} of ${catalog.upgrades.length} upgrades invested · ${totalRanks} total ranks`}
+        </div>
+        {upgradeEntries.length > 0 && (
+          <table class="engineer__upgrade-table">
+            <thead>
+              <tr><th scope="col">Your invested GUID</th><th scope="col">Level</th></tr>
+            </thead>
+            <tbody>
+              {upgradeEntries.map(([guid, level]) => (
+                <tr key={guid}>
+                  <td><code class="engineer__guid">{shortGuid(guid)}…</code></td>
+                  <td>{level}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
+
+        <button
+          class="engineer__catalog-toggle"
+          onClick={() => setShowCatalog((v) => !v)}
+        >
+          {showCatalog ? '▾ Hide catalog' : `▸ Show all ${catalog.upgrades.length} upgrades`}
+        </button>
+        {showCatalog && <CatalogTable upgrades={catalog.upgrades} />}
       </div>
     </div>
   );
@@ -100,7 +167,7 @@ export function Engineer() {
           Gem-shop slot upgrade rank: <strong>{slotUpgradeLevel}</strong>
         </div>
         <div class="engineer__hint">
-          Upgrade GUIDs and recipe outputs aren't yet mapped to names — observe in-game and add entries to a future <code>ENGINEER_UPGRADE_GUID_MAP</code> in <code>save-decoder.js</code> to surface them here.
+          Each slot produces a different item (Idea / Blueprint / Runic Blueprint / Sun Scroll) and has its own upgrade tree. Click "Show all upgrades" on a slot to see what's available; your invested GUIDs are listed separately. Once we map GUIDs to upgrade names, both columns will resolve to readable rows.
         </div>
       </section>
 

@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.16 <span class="release-notes__date">May 5, 2026</span></h3>
+
+        <h4>Daily Vendor Purchases + Engineer Upgrade Catalog</h4>
+        <ul>
+          <li><strong>Daily Vendor Purchases panel</strong> on the Dashboard (replaces the old Daily Tasks): three act sections (Act 1: Solid Fuel + Enhance Stone 1; Act 2: Crystalized Yellow Substance + Enhance Stone 2; Act 3: Crystallized Blue Substance + Enhance Stone 3) with checkboxes that auto-reset on day rollover. Per-act <em>Engineer +stock</em> input applies your Vendor Stock rank (max +6 Act 1 from idea+blueprint slots, +3 Acts 2/3) to the displayed daily count. Daily limit + gold cost are editable per row and persist to the profile, so you can fill in numbers as you observe them in-game.</li>
+          <li><strong>Engineer tab</strong> now shows what each slot produces (Idea / Blueprint / Runic Blueprint / Sun Scroll) and how many upgrades exist in each slot's tree (5 / 11 / 15 / 9 = 40 total). A <em>Show all upgrades</em> toggle reveals the full catalog with effects, max levels, and per-level costs (table-based and exponential cost progressions both rendered).</li>
+          <li>New <code>src/data/engineer-upgrades.json</code> — 40 upgrades with names, effects, costs (pre-expanded for exponential ones using <code>base × growth^(level-offset)</code>). Game data cross-referenced from in-game observation and BadBotExe's evi reference site (license-clearing PR pending).</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.15 <span class="release-notes__date">May 4, 2026</span></h3>
 
         <h4>Same-name Heroes No Longer Collide on Import + How-To Guide</h4>

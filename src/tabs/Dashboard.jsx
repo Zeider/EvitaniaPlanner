@@ -468,27 +468,129 @@ function getYellowSubstanceNeeds(profile) {
   return { totalYS, dailyLimit, costPerUnit, dailyCost, daysNeeded };
 }
 
-function DailyReminders() {
-  const profile = activeProfile.value;
-  const ys = dropsData.resources['Yellow Substance'];
-  if (!ys || !ys.vendor) return null;
+// Vendor items grouped by act. Pulled from drops.json (vendor:true entries
+// tagged with `act`); item ordering is the in-game shop order.
+const VENDOR_ITEMS_BY_ACT = {
+  1: ['Solid Fuel', 'Enhance Stone 1'],
+  2: ['Crystalized Yellow Substance', 'Enhance Stone 2'],
+  3: ['Crystallized Blue Substance', 'Enhance Stone 3'],
+};
 
-  const needs = getYellowSubstanceNeeds(profile);
+// Per-act max bonus stock from Engineer upgrades:
+//   Act 1: Vendor Stock (idea) +3 + Vendor Stock (blueprint) +3 = +6
+//   Act 2: Vendor Stock (runic_blueprint) +3
+//   Act 3: Vendor Stock (sun_scroll) +3
+const VENDOR_BONUS_CAP = { 1: 6, 2: 3, 3: 3 };
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD in UTC
+}
+
+function VendorPurchases() {
+  const profile = activeProfile.value;
+  if (!activeProfileKey.value) return null;
+
+  const today = todayStr();
+  const checks = profile.dailyVendorChecks?.date === today
+    ? (profile.dailyVendorChecks.items || {})
+    : {};
+  const bonus = profile.engineerVendorBonus || {};
+
+  const setBonus = useCallback((act, raw) => {
+    const n = Math.max(0, Math.min(VENDOR_BONUS_CAP[act], Math.floor(Number(raw) || 0)));
+    saveProfile(activeProfileKey.value, {
+      ...profile,
+      engineerVendorBonus: { ...bonus, [act]: n },
+    });
+  }, [profile]);
+
+  const setOverride = useCallback((item, field, raw) => {
+    // Persist user-observed daily limit / gold cost into the profile so the
+    // numbers stick even if drops.json doesn't have them yet.
+    const n = Math.max(0, Math.floor(Number(raw) || 0));
+    const overrides = { ...(profile.vendorOverrides || {}) };
+    overrides[item] = { ...(overrides[item] || {}), [field]: n || null };
+    saveProfile(activeProfileKey.value, { ...profile, vendorOverrides: overrides });
+  }, [profile]);
+
+  const toggleCheck = useCallback((item) => {
+    const next = !checks[item];
+    const items = { ...checks, [item]: next };
+    saveProfile(activeProfileKey.value, {
+      ...profile,
+      dailyVendorChecks: { date: today, items },
+    });
+  }, [profile, checks]);
+
+  const clearAll = useCallback(() => {
+    saveProfile(activeProfileKey.value, {
+      ...profile,
+      dailyVendorChecks: { date: today, items: {} },
+    });
+  }, [profile]);
+
+  function rowFor(item, act) {
+    const drop = dropsData.resources[item] || {};
+    const override = profile.vendorOverrides?.[item] || {};
+    const baseLimit = override.dailyLimit ?? drop.dailyLimit ?? null;
+    const cost = override.cost ?? drop.cost ?? null;
+    const total = baseLimit != null ? baseLimit + (bonus[act] || 0) : null;
+    const totalGold = total != null && cost != null ? total * cost : null;
+    const checked = !!checks[item];
+    return (
+      <div key={item} class={`vendor-purchases__row ${checked ? 'vendor-purchases__row--done' : ''}`}>
+        <input type="checkbox" checked={checked} onChange={() => toggleCheck(item)} />
+        <span class="vendor-purchases__label">
+          {total != null ? `Buy ${total}` : 'Buy ?'} {item}
+          {totalGold != null && <span class="vendor-purchases__cost"> ({fmt(totalGold)} gold)</span>}
+        </span>
+        <span class="vendor-purchases__edits">
+          /day:&nbsp;
+          <input
+            type="number" min="0" class="vendor-purchases__num"
+            defaultValue={baseLimit ?? ''} placeholder="?"
+            onBlur={(e) => setOverride(item, 'dailyLimit', e.target.value)}
+            key={`${item}:limit:${baseLimit}`}
+          />
+          gold:&nbsp;
+          <input
+            type="number" min="0" class="vendor-purchases__num"
+            defaultValue={cost ?? ''} placeholder="?"
+            onBlur={(e) => setOverride(item, 'cost', e.target.value)}
+            key={`${item}:cost:${cost}`}
+          />
+        </span>
+      </div>
+    );
+  }
 
   return (
-    <div class="daily-reminders">
-      <div class="daily-reminders__title">Daily Tasks</div>
-      <div class="daily-reminders__item">
-        <span class="daily-reminders__label">
-          Buy {ys.dailyLimit} Yellow Substance ({fmt(ys.dailyLimit * ys.cost)} gold)
-        </span>
-        <span class="daily-reminders__source">Act 2 Vendor</span>
+    <div class="vendor-purchases">
+      <div class="vendor-purchases__header">
+        <span class="vendor-purchases__title">Daily Vendor Purchases</span>
+        <button class="vendor-purchases__reset" onClick={clearAll} title="Clear today's checks">↺ reset</button>
       </div>
-      {needs && needs.daysNeeded > 0 && (
-        <div class="daily-reminders__detail">
-          {needs.totalYS} needed for Thorium gear — {needs.daysNeeded} day{needs.daysNeeded !== 1 ? 's' : ''} of purchases
+      {[1, 2, 3].map((act) => (
+        <div key={act} class="vendor-purchases__act">
+          <div class="vendor-purchases__act-header">
+            <span class="vendor-purchases__act-title">Act {act} Vendor</span>
+            <span class="vendor-purchases__bonus-control">
+              Engineer +stock:&nbsp;
+              <input
+                type="number" min="0" max={VENDOR_BONUS_CAP[act]} class="vendor-purchases__num"
+                defaultValue={bonus[act] || 0}
+                onBlur={(e) => setBonus(act, e.target.value)}
+                key={`bonus:${act}:${bonus[act] || 0}`}
+              />
+              <span class="vendor-purchases__bonus-cap">/{VENDOR_BONUS_CAP[act]}</span>
+            </span>
+          </div>
+          {VENDOR_ITEMS_BY_ACT[act].map(item => rowFor(item, act))}
         </div>
-      )}
+      ))}
+      <div class="vendor-purchases__hint">
+        Engineer +stock auto-fills once we map your save's slot-upgrade GUIDs to upgrade names. For now type your <code>Vendor Stock</code> rank manually (max +6 Act 1 from idea + blueprint slots, +3 Acts 2/3).
+      </div>
     </div>
   );
 }
@@ -535,7 +637,7 @@ export function Dashboard() {
 
       <div class="dashboard__buffs" style="margin-top: 0;">
         <BossReadinessPanel />
-        <DailyReminders />
+        <VendorPurchases />
       </div>
 
       <div class="dashboard__buffs" style="margin-top: 0;">

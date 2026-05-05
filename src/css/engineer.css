@@ -40,3 +40,24 @@
 }
 .engineer__upgrade-table th, .engineer__stockpile-table th { color: var(--muted, #aab); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
 .engineer__guid { font-family: monospace; font-size: 0.78rem; color: var(--muted, #aab); }
+.engineer__slot-produces { font-size: 0.85rem; color: var(--text, #e5e7eb); margin-bottom: 4px; }
+.engineer__catalog-toggle {
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid var(--border, rgba(255,255,255,0.15));
+  color: var(--muted, #aab);
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+.engineer__catalog-toggle:hover { color: var(--text, #e5e7eb); }
+.engineer__catalog-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 6px; }
+.engineer__catalog-table th, .engineer__catalog-table td {
+  padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--border, rgba(255,255,255,0.06));
+}
+.engineer__catalog-table th { color: var(--muted, #aab); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; }
+.engineer__catalog-effect { color: var(--muted, #aab); font-size: 0.74rem; }
+.engineer__catalog-cost { color: var(--muted, #aab); font-size: 0.74rem; white-space: nowrap; }
