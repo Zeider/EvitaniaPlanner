@@ -4,6 +4,17 @@ export function ReleaseNotes() {
       <h2 class="release-notes__title">Release Notes</h2>
 
       <div class="release-notes__version">
+        <h3>v3.2.17 <span class="release-notes__date">May 5, 2026</span></h3>
+
+        <h4>38 Pet Skin GUIDs Mapped (Bulk Asset Extraction)</h4>
+        <ul>
+          <li>Bulk-extracted via Cpp2IL + UnityPy + TypeTreeGenerator from the game's compiled asset bundle. The 38 pet skin GUIDs (Animated Armor Skin, Astral Head Skin, Basic Bat Skin, …, Winged Observer Skin) now resolve to friendly names everywhere <code>PET_SKIN_GUID_MAP</code> is consulted.</li>
+          <li>Save extraction's <code>activePet</code> output now includes the equipped pet's <code>skin</code> name when the GUID is known.</li>
+          <li>Item / curio / recipe ScriptableObject classes use Unity's <code>[SerializeReference]</code> polymorphic serialization which can't be deserialized with free tooling — those still get filled in per-save observation. AssetRipper Premium would unblock the rest in one pass; pending decision until BadBotExe license response.</li>
+        </ul>
+      </div>
+
+      <div class="release-notes__version">
         <h3>v3.2.16 <span class="release-notes__date">May 5, 2026</span></h3>
 
         <h4>Daily Vendor Purchases + Engineer Upgrade Catalog</h4>

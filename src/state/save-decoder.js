@@ -86,6 +86,56 @@ const GEAR_GUID_MAP = {
 };
 
 /**
+ * Pet skin GUID → name. Bulk-extracted via Cpp2IL + UnityPy + TypeTreeGenerator
+ * from the game's data.unity3d (full asset extraction, May 2026). These are
+ * the only ScriptableObject class whose schema TypeTreeGenerator could fully
+ * resolve from the IL2CPP dummy DLLs — most other Item subclasses use
+ * `[SerializeReference]` polymorphic fields that fail to deserialize.
+ *
+ * Used to display unlocked skins (save's `unlockedSkinGuids`) by name.
+ */
+const PET_SKIN_GUID_MAP = {
+  '16868ae2-4460-4a04-be1a-b4989e05d431': 'Animated Armor Skin',
+  '4abe398f-dee8-454b-8149-fbeb472f2a3a': 'Astral Head Skin',
+  '1d17baa0-7c32-43fe-ab65-d06fdf529e68': 'Basic Bat Skin',
+  'c25a348e-0236-4d96-bf0d-0b6d30d0b198': 'Beeb Skin',
+  'd38efd3d-57cc-4084-8656-2f7b9be6a99a': 'Blue Drake Skin',
+  '9e384431-a343-42ca-bdf5-21cae0c00ba5': 'Blue Slyme Skin',
+  '9e297d51-5625-4789-9a6e-b9b223043982': 'Bugling Skin',
+  '5b8c2533-d388-4f81-9e58-aba07c66b3d4': 'Captain Squishy Skin',
+  'ee2cd99c-f031-4285-bac9-ada9d50c82b5': 'Chick Skin',
+  '32ff7a39-f62c-40ae-8d4e-02f7cb6e0b13': 'Cupid Skin',
+  '30d57c4d-6b12-4ee2-b466-039b63d41192': 'Dark Whelp Skin',
+  '5bab2a9d-5c33-4d09-a6cd-9f0c68512faa': 'Demon Bat Skin',
+  '1ae2cd0c-79b7-4285-8086-a7b69fd2ef5e': 'Easter Bunny Skin',
+  'f9f951c9-7c22-4601-b1cf-a3df701eb3d8': 'Fire Whelp Skin',
+  'e43662f8-2ed9-458a-b228-fd4402e93d67': 'Ghosty Skin',
+  '0590e481-f034-4883-a0a8-4090115a2fe7': 'Glitch Skin',
+  '4f0fbdce-09ee-4533-ae4f-44aa43e7dbb2': 'Golden Piggy Skin',
+  'cf787c8d-d9cc-4c10-91a2-3977905cc34f': 'Kitty Skin',
+  '0b3bd615-fc44-4aa2-a087-abb10d8ce3bf': 'Leaf Spirit Skin',
+  '20cf5895-da96-4fd6-9ee7-5abd695bf200': 'Meema Skin',
+  'f9bd61da-a165-48db-9e48-f582a9953c43': 'Mimic Skin',
+  '70d7f2fc-8a31-4188-a260-2c81ff6f12a4': 'Mony Skin',
+  'f97028ca-e9ab-4606-85bc-c0b24edda001': 'Orange Slyme Skin',
+  'baf0559b-c2bd-4c29-b4fb-9c137bd3eeab': 'Pebble Skin',
+  '31fc9f9b-f400-4ca0-be8a-1ea57da04f95': 'Pump Kin Skin',
+  'b92aaf0c-8dfa-4c0a-aea0-3181f502a732': 'Purple Slyme Skin',
+  'ab11a8bb-d2b4-4563-80fe-d8cfb4ac840f': 'Queen of Hearts Skin',
+  '60e2782a-ffd6-4b22-b4bc-911008d93a96': 'Red Drake Skin',
+  '21af9dd1-e9d2-46ae-8a9c-4f208e774660': 'Slyme Skin',
+  '3f2e0873-1b1a-4f9b-8b1d-3d0fa741622f': 'Snek Skin',
+  '792ea88f-7fa1-448e-9790-de50d59ce84d': 'Snowflake Skin',
+  '74215ff2-14c6-4fa3-825d-c659b500d33d': 'Spiney Skin',
+  '3be8cf5d-5e3e-4e50-8af6-f743e7906838': 'Succubus Skin',
+  '8ecafe4d-bbaa-47e6-b635-56ee51a13293': 'Turkey Skin',
+  '852ebfab-0703-40da-ab92-fac77cdb1fea': 'Valentine Skin',
+  '2ccf69e3-5296-42d3-a416-60efba2a1f6b': 'Valkyrie Skin',
+  'd9b02bf4-3d4d-4407-8ff5-4b496743f3f0': 'Weird Book Skin',
+  '4d4c7e68-9f10-4bbe-8e90-0c72bcaa489b': 'Winged Observer Skin',
+};
+
+/**
  * Known curio DefinitionId GUID → curio name mappings.
  * Add new entries as they're discovered from save files.
  */
@@ -392,7 +442,9 @@ export function extractProfiles(saveData) {
       activePet: (() => {
         const heroIndex = heroes.indexOf(hero);
         const pet = petSaveData.find(p => p.characterId === heroIndex && p.petSlot === 0);
-        return pet ? { name: pet.petName, level: pet.level, tier: pet.tier } : null;
+        if (!pet) return null;
+        const skin = PET_SKIN_GUID_MAP[pet.skinGuid] || null;
+        return { name: pet.petName, level: pet.level, tier: pet.tier, skin };
       })(),
       // Bosses defeated across all acts. Used by Boss Readiness panel and
       // for sacrifice unlock detection (Mammoth/Jotunn/Maevath gate Act 2 sacrifices).
