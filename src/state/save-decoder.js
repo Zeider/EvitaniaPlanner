@@ -17,7 +17,7 @@ const CLASS_MAP = {
  */
 const GEAR_GUID_MAP = {
   // Helmets
-  'a2d4e836-c10f-414e-8662-5ef40f24556b': 'Straw Hat',
+  'a2d4e836-c10f-414e-8662-5ef40f24556b': 'Straw hat',
   'ebc99fd6-a250-4a20-a4a5-0815f796148c': 'Bronze Helmet',
   '25f97961-90f6-4f18-9f7b-76e20c54e845': 'Iron Helmet',
   'cdd7ffa7-dd6e-499c-8fec-107ad960042e': 'Thorium Helmet',
@@ -63,7 +63,7 @@ const GEAR_GUID_MAP = {
   'f2bf27ef-f604-4f8d-a10e-4161d7f1d087': 'Bone Dagger',
   '5279b9a3-3ac1-44e2-8306-1374d6351c10': 'Essence Sword',
   'bd3cfbe4-d754-410f-916b-db2a4241977b': 'Steel Longsword',
-  'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Sword',
+  'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Longsword',
   '3f98e0fe-9f6b-4bb6-af30-c690f44a20c9': 'Sunstone Longsword',
   'a4fb1638-2d15-421c-abf5-0f95aed04d66': 'Infinite Longsword I',
   '34233e5d-0201-4183-981e-ec809440c4a6': 'Christmas Longsword',
@@ -74,7 +74,7 @@ const GEAR_GUID_MAP = {
   '48640cc3-b770-4f91-add7-0ad871dfc7e7': 'Copper Staff',
   'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Steel Staff',
   // Pickaxes
-  'a36efc3c-9678-4613-8cda-b102e55fe714': 'Copper Pickaxe',
+  'a36efc3c-9678-4613-8cda-b102e55fe714': 'Bronze Pickaxe',
   'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
   '8500b653-61a3-42b3-9a60-af782562e9e6': 'Thorium Pickaxe',
   '2b86c517-ff48-41e2-8be7-ee2cc1a49519': 'Second Anniversary Pickaxe',
@@ -140,12 +140,29 @@ const PET_SKIN_GUID_MAP = {
  * Add new entries as they're discovered from save files.
  */
 const CURIO_GUID_MAP = {
-  '961b2e57-cffb-4969-9efd-a8ecb863086b': 'Pandemonium Egg',
-  '428e363e-0d31-472c-9eb0-364ca82650cf': 'Ceremonial Dagger',
-  'ee7c4afc-2b5f-4ee6-9965-5f8988799fc1': 'Century Tome',
-  'd400737a-2802-4e02-9559-b31e43c1bbd4': 'Entomed Mask',
+  // All 20 curios verified against Items_en localization keys (2026-05-06).
+  // Note: prior versions had Ceremonial Dagger/Century Tome SWAPPED and
+  // misspelled "Entomed Mask" — both fixed here.
   '01d9ca35-48b6-4a62-bf8a-33785df36275': 'Swirling Tear',
+  '1ba01e17-307a-48f2-a843-18714536bc16': "Worm's Horn",
+  '2c0f298e-ead1-4ecf-aa48-11752f4f36d3': 'Wyrd Goblet',
+  '2ec691de-4888-4d3b-ba68-6f08389fd350': 'Sected Bypiramid',
+  '428e363e-0d31-472c-9eb0-364ca82650cf': 'Century Tome',
   '5e0c5fda-7215-4934-a368-8302316021b6': "Necromancer's Hand",
+  '73dfb882-4347-42b2-b118-2bbc3a81e607': 'Elden Monolith',
+  '797a05db-85b4-4b6b-9e1a-32c5fe651b62': 'Blooming Desert',
+  '7d61e63c-a7de-47f7-a5f3-76ae44483177': 'Ichored Specimen',
+  '846cec10-a8dc-4d90-b3b8-dcee62455793': 'Crystal Cranium',
+  '961b2e57-cffb-4969-9efd-a8ecb863086b': 'Pandemonium Egg',
+  'b37a7454-9acb-4833-9b46-1aa6b2ed65af': 'Ever Eclipsed Sun',
+  'c1e13206-b2a9-4d83-8266-6621421beff8': 'Fifth Stab',
+  'd055bb8b-d47e-4d01-accf-de9e50f24b28': 'Shattered Vow',
+  'd400737a-2802-4e02-9559-b31e43c1bbd4': 'Entombed Mask',
+  'd8dd906f-4afb-40e3-8212-f3621e136fc4': 'Cup of Indulgence',
+  'd9b09743-8082-409d-8260-2b98155e73a9': 'Jade Scarab',
+  'e3e5bebd-73b0-4ca3-8372-c2afb08c2384': 'Urn Flask',
+  'ee7c4afc-2b5f-4ee6-9965-5f8988799fc1': 'Ceremonial Dagger',
+  'f7cadf81-f1f4-4dce-b584-eb69a3ea2387': "Servant's Idol",
 };
 
 /**
@@ -244,6 +261,49 @@ const RUNE_GUID_MAP = {
   '9fe2cd59-b50f-49f0-8e07-d7a498435953': 'WOM',
   // Phys DEF
   'bd30b89c-11ee-4fc7-9edd-7ef31897f558': 'KI',
+};
+
+/**
+ * Rune-fragment item GUIDs (the "Use to add to Rune Inventory" stash items).
+ * Distinct GUID space from RUNE_GUID_MAP (which keys the rune-system inventory).
+ * Bulk-extracted 2026-05-06 from Items_en localization. All 33 rune names
+ * present in runes.json now have a fragment GUID — a 22-rune jump from the
+ * 11-rune coverage RUNE_GUID_MAP had previously.
+ */
+const RUNE_FRAGMENT_GUID_MAP = {
+  '5c6a4ed7-3db1-4434-9494-f276cffbe73a': 'ANG',
+  '38b10953-1093-402f-b033-10c29aba4958': 'APEX',
+  '10bce1a1-65ef-442f-b30b-0b8d28f9f221': 'BEB',
+  '6ee29bec-0d1a-4a00-b0f4-ec1c1a9acb00': 'BOL',
+  'ee7d769f-e6f1-4505-9258-b72a35fba841': 'DOT',
+  'f9fc2e7e-2321-4b42-b1f7-926618a52707': 'FAL',
+  '93eb358c-e2f2-4720-8ac3-d0c598c9fe7d': 'FON',
+  '6eee12dd-d7ca-4fe8-a888-74014ef92535': 'FUS',
+  'ac8c9028-9763-46db-a675-29f486f4d3d8': 'GOR',
+  '9a8cd33b-c38b-4594-a3db-24d687485bcc': 'GRO',
+  'd3a3f3b2-f6ab-49c8-93ad-b73b609c55db': 'HAS',
+  'f23f4633-6148-4ac4-aba7-78a8a16b2fae': 'KI',
+  '934a827e-f6ef-4df1-88e0-e43648a7519a': 'LUM',
+  'd4261f45-6a7a-42dc-bc44-c576e5da6ab2': 'MIN',
+  'd3a098d8-e50e-4e1d-97e6-3d84417b4d76': 'MU',
+  '298499df-7bb5-4307-bca4-2544a436e1bf': 'NIL',
+  'f5d30a43-9f0f-46aa-adc6-e52a82f23dc6': 'OLU',
+  '0f81c5cd-387e-4e42-b3fd-0520f9fef9b3': 'ORT',
+  '2b6957b5-0e9a-4aee-9315-9aee146c0985': 'PRE',
+  '124234f0-ee0f-48a3-886d-54053f70cdd7': 'RO',
+  'a977ade9-91fc-43a8-8563-bff0d17999ea': 'RYS',
+  '046323b6-8aa5-4f94-afc9-fb9e56d29f0f': 'SIRC',
+  '3b777d26-7e8c-4322-8262-85ccc142d518': 'SKO',
+  'f0ca2328-04c0-4fed-964a-168062b68ef7': 'SUR',
+  '6cb3dcd2-cb55-4842-b01f-51b0040a9e60': 'TES',
+  'eedd4646-4222-475b-8188-c9b75fb255f2': 'TYR',
+  'd19ecd84-bee0-47bf-bda2-e731558eb8bd': 'VEX',
+  'bb1ca061-193a-4188-bf60-70ed0378475f': 'WAR',
+  'cb449023-f5cb-448b-841b-ba11a3285ec2': 'WER',
+  'd9da007f-ce3e-4480-b45c-ba3704bc7ff6': 'WIR',
+  '615b2523-48b2-4c5b-95f9-9f8cdcc26048': 'WOM',
+  'eb8e653e-c8bc-4fde-b265-b22a35e8a8e0': 'YIT',
+  'b88fe027-7008-4cf7-ba18-39d71af99b24': 'YUR',
 };
 
 /**
@@ -508,7 +568,7 @@ export function extractStash(saveData) {
     const isGear = Object.prototype.hasOwnProperty.call(entry, 'Durability');
     items.push({
       guid: entry.itemGuid,
-      name: GEAR_GUID_MAP[entry.itemGuid] || null,
+      name: GEAR_GUID_MAP[entry.itemGuid] || RUNE_FRAGMENT_GUID_MAP[entry.itemGuid] || null,
       amount: entry.Amount ?? 0,
       level: entry.Level ?? 0,
       enhancementLevel: entry.EnhancementLevel ?? 0,
