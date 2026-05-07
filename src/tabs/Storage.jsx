@@ -53,9 +53,6 @@ export function Storage() {
   gear.sort((a, b) => (b.enhancementLevel - a.enhancementLevel) || (a.name || '').localeCompare(b.name || ''));
   resources.sort((a, b) => b.amount - a.amount);
 
-  const namedResources = resources.filter((r) => r.name).length;
-  const unknownResources = resources.length - namedResources;
-
   return (
     <div class="storage">
       <section class="storage__summary">
@@ -63,12 +60,6 @@ export function Storage() {
           <strong>{stash.items.length}</strong> items across <strong>{stash.slotsOpened}</strong> opened slots
           {stash.totalSlots > stash.slotsOpened && <> (of <strong>{stash.totalSlots}</strong> total)</>}
         </div>
-        {unknownResources > 0 && (
-          <div class="storage__hint">
-            {unknownResources} resource{unknownResources > 1 ? 's' : ''} with unmapped GUIDs — the planner doesn't know their names yet.
-            Add entries to <code>GEAR_GUID_MAP</code> (gear) or a future resource map in <code>save-decoder.js</code> as you identify them in-game.
-          </div>
-        )}
       </section>
 
       <StashSection
@@ -78,7 +69,6 @@ export function Storage() {
           { key: 'name', label: 'Name', render: (i) => i.name || <code>{shortGuid(i.guid)}…</code> },
           { key: 'enh', label: 'Enhance', render: (i) => `+${i.enhancementLevel}` },
           { key: 'dur', label: 'Durability', render: (i) => i.durability },
-          { key: 'guid', label: 'GUID', render: (i) => <code class="storage__guid">{i.guid}</code> },
         ]}
       />
 
@@ -88,7 +78,6 @@ export function Storage() {
         columns={[
           { key: 'name', label: 'Name', render: (i) => i.name || <code>{shortGuid(i.guid)}…</code> },
           { key: 'amount', label: 'Amount', render: (i) => i.amount.toLocaleString() },
-          { key: 'guid', label: 'GUID', render: (i) => <code class="storage__guid">{i.guid}</code> },
         ]}
       />
     </div>

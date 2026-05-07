@@ -8,8 +8,6 @@
   flex-direction: column;
   gap: 8px;
 }
-.storage__hint { color: var(--muted, #aab); font-size: 0.8rem; }
-.storage__hint code { background: rgba(0,0,0,0.3); padding: 1px 4px; border-radius: 3px; }
 .storage__empty { color: var(--muted, #aab); margin: 0; }
 .storage__section {
   background: var(--card-bg, rgba(255,255,255,0.05));
@@ -21,4 +19,3 @@
 .storage__table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .storage__table th, .storage__table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border, rgba(255,255,255,0.06)); }
 .storage__table th { color: var(--muted, #aab); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
-.storage__guid { font-family: monospace; font-size: 0.78rem; color: var(--muted, #aab); }
