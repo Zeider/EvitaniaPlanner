@@ -1,5 +1,6 @@
 import recipesData from '../data/recipes.json';
 import dropsData from '../data/drops.json';
+import { getEffectiveInventory } from './store.js';
 
 /** Build a flat recipe lookup: recipeName → recipe object (from any category). */
 function buildRecipeLookup() {
@@ -283,7 +284,7 @@ export function buildProgressionPlan(profile) {
   const recipeNames = resolveRecipeNames(target, profile);
   if (recipeNames.length === 0) return { ...empty, target: target.value };
 
-  const inventory = profile.inventory || {};
+  const inventory = getEffectiveInventory(profile);
 
   // Per-piece breakdown: expand each piece separately with its OWN consumed
   // map (optimistic — every piece sees the full inventory). A piece is "done"

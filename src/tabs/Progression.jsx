@@ -73,11 +73,19 @@ export function Progression() {
   const toggleExpand = (name) => setExpandedPieces(p => ({ ...p, [name]: !p[name] }));
 
   const updateInventory = useCallback((matName, raw) => {
-    // Ignore invalid input instead of clobbering existing value with 0.
-    // `qty | 0` would silently reset large numbers (>2^31), NaN, and paste typos.
-    const n = Number(raw);
-    if (!Number.isFinite(n) || n < 0) return;
-    const inv = { ...profile.inventory, [matName]: Math.floor(n) };
+    const inv = { ...profile.inventory };
+    const trimmed = (raw ?? '').toString().trim();
+    if (trimmed === '') {
+      // Empty field removes the manual override; the stash count flows through
+      // again via getEffectiveInventory. Useful when stash auto-fill is what
+      // the user actually wants but they previously typed a what-if value.
+      delete inv[matName];
+    } else {
+      const n = Number(trimmed);
+      // `qty | 0` would silently reset large numbers (>2^31), NaN, and paste typos.
+      if (!Number.isFinite(n) || n < 0) return;
+      inv[matName] = Math.floor(n);
+    }
     saveProfile(activeProfileKey.value, { ...profile, inventory: inv });
   }, [profile]);
 

@@ -32,7 +32,7 @@
     "1.4": {
       "mob": "Plant",
       "drops": [
-        { "item": "Mini Plant", "rate": 4, "type": "material" },
+        { "item": "Mini Plants", "rate": 4, "type": "material" },
         { "item": "Plant Card", "rate": 10000, "type": "card" }
       ]
     },
@@ -432,7 +432,7 @@
     "Honeycomb": { "zone": "1.2", "rate": 4 },
     "Stoney McStoneface": { "zone": "1.2", "rate": 4 },
     "Leaf": { "zone": "1.3", "rate": 4 },
-    "Mini Plant": { "zone": "1.4", "rate": 4 },
+    "Mini Plants": { "zone": "1.4", "rate": 4 },
     "Wolf Fang": { "zone": "1.5", "rate": 4 },
     "Fruit": { "zone": "1.6", "rate": 4 },
     "Ectoplasm": { "zone": "1.7", "rate": 4 },
@@ -448,7 +448,7 @@
     "Enhance Stone 1": { "vendor": true, "act": 1, "dailyLimit": 3, "cost": 20000 },
     "Crystalized Yellow Substance": { "vendor": true, "act": 2, "dailyLimit": 50, "cost": 10000, "note": "Act 2 town shop NPC, 50/day at 10k each" },
     "Enhance Stone 2": { "vendor": true, "act": 2, "dailyLimit": 3, "cost": 50000 },
-    "Steel Ingot": { "craft": true, "note": "smelted from Iron Ore" },
+    "Steel Bar": { "craft": true, "note": "smelted from Iron Ore" },
     "Copper Ore": { "activity": "mining", "minLevel": 1 },
     "Tin Ore": { "activity": "mining", "minLevel": 5, "note": "zone 1.5 mining node" },
     "Iron Ore": { "activity": "mining", "minLevel": 10 },

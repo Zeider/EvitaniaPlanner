@@ -32,6 +32,33 @@ export function createDefaultProfile() {
   };
 }
 
+/**
+ * Aggregate non-gear stash items into a { name → count } map. Items without
+ * a resolved name (unmapped GUIDs) are skipped — those would just clutter
+ * the planner with truncated GUID labels.
+ */
+export function deriveStashCounts(stash) {
+  const out = {};
+  if (!stash || !Array.isArray(stash.items)) return out;
+  for (const item of stash.items) {
+    if (item.isGear) continue;
+    if (!item.name) continue;
+    out[item.name] = (out[item.name] || 0) + (item.amount || 0);
+  }
+  return out;
+}
+
+/**
+ * Merge stash counts under the user's manual `profile.inventory` overrides.
+ * Stash provides the baseline (auto-populated from save); manual entries
+ * win for what-if planning. Clearing a manual entry (delete) restores the
+ * stash value; setting it to 0 explicitly zeroes the material.
+ */
+export function getEffectiveInventory(profile) {
+  if (!profile) return {};
+  return { ...deriveStashCounts(profile.stash), ...(profile.inventory || {}) };
+}
+
 /** One-time migration: if profile.inventory is empty and ic-invent-v1
  *  has data, copy it over. Returns the (possibly mutated) profile.
  *  Safe to call multiple times — no-op once inventory is populated. */

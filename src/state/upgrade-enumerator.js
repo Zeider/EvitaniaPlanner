@@ -4,6 +4,7 @@ import ashUpgradesData from '../data/ash-upgrades.json';
 import sacrificesData from '../data/sacrifices.json';
 import gearData from '../data/gear.json';
 import dropsData from '../data/drops.json';
+import { getEffectiveInventory } from './store.js';
 
 /** Maps each class to the weapon subtypes they can equip. */
 const CLASS_WEAPON_SUBTYPES = {
@@ -43,32 +44,36 @@ const gearBySlotSubtype = buildGearBySlotSubtype();
 
 /**
  * Estimate farm time in hours for a material cost object using the profile's
- * kill rate and drop rate data. Returns the max across all materials (bottleneck).
+ * kill rate and drop rate data. Credits whatever the player already has in
+ * stash (auto-populated) and inventory (manual override) — only the deficit
+ * counts toward the farm estimate. Returns the max across all materials
+ * (bottleneck).
  */
 function estimateFarmTime(materialCost, profile) {
   const kph = profile.farmingRates?.killsPerHour || 0;
   if (!materialCost || Object.keys(materialCost).length === 0) return 0;
 
+  const inventory = getEffectiveInventory(profile);
+
   let maxHours = 0;
   for (const [mat, qty] of Object.entries(materialCost)) {
-    if (qty <= 0) continue;
+    const owned = inventory[mat] || 0;
+    const remaining = Math.max(0, qty - owned);
+    if (remaining <= 0) continue; // already have enough — this material isn't the bottleneck
+
     const source = dropsData.resources[mat];
     if (!source) { maxHours = Math.max(maxHours, 1); continue; } // unknown source fallback
 
     if (source.vendor) {
-      // Vendor items: limited daily purchases
-      const days = Math.ceil(qty / (source.dailyLimit || 1));
+      const days = Math.ceil(remaining / (source.dailyLimit || 1));
       maxHours = Math.max(maxHours, days * 24);
     } else if (source.boss) {
-      // Boss drops: rare, assume ~1 kill per attempt with long intervals
-      maxHours = Math.max(maxHours, qty * 2);
+      maxHours = Math.max(maxHours, remaining * 2);
     } else if (source.activity) {
-      // Mining/WC: rough estimate based on profession level
-      maxHours = Math.max(maxHours, qty * 0.01);
+      maxHours = Math.max(maxHours, remaining * 0.01);
     } else if (source.zone && source.rate && kph > 0) {
-      // Zone drops: qty needed / (kills per hour / rate)
       const dropsPerHour = kph / source.rate;
-      maxHours = Math.max(maxHours, qty / dropsPerHour);
+      maxHours = Math.max(maxHours, remaining / dropsPerHour);
     } else {
       maxHours = Math.max(maxHours, 1);
     }
