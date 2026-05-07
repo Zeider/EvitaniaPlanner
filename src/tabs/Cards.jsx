@@ -123,6 +123,7 @@ function timeToNextTier(card, count, thresholds, stats) {
 
 function CardRow({ card, importedCount, overrides, thresholds, stats }) {
   const name = card.enemy || card.resource || card.name;
+  const displayName = card.displayName || name;
   const isOverridden = overrides[name] != null;
   const count = isOverridden ? overrides[name] : importedCount;
   const tier = tierOf(count, thresholds);
@@ -142,7 +143,7 @@ function CardRow({ card, importedCount, overrides, thresholds, stats }) {
 
   return (
     <tr class={tier >= 0 ? 'cards-tab__row cards-tab__row--active' : 'cards-tab__row'}>
-      <td class="cards-tab__name">{name}</td>
+      <td class="cards-tab__name">{displayName}</td>
       <td class="cards-tab__zone">{zone}</td>
       <td class="cards-tab__stat">{stat}</td>
       <td class="cards-tab__bonus">{activeBonus}</td>

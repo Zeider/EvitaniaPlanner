@@ -27,7 +27,7 @@
     { "enemy": "Fire Elemental", "zone": "1.14", "stat": "magicFind", "tierValues": [3, 6, 9, 12], "dropRate": 10000 },
     { "enemy": "Bringer of Death", "zone": "boss", "bossZone": "1.6", "stat": "combatXp", "tierValues": [6, 12, 18, 24], "isPercent": true, "dropRate": 2 },
     { "enemy": "The Crab", "zone": "boss", "bossZone": "1.9", "stat": "miningOffline", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 2 },
-    { "enemy": "Yrsainir", "zone": "boss", "bossZone": "1.14", "stat": "offlineGains", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 2 }
+    { "enemy": "Yrsainir", "displayName": "Yrsainir, Champion of the Red", "zone": "boss", "bossZone": "1.14", "stat": "offlineGains", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 2 }
   ],
   "act2Cards": [
     { "enemy": "Iceboar", "zone": "2.1", "stat": "smelterySpeed", "tierValues": [5, 10, 15, 20], "isPercent": true, "dropRate": 25000 },
@@ -43,8 +43,8 @@
     { "enemy": "Matryoshka", "zone": "2.11", "stat": "ashDiscount", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 25000 },
     { "enemy": "Draugr", "zone": "2.12", "stat": "magicFind", "tierValues": [3, 6, 9, 12], "dropRate": 25000 },
     { "enemy": "Ice Mammoth", "zone": "boss", "bossZone": "2.4", "stat": "critChance", "tierValues": [3, 6, 9, 12], "isPercent": true, "dropRate": 2 },
-    { "enemy": "Jötunn", "zone": "boss", "bossZone": "2.8", "stat": "magicFind", "tierValues": [5, 10, 15, 20], "dropRate": 2 },
-    { "enemy": "Maevath", "zone": "boss", "bossZone": "2.12", "stat": "offlineGains", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 2 }
+    { "enemy": "Jötunn", "displayName": "Jötunn, son of Jötunn", "zone": "boss", "bossZone": "2.8", "stat": "magicFind", "tierValues": [5, 10, 15, 20], "dropRate": 2 },
+    { "enemy": "Maevath", "displayName": "Maevath, Champion of the Blue", "zone": "boss", "bossZone": "2.12", "stat": "offlineGains", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 2 }
   ],
   "act3Cards": [
     { "enemy": "Sun Boy", "zone": "3.1", "stat": "magicFind", "tierValues": [4, 8, 12, 16], "dropRate": 50000 },
@@ -55,20 +55,20 @@
     { "enemy": "Winged Serpent", "zone": "3.6", "stat": "wcPower", "tierValues": [1.03, null, null, null], "isMultiplier": true, "dropRate": 50000 },
     { "enemy": "Bandiff", "zone": "3.7", "stat": "accuracy", "tierValues": [5, null, null, null], "dropRate": 50000 },
     { "enemy": "Beetleman", "zone": "3.8", "stat": "unknown", "tierValues": [5, 10, null, null], "dropRate": 50000 },
-    { "enemy": "Ciphered Bilding", "zone": "3.9", "stat": "unknown", "tierValues": [null, null, null, null], "dropRate": 50000 },
+    { "enemy": "Ciphered Billding", "zone": "3.9", "stat": "unknown", "tierValues": [null, null, null, null], "dropRate": 50000 },
     { "enemy": "Mummy", "zone": "3.10", "stat": "unknown", "tierValues": [null, null, null, null], "dropRate": 50000 },
     { "enemy": "Djinn", "zone": "3.11", "stat": "unknown", "tierValues": [null, null, null, null], "dropRate": 50000 },
     { "enemy": "Horus", "zone": "3.12", "stat": "unknown", "tierValues": [null, null, null, null], "dropRate": 50000 },
-    { "enemy": "Zhai Halud", "zone": "boss", "bossZone": "3.4", "stat": "wcOffline", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 2 }
+    { "enemy": "Zhai Halud", "displayName": "Zhai Halud's Gate", "zone": "boss", "bossZone": "3.4", "stat": "wcOffline", "tierValues": [2, 4, 6, 8], "isPercent": true, "dropRate": 2 }
   ],
   "resourceCards": [
-    { "resource": "Copper", "zone": "1.3", "stat": "miningPower", "tierValues": [1, 2, 3, 4], "thresholdKey": "act1", "dropRate": 10000 },
-    { "resource": "Iron", "zone": "1.10", "stat": "miningXp", "tierValues": [4, 8, 12, 16], "isPercent": true, "thresholdKey": "act1", "dropRate": 10000 },
-    { "resource": "Thorium", "zone": "2.5", "stat": "miningPower", "tierValues": [1.02, 1.04, 1.06, 1.08], "isMultiplier": true, "thresholdKey": "act2", "dropRate": 25000 },
-    { "resource": "Sunstone", "zone": "3.5", "stat": "miningMultiloot", "tierValues": [5, null, null, null], "thresholdKey": "act3", "dropRate": 25000 },
-    { "resource": "Ash", "zone": "1.4", "stat": "wcPower", "tierValues": [1, 2, 3, 4], "thresholdKey": "act1", "dropRate": 10000 },
-    { "resource": "Pyrewood", "zone": "1.12", "stat": "wcXp", "tierValues": [4, 8, 12, 16], "isPercent": true, "thresholdKey": "act1", "dropRate": 10000 },
-    { "resource": "Ironwood", "zone": "2.1", "stat": "wcPower", "tierValues": [1.02, 1.04, 1.06, 1.08], "isMultiplier": true, "thresholdKey": "act2", "dropRate": 10000 },
+    { "resource": "Copper", "displayName": "Copper Vein", "zone": "1.3", "stat": "miningPower", "tierValues": [1, 2, 3, 4], "thresholdKey": "act1", "dropRate": 10000 },
+    { "resource": "Iron", "displayName": "Iron Vein", "zone": "1.10", "stat": "miningXp", "tierValues": [4, 8, 12, 16], "isPercent": true, "thresholdKey": "act1", "dropRate": 10000 },
+    { "resource": "Thorium", "displayName": "Thorium Vein", "zone": "2.5", "stat": "miningPower", "tierValues": [1.02, 1.04, 1.06, 1.08], "isMultiplier": true, "thresholdKey": "act2", "dropRate": 25000 },
+    { "resource": "Sunstone", "displayName": "Sunstone Vein", "zone": "3.5", "stat": "miningMultiloot", "tierValues": [5, null, null, null], "thresholdKey": "act3", "dropRate": 25000 },
+    { "resource": "Ash", "displayName": "Ash Tree", "zone": "1.4", "stat": "wcPower", "tierValues": [1, 2, 3, 4], "thresholdKey": "act1", "dropRate": 10000 },
+    { "resource": "Pyrewood", "displayName": "Pyrewood Tree", "zone": "1.12", "stat": "wcXp", "tierValues": [4, 8, 12, 16], "isPercent": true, "thresholdKey": "act1", "dropRate": 10000 },
+    { "resource": "Ironwood", "displayName": "Ironwood Tree", "zone": "2.1", "stat": "wcPower", "tierValues": [1.02, 1.04, 1.06, 1.08], "isMultiplier": true, "thresholdKey": "act2", "dropRate": 10000 },
     { "resource": "Palm Tree", "zone": "3.3", "stat": "wcMultiloot", "tierValues": [5, null, null, null], "thresholdKey": "act3", "dropRate": 50000 }
   ],
   "hardCards": [

@@ -287,6 +287,8 @@ const CARD_NAME_ALIASES = {
   'BlueDragon': 'Maevath',
   'difficulty1-act1': 'Act 1 Hard',
   'difficulty1-act2': 'Act 2 Hard',
+  // Defensive: pre-fix saves may use the old typo "Ciphered Bilding" — route to canonical "Billding".
+  'Ciphered Bilding': 'Ciphered Billding',
 };
 
 function resolveCardName(saveKey) {
@@ -633,6 +635,85 @@ const RESOURCE_GUID_MAP = {
 };
 
 /**
+ * Card-item GUID → name. Stash-resident card drops (the consumable
+ * "X Card" items granted by mob kills, before being deposited into
+ * Currency.cards). Bulk-extracted 2026-05-06 from Items_en localization
+ * (`card_<guid>_name` keys). Names preserve game's inconsistent casing
+ * (e.g. "Bat Card" vs "Bandiff card") — match the loc tables verbatim
+ * so a future cards.json cross-reference is mechanical.
+ *
+ * Distinct namespace from the canonical card names in cards.json which
+ * are keyed by mob name; these GUIDs key the *item form* of the card.
+ */
+const CARD_GUID_MAP = {
+  '0c1ef0c9-94a6-4b03-b7d0-0f7c123a80d5': 'Act 1 Hard Card',
+  '9995e57d-56a0-43f7-ba9a-2ae58d660c9e': 'Act 1 Hell Card',
+  '4e7b9ee2-ed39-4452-b110-b48173fbcf44': 'Act 1 Nightmare Card',
+  'e517df04-27d7-4b19-9b40-e3946da487e9': 'Act 2 Hard Card',
+  'e8f12476-16d8-46e3-a434-a610586e60a9': 'Act 2 Hell Card',
+  '3dfa3ddf-920a-417e-89c4-23761104bf70': 'Act 2 Nightmare Card',
+  '13afcba1-93a5-4db7-9c95-9495cbf106b6': 'Act 3 Hard Card',
+  'fd8fb64e-75f5-4cc7-b10f-a09551e3b992': 'Act 3 Hell Card',
+  'd29f81f5-16dd-48d1-a3cf-6c01d881d7a3': 'Act 3 Nightmare Card',
+  'd2102531-54c6-4015-bf80-999a77bdce22': 'Animater Armor Card',
+  '6c49777f-3a8e-45fe-882d-b04441d5e3a6': 'Ash Card',
+  'e09a9f88-761d-4c8c-a0fc-52f636598e96': 'Bandiff card',
+  '1d96b63e-a91b-4950-9100-bfb2cb8ac842': 'Bat Card',
+  '085147aa-8bad-48ad-bcda-8a2cb6f304a2': 'Beetleman card',
+  '2a87e53c-5189-44f1-9ff3-cc154244d6df': 'Boar Card',
+  'eaf231fb-1ed2-469f-a044-8db4b30bfd02': 'Bringer Of Death Card',
+  '04a440f8-fd4c-40ee-9a87-dbcd90f6b809': 'Cactus Mommy card',
+  'ec7cbbcd-f65e-4b05-a81c-adc26c9d71d2': 'Card Part',
+  '86d874e3-22b5-435a-b5ff-5dc6ac111282': 'Ciphered Billding card',
+  '09cb5090-94c0-43a3-acfc-ab0f835b1f54': 'Copper Card',
+  'b72641aa-5db0-4b68-b3ec-1a57ca2a0a3a': 'Crab Card',
+  'f6914f23-0587-49ea-958f-843f4f932a64': 'Djinn card',
+  '228b968e-52a1-4f6d-b7e5-be7ffa2ad8bf': 'Draugr card',
+  'fa1a8b0b-6e0d-4e35-a1ca-ffc56adb6c64': 'Dung Beetle card',
+  '6f490791-93ca-440e-b3f8-3af4f7a73f9e': 'Fez card',
+  'd716276f-216b-4990-936b-309b7bc0dc24': 'Fire Elemental Card',
+  'f310bbcd-bcf8-428c-bd2e-be0a584456e1': 'Ghost Card',
+  '278b0a94-1953-4745-80c1-603f29744f10': 'Glass card',
+  '195d383e-553b-4243-ab67-1a4cfb503593': 'Gnoll Card',
+  'ed63ed44-bae8-42e7-9ca5-47d200a7fb62': 'Helmet Card',
+  '49a24059-a3c3-4c30-89ae-82e7a5333393': 'Horus card',
+  '563f4aef-ba6d-4c65-89cd-24087826e034': 'Ice Mammoth Card',
+  '0ba54af9-0ea2-43b5-9074-b84250a86694': 'Iceboar Card',
+  '04669273-34ee-40d5-adda-4bf162298f91': 'Iron Card',
+  'e4df93e0-043a-42d4-82d9-995dfe377ad3': 'Ironwood Card',
+  'c55b3d08-a246-4f31-bc0d-b994295130a0': 'Jötunn Card',
+  '6deeee7a-63be-4d28-9bb8-28b9db41e858': 'Kangaroo card',
+  'f45ae0ff-0a4e-455c-a38c-4238279eac7d': 'Kobold Card',
+  '41545085-b69b-4ab9-accf-7270aaab281c': 'Maevath Card',
+  '43b27c88-c39d-4bc0-a879-174f5b0243ba': 'Matryoshka card',
+  '3fb7c68e-e446-4912-bc2e-5ad91e94aacc': 'Mummy card',
+  '23043ffb-3407-44cd-9f17-a6b63ca62171': 'Palm Log Card',
+  'f88c8b6b-f55d-4339-a6db-97843c024cf6': 'Palm Tree Log',
+  '48db6aaa-b33e-4c00-b323-d3aa45d0ec31': 'Pebble Card',
+  'ccd72a01-1a23-4041-9dc0-ab9165c5cf60': 'Penguin card',
+  '5031b32c-bb3c-46de-a452-f9a22c9f3d96': 'Plant Card',
+  'bfe49fc3-697d-4884-8a5b-08b59e7ec086': 'Pyrewood Card',
+  '18ac5c22-20e8-4510-bf9a-516d49c21f50': 'Ratatoskr Card',
+  'bded5fc3-5265-4498-a7c9-095376753ad2': 'Slime Cube Card',
+  '45dc33bf-8cf2-4c8d-a56f-4b48aa1d2b8b': 'Snowman Card',
+  'aafa5ac8-c68d-4fd7-97b3-6c7355ee2bbb': 'Stump Card',
+  'f8a249ee-9a96-4945-84de-1420e4d33bd7': 'Sun Boy card',
+  'bef24786-db08-4b11-9562-c3b4f4f91d47': 'Sunstone Card',
+  '637d075b-b2cb-4292-8054-b594e4d65c0b': 'The Crab Card',
+  '548d6401-1d48-4720-859e-1cd03001eb44': 'Thorium Card',
+  '2725d34a-1ef5-4445-981b-703af861138d': 'Tree Toy',
+  'f14aa711-dc2b-4a12-a404-7ef5af15d755': 'Troll Card',
+  'f641d601-c3c3-44a2-9699-49872cdc5dda': 'Wasp Card',
+  'f9e14b9b-e349-40d4-9927-7b2e690b12d2': 'Watches Card',
+  'e3b872a7-58fd-443b-88f5-232253ccee9c': 'Weird Book Card',
+  '131e901e-3990-439f-bba0-8a988c3b5383': 'Winged Serpent card',
+  'c3857507-4fab-4170-bf2b-ec7d7e142870': 'Wolf Card',
+  '72dd2c27-1c96-453c-9b05-c8b42221a8d5': 'Yeti Card',
+  '8bf4528f-60d9-4d31-b733-596814e18cdb': 'Yrsainir Card',
+  '33bf4722-6489-48df-8c04-13f4068389f4': 'Zhai Halud card',
+};
+
+/**
  * Pet-unlock GUID → name. Distinct from PET_SKIN_GUID_MAP (which keys
  * cosmetic skins applied to an already-unlocked pet). These are the
  * "Unlock" items that grant access to a pet variant. Bulk-extracted
@@ -923,6 +1004,7 @@ export function extractStash(saveData) {
       name:
         GEAR_GUID_MAP[entry.itemGuid] ||
         RESOURCE_GUID_MAP[entry.itemGuid] ||
+        CARD_GUID_MAP[entry.itemGuid] ||
         RUNE_FRAGMENT_GUID_MAP[entry.itemGuid] ||
         PET_UNLOCK_GUID_MAP[entry.itemGuid] ||
         null,

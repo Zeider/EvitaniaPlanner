@@ -69,7 +69,7 @@
       }
     },
     {
-      "name": "Entomed Mask", "rarity": "blue",
+      "name": "Entombed Mask", "rarity": "blue",
       "primaryStat": "physDef", "primaryValue": 1.20, "primaryValueMax": 1.54, "isMultiplier": true,
       "tierBonuses": {
         "t3": { "stat": "offlineGains", "value": 3, "isPercent": true },

@@ -180,6 +180,7 @@ function CardOverviewPanel() {
 
   const renderCardRow = (card, thresholds, label) => {
     const key = card.enemy || card.resource || card.name;
+    const displayName = card.displayName || key;
     const count = cards[key] || 0;
     const tier = count > 0 ? getCardTier(count, thresholds) : -1;
     const tierLabel = tier >= 0 ? `T${tier + 1}` : '-';
@@ -188,7 +189,7 @@ function CardOverviewPanel() {
 
     return (
       <div key={key} class={`card-row ${tier >= 0 ? 'card-row--active' : ''}`}>
-        <span class="card-row__name">{key}</span>
+        <span class="card-row__name">{displayName}</span>
         <span class="card-row__count">{count}</span>
         <span class={`card-row__tier card-row__tier--${tier + 1}`}>{tierLabel}</span>
         {nextThreshold && <span class="card-row__next">{nextThreshold - count} to T{tier + 2}</span>}
