@@ -78,14 +78,31 @@ function estimateFarmTime(materialCost, profile) {
 
 // --- Upgrade enumeration ---
 
+// Hunter cost per rank grows exponentially. Calibrated 2026-05-07 from
+// in-game observation of LeBabka_MAtk: rank 30→31 costs 919K with the
+// daily LeBabkaHunterDiscount removed (it's a flat 60% off when active).
+// Three points (rank 29→30 = 540K computed, rank 30→31 = 919K, rank 31→32
+// = 1.56M) all share the same per-rank ratio 1.70 — single-segment
+// exponential, no tier-band break visible at the high end.
+const HUNTER_COST_GROWTH = 1.70;
+
+function computeHunterCost(hu, nextRank) {
+  // Per-upgrade calibrated anchor (cost at anchorRank → anchorRank+1).
+  // Only upgrades with an `anchor` field use the real formula; the rest
+  // fall back to the old rough placeholder until calibrated in-game.
+  if (hu.anchor) {
+    return Math.ceil(hu.anchor.amount * Math.pow(HUNTER_COST_GROWTH, nextRank - hu.anchor.rank));
+  }
+  return nextRank * 10;
+}
+
 function enumerateHunterUpgrades(profile) {
   const upgrades = [];
   for (const hu of hunterUpgradesData) {
     const currentRank = (profile.hunterUpgrades && profile.hunterUpgrades[hu.id]) || 0;
     if (currentRank >= hu.maxRank) continue;
     const nextRank = currentRank + 1;
-    // Material cost scales with rank (rough: rank * 10 base materials)
-    const materialQty = nextRank * 10;
+    const materialQty = computeHunterCost(hu, nextRank);
     const materialCost = { [hu.material]: materialQty };
     upgrades.push({
       type: 'hunter',
