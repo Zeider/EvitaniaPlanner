@@ -17,7 +17,7 @@
   { "id": "LeBabka_Woodcutting", "name": "Woodcutting Training", "stat": "woodcuttingPercent", "perRank": 3, "material": "Bat Dust", "maxRank": 45 },
   { "id": "LeBabka_WoodcuttingPower", "name": "Woodcutting Power", "stat": "woodcuttingPower", "perRank": 1, "material": "Ash Logs", "maxRank": 45 },
   { "id": "LeBabka_HunterCost", "name": "Hunter Cost Reduction", "stat": "hunterCostReduction", "perRank": 5, "material": "Coin", "maxRank": 45, "anchor": { "rank": 31, "amount": 37000000, "growth": 1.50, "source": "in-game obs 2026-05-07" } },
-  { "id": "LeBabka_SmelterySpeed", "name": "Smeltery Speed Training", "stat": "smelterySpeed", "perRank": 5, "material": "Steel Ingot", "maxRank": 45 },
+  { "id": "LeBabka_SmelterySpeed", "name": "Smeltery Speed Training", "stat": "smelterySpeed", "perRank": 5, "material": "Steel Ingot", "maxRank": 45, "anchor": { "rank": 13, "amount": 111, "growth": 1.70, "source": "in-game obs 2026-05-07 (6 data points rank 13-18)" } },
   { "id": "LeBabka_MiningExp", "name": "Mining Experience", "stat": "miningXp", "perRank": 1, "material": "Iron Ore", "maxRank": 45 },
   { "id": "LeBabka_WoodcuttingExp", "name": "Woodcutting Experience", "stat": "woodcuttingXp", "perRank": 1, "material": "Pyrewood Logs", "maxRank": 45 }
 ]

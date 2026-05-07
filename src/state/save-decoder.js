@@ -714,6 +714,21 @@ const CARD_GUID_MAP = {
 };
 
 /**
+ * Engineer slot output GUID → item name. The 4 Engineer slots produce
+ * Idea / Blueprint / Runic Blueprint / Sun Scroll (slots 0-3 in order).
+ * Loc tables don't expose these as GUID-keyed entries — they live under
+ * `engineer-item<N>_name` slugs. Mapping confirmed 2026-05-07 by
+ * cross-referencing live save stockpile counts against the in-game
+ * Engineer panel display.
+ */
+const ENGINEER_OUTPUT_GUID_MAP = {
+  'fb8ec77b-7539-4ca7-9273-8992341f849e': 'Idea',
+  '80fea108-d292-4c4e-ae19-bdc20b2cb3de': 'Blueprint',
+  '97489751-4a47-4487-b5e1-8ce1ccb9a81d': 'Runic Blueprint',
+  '3fd5ecc5-bbeb-4919-97d8-17ffbbb9f0fd': 'Sun Scroll',
+};
+
+/**
  * Pet-unlock GUID → name. Distinct from PET_SKIN_GUID_MAP (which keys
  * cosmetic skins applied to an already-unlocked pet). These are the
  * "Unlock" items that grant access to a pet variant. Bulk-extracted
@@ -1049,6 +1064,13 @@ export function extractEngineer(saveData) {
   for (const [key, value] of Object.entries(saveData.ProgressProfile?.Enhancements || {})) {
     if (key.startsWith('engineer_')) enhancements[key] = value;
   }
+  // Resolve stockpile GUIDs to readable item names (Idea / Blueprint /
+  // Runic Blueprint / Sun Scroll). Unknown GUIDs preserve raw key.
+  const stockpile = {};
+  for (const [guid, count] of Object.entries(eng.Stockpile || {})) {
+    const name = ENGINEER_OUTPUT_GUID_MAP[guid] || guid;
+    stockpile[name] = count;
+  }
   return {
     slots: slots.map((s, idx) => ({
       index: idx,
@@ -1057,7 +1079,7 @@ export function extractEngineer(saveData) {
       lastProduced: s?.LastProduced ?? 0,
       upgrades: { ...(s?.Upgrades || {}) },
     })),
-    stockpile: { ...(eng.Stockpile || {}) },
+    stockpile,
     lastSelectedSlot: eng.LastSelectedSlot ?? 0,
     hasBeenOpened: !!eng.HasBeenOpened,
     enhancements,

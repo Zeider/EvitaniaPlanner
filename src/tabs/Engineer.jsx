@@ -184,12 +184,12 @@ export function Engineer() {
         ) : (
           <table class="engineer__stockpile-table">
             <thead>
-              <tr><th scope="col">Item GUID</th><th scope="col">Count</th></tr>
+              <tr><th scope="col">Item</th><th scope="col">Count</th></tr>
             </thead>
             <tbody>
-              {stockpileEntries.map(([guid, count]) => (
-                <tr key={guid}>
-                  <td><code class="engineer__guid">{guid}</code></td>
+              {stockpileEntries.map(([name, count]) => (
+                <tr key={name}>
+                  <td>{name}</td>
                   <td>{count.toLocaleString()}</td>
                 </tr>
               ))}

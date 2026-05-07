@@ -404,7 +404,9 @@ describe('extractEngineer', () => {
 
   it('extracts stockpile and ui state', () => {
     const eng = extractEngineer(MOCK_SAVE);
-    expect(eng.stockpile).toEqual({ 'fb8ec77b-7539-4ca7-9273-8992341f849e': 1404 });
+    // Stockpile GUIDs resolve to readable names via ENGINEER_OUTPUT_GUID_MAP;
+    // fb8ec77b is slot 0 (Idea).
+    expect(eng.stockpile).toEqual({ 'Idea': 1404 });
     expect(eng.lastSelectedSlot).toBe(0);
     expect(eng.hasBeenOpened).toBe(true);
   });
