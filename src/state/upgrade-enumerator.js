@@ -78,20 +78,21 @@ function estimateFarmTime(materialCost, profile) {
 
 // --- Upgrade enumeration ---
 
-// Hunter cost per rank grows exponentially. Calibrated 2026-05-07 from
-// in-game observation of LeBabka_MAtk: rank 30→31 costs 919K with the
-// daily LeBabkaHunterDiscount removed (it's a flat 60% off when active).
-// Three points (rank 29→30 = 540K computed, rank 30→31 = 919K, rank 31→32
-// = 1.56M) all share the same per-rank ratio 1.70 — single-segment
-// exponential, no tier-band break visible at the high end.
-const HUNTER_COST_GROWTH = 1.70;
-
+// Hunter cost per rank grows exponentially, but the GROWTH RATE and
+// MAX RANK both vary per upgrade. Calibrated values so far:
+//   LeBabka_MAtk        growth 1.70  max 45  (rank 30→31 = 919K Fire Essence)
+//   LeBabka_HunterCost  growth 1.50  max 45  (rank 31→32 = 37M Gold)
+//   LeBabka_MoveSpeed   growth 1.54  max 30  (rank 26→27 = 8.10M Gold)
+// All anchors are taken with the daily LeBabkaHunterDiscount dismissed
+// (it's a flat 60% off when active and cancels in the per-rank ratio
+// either way). Each upgrade also has its own material — costs are not
+// in a single shared currency.
 function computeHunterCost(hu, nextRank) {
-  // Per-upgrade calibrated anchor (cost at anchorRank → anchorRank+1).
+  // Per-upgrade calibrated anchor (cost at anchor.rank → anchor.rank+1).
   // Only upgrades with an `anchor` field use the real formula; the rest
   // fall back to the old rough placeholder until calibrated in-game.
   if (hu.anchor) {
-    return Math.ceil(hu.anchor.amount * Math.pow(HUNTER_COST_GROWTH, nextRank - hu.anchor.rank));
+    return Math.ceil(hu.anchor.amount * Math.pow(hu.anchor.growth, nextRank - hu.anchor.rank));
   }
   return nextRank * 10;
 }
