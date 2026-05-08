@@ -83,23 +83,31 @@ function estimateFarmTime(materialCost, profile) {
 
 // --- Upgrade enumeration ---
 
-// Hunter cost per rank grows exponentially, but the GROWTH RATE and
-// MAX RANK both vary per upgrade. Calibrated values so far:
-//   LeBabka_MAtk        growth 1.70  max 45  (rank 30→31 = 919K Fire Essence)
+// Hunter cost per rank grows exponentially. The dominant curve is
+// growth = 1.70, confirmed by:
+//   - Direct observation: LeBabka_MAtk (1.70), LeBabka_SmelterySpeed (1.70)
+//   - Discord-shared cost table (May 2026) following ceil(1.7 * 1.7^rank)
+// A handful of utility upgrades scale slower:
 //   LeBabka_HunterCost  growth 1.50  max 45  (rank 31→32 = 37M Gold)
 //   LeBabka_MoveSpeed   growth 1.54  max 30  (rank 26→27 = 8.10M Gold)
-// All anchors are taken with the daily LeBabkaHunterDiscount dismissed
-// (it's a flat 60% off when active and cancels in the per-rank ratio
-// either way). Each upgrade also has its own material — costs are not
-// in a single shared currency.
+// Both directly observed; their slower growth is preserved against the
+// default. All anchors are taken with the daily LeBabkaHunterDiscount
+// dismissed (it's a flat 60% off when active and cancels in per-rank
+// ratios). Each upgrade also has its own material — costs are not in
+// a single shared currency.
+//
+// Default for un-anchored upgrades: ceil(1.7 * 1.7^rank), matching the
+// Discord-shared base. Per-upgrade base varies so this default can be
+// off by a constant factor for any specific upgrade — drop in an
+// `anchor` once observed and that overrides the default.
+const DEFAULT_HUNTER_BASE = 1.7;
+const DEFAULT_HUNTER_GROWTH = 1.70;
+
 function computeHunterCost(hu, nextRank) {
-  // Per-upgrade calibrated anchor (cost at anchor.rank → anchor.rank+1).
-  // Only upgrades with an `anchor` field use the real formula; the rest
-  // fall back to the old rough placeholder until calibrated in-game.
   if (hu.anchor) {
     return Math.ceil(hu.anchor.amount * Math.pow(hu.anchor.growth, nextRank - hu.anchor.rank));
   }
-  return nextRank * 10;
+  return Math.ceil(DEFAULT_HUNTER_BASE * Math.pow(DEFAULT_HUNTER_GROWTH, nextRank));
 }
 
 function enumerateHunterUpgrades(profile) {
