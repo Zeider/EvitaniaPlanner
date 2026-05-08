@@ -129,6 +129,38 @@ function isPieceOwned(recipeName, profile) {
  *   - 'autoNextTier'  — delegates to Upgrade Advisor's next-tier suggestion
  *                       (stubbed for this MVP — returns empty until wired)
  */
+/**
+ * Compute total farming hours for a single gear piece (or any recipe-output
+ * name), honoring stash + inventory and recursively expanding intermediates.
+ *
+ * Same logic the Progression Planner uses for `pieceEtaHrs` — sums ETA across
+ * base (non-intermediate) materials only, since intermediates' costs are
+ * captured by their ingredient rows.
+ *
+ * Returns 0 if the name has no recipe (e.g. vendor-bought or boss-dropped
+ * gear) — caller can decide on a fallback. Returns Infinity for any
+ * unfarmable bottleneck material so callers can deprioritize accordingly.
+ */
+export function estimateGearPieceEtaHrs(name, profile) {
+  if (!recipeLookup[name]) return 0;
+  const inventory = getEffectiveInventory(profile);
+  const gross = {};
+  const consumed = {};
+  expandRecipeWithInventory(name, 1, inventory, gross, consumed);
+  let totalHrs = 0;
+  for (const [matName, needed] of Object.entries(gross)) {
+    if (matName === name) continue; // skip the piece itself
+    if (recipeLookup[matName]) continue; // intermediate — covered by its ingredients
+    const usedFromInv = consumed[matName] || 0;
+    const remaining = Math.max(0, needed - usedFromInv);
+    if (remaining <= 0) continue;
+    const eta = estimateMaterialEta(matName, remaining, profile);
+    if (isFinite(eta.etaHrs)) totalHrs += eta.etaHrs;
+    else return Infinity; // unfarmable bottleneck
+  }
+  return totalHrs;
+}
+
 export function expandTargetToMaterials(target, profile) {
   if (!target) return [];
 

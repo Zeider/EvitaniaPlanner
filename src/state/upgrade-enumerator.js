@@ -5,6 +5,7 @@ import sacrificesData from '../data/sacrifices.json';
 import gearData from '../data/gear.json';
 import dropsData from '../data/drops.json';
 import { getEffectiveInventory } from './store.js';
+import { estimateGearPieceEtaHrs } from './progression-planner.js';
 
 /** Maps each class to the weapon subtypes they can equip. */
 const CLASS_WEAPON_SUBTYPES = {
@@ -278,6 +279,12 @@ function enumerateGearUpgrades(profile) {
     if (Object.keys(statChanges).length === 0) continue;
 
     const matCost1 = nextItem.recipe ? { [nextItem.recipe]: 1 } : {};
+    // Gear farm time uses the Progression Planner's recipe expansion so it
+    // sums real ingredient ETAs (Steel Bar, Grassy Stone I, Dragon Horn, ...)
+    // instead of returning 1hr because the gear name isn't in drops.json.
+    const gearHrs = nextItem.recipe
+      ? estimateGearPieceEtaHrs(nextItem.recipe, profile)
+      : estimateFarmTime(matCost1, profile);
     upgrades.push({
       type: 'gear',
       id: `gear_${slot}_${nextItem.name}`,
@@ -286,7 +293,7 @@ function enumerateGearUpgrades(profile) {
       gearName: nextItem.name,
       statChanges,
       materialCost: matCost1,
-      farmTimeHours: estimateFarmTime(matCost1, profile),
+      farmTimeHours: gearHrs,
     });
   }
 
@@ -307,6 +314,9 @@ function enumerateGearUpgrades(profile) {
     if (Object.keys(statChanges).length === 0) continue;
 
     const matCost2 = firstItem.recipe ? { [firstItem.recipe]: 1 } : {};
+    const firstHrs = firstItem.recipe
+      ? estimateGearPieceEtaHrs(firstItem.recipe, profile)
+      : estimateFarmTime(matCost2, profile);
     upgrades.push({
       type: 'gear',
       id: `gear_${baseSlot}_${firstItem.name}`,
@@ -315,7 +325,7 @@ function enumerateGearUpgrades(profile) {
       gearName: firstItem.name,
       statChanges,
       materialCost: matCost2,
-      farmTimeHours: estimateFarmTime(matCost2, profile),
+      farmTimeHours: firstHrs,
     });
   }
 
