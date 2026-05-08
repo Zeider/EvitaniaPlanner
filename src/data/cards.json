@@ -15,7 +15,7 @@
     { "enemy": "Wasp", "zone": "1.2", "stat": "mana", "tierValues": [3, 9, 15, 21], "dropRate": 10000 },
     { "enemy": "Pebble", "zone": "1.3", "stat": "miningPower", "tierValues": [10, 15, 20, 25], "isPercent": true, "dropRate": 10000 },
     { "enemy": "Stump", "zone": "1.4", "stat": "wcPower", "tierValues": [10, 15, 20, 25], "isPercent": true, "dropRate": 10000 },
-    { "enemy": "Plant", "zone": "1.5", "stat": "smelterySpeed", "tierValues": [5, 10, 15, 20], "dropRate": 10000 },
+    { "enemy": "Plant", "zone": "1.5", "stat": "smelterySpeed", "tierValues": [5, 10, 15, 20], "isPercent": true, "dropRate": 10000 },
     { "enemy": "Wolf", "zone": "1.6", "stat": "critDamage", "tierValues": [5, 10, 15, 20], "isPercent": true, "dropRate": 10000 },
     { "enemy": "Gnoll", "zone": "1.7", "stat": "combatXp", "tierValues": [6, 12, 18, 24], "isPercent": true, "dropRate": 10000 },
     { "enemy": "Animated Armor", "zone": "1.8", "stat": "atkPercent", "tierValues": [4, 8, 12, 16], "isPercent": true, "dropRate": 10000 },
