@@ -1,8 +1,8 @@
 [
   { "id": "act-2-sacrifice-0", "name": "Cutting Edge Technology", "soul": "Mammoth", "costItem": "Icy Needle", "stat": "wcPower", "perRank": 0.10, "maxRank": 30, "maxTotal": 4.00, "isMultiplier": true },
   { "id": "act-2-sacrifice-1", "name": "Attack Wish", "soul": "Mammoth", "costItem": "Helmet", "stat": "atk", "perRank": 0.05, "maxRank": 30, "maxTotal": 2.50, "isMultiplier": true },
-  { "id": "act-2-sacrifice-2", "name": "Wish for Luck", "soul": "Mammoth", "costItem": "Iceghost Doll", "stat": "critChance", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false },
-  { "id": "act-2-sacrifice-3", "name": "Food Donation", "soul": "Mammoth", "costItem": "Distinguished Glasses", "stat": "hp", "perRank": 0.03, "maxRank": 30, "maxTotal": 1.90, "isMultiplier": true },
+  { "id": "act-2-sacrifice-2", "name": "Wish for Luck", "soul": "Mammoth", "costItem": "Iceghost Doll", "stat": "critChance", "perRank": 1, "maxRank": 30, "maxTotal": 30, "isMultiplier": false, "anchor": { "rank": 25, "amount": 352000, "growth": 1.30, "source": "in-game obs 2026-05-07 (rank 25→26)" } },
+  { "id": "act-2-sacrifice-3", "name": "Food Donation", "soul": "Mammoth", "costItem": "Distinguished Glasses", "stat": "hp", "perRank": 0.03, "maxRank": 30, "maxTotal": 1.90, "isMultiplier": true, "anchor": { "rank": 24, "amount": 271000, "growth": 1.30, "source": "in-game obs 2026-05-07 (rank 24→25)" } },
   { "id": "act-2-sacrifice-4", "name": "Mining Edge Technology", "soul": "Mammoth", "costItem": "Nut", "stat": "miningPower", "perRank": 0.10, "maxRank": 30, "maxTotal": 4.00, "isMultiplier": true },
   { "id": "act-2-sacrifice-5", "name": "Wish for Knowledge", "soul": "Jotunn", "costItem": "Pocketwatch", "stat": "mana", "perRank": 0.03, "maxRank": 30, "maxTotal": 1.90, "isMultiplier": true },
   { "id": "act-2-sacrifice-6", "name": "Wish for Hardness", "soul": "Jotunn", "costItem": "Carrot", "stat": "def", "perRank": 0.05, "maxRank": 30, "maxTotal": 2.50, "isMultiplier": true },

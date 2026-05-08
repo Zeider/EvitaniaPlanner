@@ -110,6 +110,26 @@ function computeHunterCost(hu, nextRank) {
   return Math.ceil(DEFAULT_HUNTER_BASE * Math.pow(DEFAULT_HUNTER_GROWTH, nextRank));
 }
 
+// Sacrifice cost per rank also grows exponentially, but at a slower pace
+// (~1.30 per rank). Calibrated 2026-05-07 across two sacrifices at adjacent
+// target ranks: Food Donation rank 24→25 = 271K, Wish for Luck rank 25→26 =
+// 352K — primary cost ratio 352/271 = 1.299. Same-sacrifice consecutive
+// observation would refine per-sacrifice growth (we currently assume the
+// curve is shared across sacrifices).
+const DEFAULT_SACRIFICE_GROWTH = 1.30;
+
+function computeSacrificeCost(sac, nextRank) {
+  if (sac.anchor) {
+    return Math.ceil(sac.anchor.amount * Math.pow(sac.anchor.growth, nextRank - sac.anchor.rank));
+  }
+  // Fallback: anchor against the lowest known calibration (Wish for Luck
+  // rank 25 = 352K) and the shared 1.30 growth. Per-sacrifice base
+  // probably varies (different cost items), so this default may be off
+  // by a constant factor for any specific sacrifice — drop in an `anchor`
+  // once observed.
+  return Math.ceil(352000 * Math.pow(DEFAULT_SACRIFICE_GROWTH, nextRank - 26));
+}
+
 function enumerateHunterUpgrades(profile) {
   const upgrades = [];
   for (const hu of hunterUpgradesData) {
@@ -197,7 +217,7 @@ function enumerateSacrificeUpgrades(profile) {
     if (currentRank === 0 && defeated.length > 0 && !defeated.includes(sac.soul)) continue;
     if (currentRank >= sac.maxRank) continue;
     const nextRank = currentRank + 1;
-    const materialCost = { [sac.costItem]: nextRank, [`${sac.soul} Soul`]: 1 };
+    const materialCost = { [sac.costItem]: computeSacrificeCost(sac, nextRank), [`${sac.soul} Soul`]: 1 };
     upgrades.push({
       type: 'sacrifice',
       id: sac.id,
