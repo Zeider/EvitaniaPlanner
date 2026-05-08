@@ -110,24 +110,32 @@ function computeHunterCost(hu, nextRank) {
   return Math.ceil(DEFAULT_HUNTER_BASE * Math.pow(DEFAULT_HUNTER_GROWTH, nextRank));
 }
 
-// Sacrifice cost per rank also grows exponentially, but at a slower pace
-// (~1.30 per rank). Calibrated 2026-05-07 across two sacrifices at adjacent
-// target ranks: Food Donation rank 24→25 = 271K, Wish for Luck rank 25→26 =
-// 352K — primary cost ratio 352/271 = 1.299. Same-sacrifice consecutive
-// observation would refine per-sacrifice growth (we currently assume the
-// curve is shared across sacrifices).
+// Sacrifice cost has TWO components, each with its own scaling:
+//
+//   PRIMARY (per-sacrifice cost item — e.g. Iceghost Doll, Carrot, Monocle):
+//     exponential, growth = 1.30 per rank
+//     base = 384 at rank 0 for "standard" sacrifices (verified across 5
+//     different sacrifices at target ranks 21-27 all matching exactly)
+//     Wish for Gold is a confirmed outlier (~15 base — much cheaper)
+//
+//   SECONDARY (some shared bonfire currency, ~yellow blob icon):
+//     linear, cost = 200 + 50 × target_rank
+//     Verified across all 7 observed data points spanning ranks 7-27
+//
+// Calibrated 2026-05-07 from 7 in-game observations across 7 different
+// sacrifices.
 const DEFAULT_SACRIFICE_GROWTH = 1.30;
+const DEFAULT_SACRIFICE_BASE = 384;
 
 function computeSacrificeCost(sac, nextRank) {
   if (sac.anchor) {
     return Math.ceil(sac.anchor.amount * Math.pow(sac.anchor.growth, nextRank - sac.anchor.rank));
   }
-  // Fallback: anchor against the lowest known calibration (Wish for Luck
-  // rank 25 = 352K) and the shared 1.30 growth. Per-sacrifice base
-  // probably varies (different cost items), so this default may be off
-  // by a constant factor for any specific sacrifice — drop in an `anchor`
-  // once observed.
-  return Math.ceil(352000 * Math.pow(DEFAULT_SACRIFICE_GROWTH, nextRank - 26));
+  return Math.ceil(DEFAULT_SACRIFICE_BASE * Math.pow(DEFAULT_SACRIFICE_GROWTH, nextRank));
+}
+
+function computeSacrificeSecondaryCost(nextRank) {
+  return 200 + 50 * nextRank;
 }
 
 function enumerateHunterUpgrades(profile) {
@@ -217,7 +225,10 @@ function enumerateSacrificeUpgrades(profile) {
     if (currentRank === 0 && defeated.length > 0 && !defeated.includes(sac.soul)) continue;
     if (currentRank >= sac.maxRank) continue;
     const nextRank = currentRank + 1;
-    const materialCost = { [sac.costItem]: computeSacrificeCost(sac, nextRank), [`${sac.soul} Soul`]: 1 };
+    const materialCost = {
+      [sac.costItem]: computeSacrificeCost(sac, nextRank),
+      [`${sac.soul} Soul`]: computeSacrificeSecondaryCost(nextRank),
+    };
     upgrades.push({
       type: 'sacrifice',
       id: sac.id,

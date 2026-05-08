@@ -47,10 +47,13 @@ describe('detectBottlenecks', () => {
       ...baseProfile,
       sacrificeUpgrades: { 'act-2-sacrifice-1': 1 },
     };
-    const bottlenecks = detectBottlenecks(profile);
+    // Sacrifice cost is exponential (~384 × 1.30^rank for primary), so a
+    // single Attack-Wish upgrade is competitive with — but not necessarily
+    // top-10 against — gear/talent/hunter alternatives. Use a wider scan
+    // window since this test only cares that sacrifice cost items DO show
+    // up as bottlenecks at all, not where they rank.
+    const bottlenecks = detectBottlenecks(profile, 100);
     const resources = bottlenecks.map(b => b.resource);
-    // Attack Wish (act-2-sacrifice-1) needs "Helmet" as costItem
-    // Should appear if Attack Wish is ranked highly enough
     const hasHelmet = resources.includes('Helmet');
     const hasSoul = resources.includes('Mammoth Soul');
     expect(hasHelmet || hasSoul).toBe(true);
