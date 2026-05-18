@@ -769,6 +769,17 @@ const PET_UNLOCK_GUID_MAP = {
 };
 
 /**
+ * Thrown by loadSaveFile when the input bytes don't match any supported save
+ * format. The .message is intended to be surfaced to the user verbatim.
+ */
+export class SaveFormatError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'SaveFormatError';
+  }
+}
+
+/**
  * Decode a hex-encoded, XOR-0xFF save string back to its original UTF-8 text.
  * @param {string} hexString - ASCII hex characters from data.sav
  * @returns {string} The decoded UTF-8 string (typically JSON)
@@ -1101,13 +1112,46 @@ export function extractEngineer(saveData) {
 }
 
 /**
- * Load a save File object and return extracted profiles.
- * @param {File} file - A File (or Blob) representing data.sav
+ * Load a save File/Blob and return extracted profiles.
+ *
+ * Accepts three formats:
+ *   - Plain JSON (preferred for 0.311.0+ saves; produced by `npm run save:export`)
+ *   - Legacy hex-XOR `data.sav` (pre-0.311.0 game versions)
+ *   - ACTk-encrypted `data.sav.dat` (0.311.0+) — rejected with a CLI pointer
+ *
+ * @param {Blob} file - A File or Blob representing the save
  * @returns {Promise<Array<object>>} Extracted character profiles
  */
 export async function loadSaveFile(file) {
-  const text = await file.text();
-  const decoded = decodeSaveHex(text);
-  const saveData = JSON.parse(decoded);
+  const buf = new Uint8Array(await file.arrayBuffer());
+
+  // ACTk magic: bytes 0x41 0x43 0x54 0x6B at offset 0
+  if (
+    buf.length >= 4 &&
+    buf[0] === 0x41 &&
+    buf[1] === 0x43 &&
+    buf[2] === 0x54 &&
+    buf[3] === 0x6b
+  ) {
+    throw new SaveFormatError(
+      'ACTk-encrypted save (.dat). Decrypt locally first:\n' +
+        '  npm run save:export\n' +
+        'Then drop the resulting data.sav.json into the importer.'
+    );
+  }
+
+  const text = new TextDecoder('utf-8').decode(buf);
+  const trimmed = text.replace(/^\s+/, '');
+  const first = trimmed.charAt(0);
+
+  let saveData;
+  if (first === '{') {
+    saveData = JSON.parse(trimmed);
+  } else if (HEX_PAIR.test(trimmed) && trimmed.length % 2 === 0 && trimmed.length > 0) {
+    saveData = JSON.parse(decodeSaveHex(trimmed));
+  } else {
+    throw new SaveFormatError('Unrecognized save format');
+  }
+
   return extractProfiles(saveData);
 }

@@ -436,17 +436,73 @@ describe('extractProfiles — stash and engineer attached to each profile', () =
 });
 
 describe('loadSaveFile', () => {
-  it('reads a File object and returns profiles', async () => {
+  // jsdom's Blob doesn't implement .arrayBuffer() or .text(), so we build a
+  // small mock that mirrors what real browser Blobs / Files provide. The
+  // production code calls file.arrayBuffer() — that's all loadSaveFile needs.
+  const makeFile = (content) => {
+    const bytes = typeof content === 'string'
+      ? new TextEncoder().encode(content)
+      : content;
+    return {
+      arrayBuffer: async () => bytes.buffer.slice(
+        bytes.byteOffset,
+        bytes.byteOffset + bytes.byteLength
+      ),
+    };
+  };
+
+  it('reads a legacy hex File object and returns profiles', async () => {
     const saveJson = JSON.stringify(MOCK_SAVE);
     const hex = encodeSaveHex(saveJson);
-
-    // jsdom File doesn't implement .text(), so we create a mock with the method
-    const file = { text: async () => hex };
+    const file = makeFile(hex);
 
     const profiles = await loadSaveFile(file);
     expect(profiles).toHaveLength(2);
     expect(profiles[0].name).toBe('Zeider');
     expect(profiles[0].class).toBe('rogue');
     expect(profiles[1].name).toBe('Thalin');
+  });
+
+  it('reads a plain-JSON File object and returns profiles', async () => {
+    const saveJson = JSON.stringify(MOCK_SAVE);
+    const file = makeFile(saveJson);
+
+    const profiles = await loadSaveFile(file);
+    expect(profiles).toHaveLength(2);
+    expect(profiles[0].name).toBe('Zeider');
+  });
+
+  it('throws SaveFormatError with a CLI pointer when given an ACTk-encrypted file', async () => {
+    // Synthetic ACTk file: magic bytes "ACTk" + random binary. The sniff
+    // fires on the magic alone — no need for a valid AES payload.
+    const actk = new Uint8Array(64);
+    actk[0] = 0x41; // 'A'
+    actk[1] = 0x43; // 'C'
+    actk[2] = 0x54; // 'T'
+    actk[3] = 0x6b; // 'k'
+    for (let i = 4; i < actk.length; i++) actk[i] = i & 0xff;
+    const file = makeFile(actk);
+
+    await expect(loadSaveFile(file)).rejects.toMatchObject({
+      name: 'SaveFormatError',
+      message: expect.stringContaining('npm run save:export'),
+    });
+  });
+
+  it('throws SaveFormatError on unrecognized content (not JSON, not hex, not ACTk)', async () => {
+    const file = makeFile('this is not a save file');
+
+    await expect(loadSaveFile(file)).rejects.toMatchObject({
+      name: 'SaveFormatError',
+      message: expect.stringMatching(/[Uu]nrecognized save format/),
+    });
+  });
+
+  it('tolerates leading whitespace before a plain-JSON payload', async () => {
+    const saveJson = '   \n\t' + JSON.stringify(MOCK_SAVE);
+    const file = makeFile(saveJson);
+
+    const profiles = await loadSaveFile(file);
+    expect(profiles).toHaveLength(2);
   });
 });
