@@ -269,7 +269,16 @@ function enumerateGearUpgrades(profile) {
     if (!items) continue;
 
     const equippedIdx = items.findIndex((i) => i.name === equipped.name);
-    const nextIdx = equippedIdx + 1;
+    let nextIdx = equippedIdx + 1;
+
+    // Guard against 0.311.0 known bug: two of the same ring cancel on zone
+    // change. If next-tier ring matches the other ring slot, skip ahead.
+    if (slot === 'ring' || slot === 'ring2') {
+      const otherSlot = slot === 'ring' ? 'ring2' : 'ring';
+      const otherName = currentGear[otherSlot]?.name;
+      while (nextIdx < items.length && items[nextIdx].name === otherName) nextIdx++;
+    }
+
     if (nextIdx >= items.length) continue;
 
     const nextItem = items[nextIdx];
@@ -300,7 +309,6 @@ function enumerateGearUpgrades(profile) {
   // Also suggest gear for empty slots (only obtainable, lowest tier)
   for (const [key, items] of Object.entries(gearBySlotSubtype)) {
     const baseSlot = key.split(':')[0];
-    if (currentGear[baseSlot] && currentGear[baseSlot].name) continue;
     if (items.length === 0) continue;
 
     // Skip weapon subtypes this class can't use
@@ -309,24 +317,36 @@ function enumerateGearUpgrades(profile) {
       if (allowedWeapons && subtype && !allowedWeapons.has(subtype)) continue;
     }
 
-    const firstItem = items[0];
-    const statChanges = computeGearStatDelta(null, firstItem);
-    if (Object.keys(statChanges).length === 0) continue;
+    // Ring items fit either ring slot; consider both
+    const targetSlots = baseSlot === 'ring' ? ['ring', 'ring2'] : [baseSlot];
+    for (const targetSlot of targetSlots) {
+      if (currentGear[targetSlot] && currentGear[targetSlot].name) continue;
 
-    const matCost2 = firstItem.recipe ? { [firstItem.recipe]: 1 } : {};
-    const firstHrs = firstItem.recipe
-      ? estimateGearPieceEtaHrs(firstItem.recipe, profile)
-      : estimateFarmTime(matCost2, profile);
-    upgrades.push({
-      type: 'gear',
-      id: `gear_${baseSlot}_${firstItem.name}`,
-      name: firstItem.name,
-      gearSlot: baseSlot,
-      gearName: firstItem.name,
-      statChanges,
-      materialCost: matCost2,
-      farmTimeHours: firstHrs,
-    });
+      // Guard against the 0.311.0 known bug: two of the same ring cancel each
+      // other on zone change. If the other ring slot already has this item,
+      // skip and pick the next-best.
+      const otherSlot = targetSlot === 'ring' ? 'ring2' : (targetSlot === 'ring2' ? 'ring' : null);
+      const otherName = otherSlot ? currentGear[otherSlot]?.name : null;
+      const pick = items.find((it) => it.name !== otherName) ?? items[0];
+
+      const statChanges = computeGearStatDelta(null, pick);
+      if (Object.keys(statChanges).length === 0) continue;
+
+      const matCost2 = pick.recipe ? { [pick.recipe]: 1 } : {};
+      const firstHrs = pick.recipe
+        ? estimateGearPieceEtaHrs(pick.recipe, profile)
+        : estimateFarmTime(matCost2, profile);
+      upgrades.push({
+        type: 'gear',
+        id: `gear_${targetSlot}_${pick.name}`,
+        name: pick.name,
+        gearSlot: targetSlot,
+        gearName: pick.name,
+        statChanges,
+        materialCost: matCost2,
+        farmTimeHours: firstHrs,
+      });
+    }
   }
 
   return upgrades;

@@ -8,6 +8,7 @@ const GEAR_SLOTS = [
   { id: 'belt', label: 'Belt' },
   { id: 'amulet', label: 'Amulet' },
   { id: 'ring', label: 'Ring' },
+  { id: 'ring2', label: 'Ring 2' },
   { id: 'weapon', label: 'Weapon' },
   { id: 'axe', label: 'Axe' },
   { id: 'pickaxe', label: 'Pickaxe' },

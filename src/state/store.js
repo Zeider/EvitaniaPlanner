@@ -185,7 +185,7 @@ export function resolveCardCount(cardName, importedCount) {
 /** Normalize old capitalized gear slot keys to lowercase IDs. */
 const SLOT_MIGRATE = {
   Helmet: 'helmet', Chest: 'chest', Legs: 'gloves', Boots: 'boots',
-  Belt: 'belt', Amulet: 'amulet', Ring: 'ring',
+  Belt: 'belt', Amulet: 'amulet', Ring: 'ring', Ring2: 'ring2',
   Weapon1: 'weapon', Weapon2: 'weapon2', Potion: 'potion',
   Axe: 'axe', Pickaxe: 'pickaxe',
 };

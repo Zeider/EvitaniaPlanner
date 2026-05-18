@@ -13,6 +13,7 @@ const SLOTS = [
   { id: 'belt',    label: 'Belt' },
   { id: 'amulet',  label: 'Amulet' },
   { id: 'ring',    label: 'Ring' },
+  { id: 'ring2',   label: 'Ring 2' },
   { id: 'weapon',  label: 'Weapon' },
   { id: 'axe',     label: 'Axe' },
   { id: 'pickaxe', label: 'Pickaxe' },
@@ -31,6 +32,10 @@ function buildItemsBySlot() {
         const slotId = item.slot;
         if (bySlot[slotId]) {
           bySlot[slotId].push(item);
+        }
+        // Ring items fit both ring slots (slots decoupled from item type in 0.311.0)
+        if (slotId === 'ring' && bySlot['ring2']) {
+          bySlot['ring2'].push(item);
         }
       }
     }
