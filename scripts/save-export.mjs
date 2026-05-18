@@ -27,12 +27,21 @@ import { decodeSaveHex } from '../src/state/save-decoder.js';
 const DEFAULT_NEW = 'C:/Users/Jeremy/AppData/LocalLow/Fireblast Studios/Evitania Online - Idle RPG/data.sav.dat';
 const DEFAULT_LEGACY = 'C:/Users/Jeremy/AppData/LocalLow/Fireblast Studios/Evitania Online - Idle RPG/data.sav';
 
+function consumeValue(argv, i, flag) {
+  const v = argv[i + 1];
+  if (v === undefined || v.startsWith('--')) {
+    console.error(`${flag} requires a value`);
+    process.exit(4);
+  }
+  return v;
+}
+
 function parseArgs(argv) {
   const out = { save: null, out: null, stdout: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a === '--save') out.save = argv[++i];
-    else if (a === '--out') out.out = argv[++i];
+    if (a === '--save') { out.save = consumeValue(argv, i, '--save'); i++; }
+    else if (a === '--out') { out.out = consumeValue(argv, i, '--out'); i++; }
     else if (a === '--stdout') out.stdout = true;
     else if (a === '-h' || a === '--help') {
       console.log('Usage: node scripts/save-export.mjs [--save <path>] [--out <path>] [--stdout]');
@@ -66,8 +75,10 @@ function resolveInput(explicit) {
   process.exit(1);
 }
 
-// Same heuristic as scripts/save-edit.mjs:52-57: ACTk files are binary,
-// legacy hex files are ASCII hex chars (plus CR/LF).
+// Format heuristic adapted from scripts/save-edit.mjs:52-57. Slightly more
+// permissive: also accepts lowercase hex (0x61-0x66) to match HEX_PAIR in
+// src/state/save-decoder.js. ACTk files are binary; legacy hex files are
+// ASCII hex chars (any case) plus CR/LF.
 function detectFormat(buf) {
   const head = buf.slice(0, 64);
   const allHex = head.every(
@@ -95,6 +106,10 @@ function deriveOutputPath(inputPath) {
 const args = parseArgs(process.argv.slice(2));
 const inputPath = resolveInput(args.save);
 const buf = fs.readFileSync(inputPath);
+if (buf.length === 0) {
+  console.error(`Empty file: ${inputPath}`);
+  process.exit(2);
+}
 const format = detectFormat(buf);
 
 let jsonText;
@@ -104,7 +119,12 @@ if (format === 'actk-v1') {
     jsonText = json.toString('utf8');
   } catch (e) {
     console.error(`Decrypt failed: ${e.message}`);
-    console.error('Was this save written by this machine?');
+    // Only suggest device-lock when the error pattern matches device-mismatch
+    // shapes. The other failures (file too small, ciphertext misaligned)
+    // indicate a corrupt or truncated save, not a wrong-machine save.
+    if (/AES decrypt failed|wrong password|Bad ACTk magic/i.test(e.message)) {
+      console.error('Was this save written by this machine?');
+    }
     process.exit(3);
   }
 } else if (format === 'legacy-hex') {
