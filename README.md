@@ -41,6 +41,22 @@ Import your save file and get instant answers to "what should I upgrade next?"
 
 Everything runs locally in your browser. Your save data never leaves your machine.
 
+### Game v0.311.0+ saves (encrypted)
+
+Starting in Evitania **0.311.0**, the game writes `data.sav.dat` — an
+AES-encrypted file locked to your machine's hardware ID. The browser tool
+can't decrypt it (browsers have no access to Windows WMI). If your save is
+`data.sav.dat`, decrypt it once locally:
+
+```bash
+npm run save:export
+```
+
+That writes a plain `data.sav.json` next to your save. Drop **that** file
+into the **Import Save** picker. Re-run whenever you want fresh data.
+
+Pre-0.311.0 saves (`data.sav`, hex-encoded) keep working without any extra step.
+
 ## Support
 
 If this tool helps you out, consider buying me a coffee:
