@@ -1,7 +1,8 @@
 node_modules/
 dist/
 .superpowers/
-docs/
+docs/*
+!docs/superpowers/
 *.log
 .env
 .DS_Store
