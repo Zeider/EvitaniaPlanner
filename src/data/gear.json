@@ -41,14 +41,14 @@
         "recipe": "Essence Sword"
       },
       {
-        "name": "Steel Sword",
+        "name": "Iron Sword",
         "slot": "weapon",
         "subtype": "sword",
         "atk": 70,
         "stats": { "str": 14, "atkSpeed": 14, "accuracy": 49, "critDamage": 35 },
         "source": "Crafted",
         "obtainable": true,
-        "recipe": "Steel Sword"
+        "recipe": "Iron Sword"
       },
       {
         "name": "Thorium Sword",
@@ -72,11 +72,21 @@
     ],
     "longswords": [
       {
-        "name": "Steel Longsword",
+        "name": "Iron Longsword",
         "slot": "weapon",
         "subtype": "longsword",
         "atk": 60,
         "stats": { "str": 25, "atkSpeed": 10, "accuracy": 49, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Longsword"
+      },
+      {
+        "name": "Steel Longsword",
+        "slot": "weapon",
+        "subtype": "longsword",
+        "atk": 79,
+        "stats": { "str": 40, "atkSpeed": 20, "critDamage": 35, "xpMulti": 10 },
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Steel Longsword"
@@ -132,11 +142,21 @@
         "recipe": "Copper Bow"
       },
       {
-        "name": "Steel Bow",
+        "name": "Iron Bow",
         "slot": "weapon",
         "subtype": "bow",
         "atk": 62,
         "stats": { "dex": 21, "atkSpeed": 20, "accuracy": 49, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Bow"
+      },
+      {
+        "name": "Steel Bow",
+        "slot": "weapon",
+        "subtype": "bow",
+        "atk": 86,
+        "stats": { "dex": 30, "atkSpeed": 30, "critDamage": 35, "xpMulti": 10 },
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Steel Bow"
@@ -192,11 +212,21 @@
         "recipe": "Copper Staff"
       },
       {
-        "name": "Steel Staff",
+        "name": "Iron Staff",
         "slot": "weapon",
         "subtype": "staff",
         "atk": 70,
         "stats": { "int": 14, "men": 14, "accuracy": 49, "critDamage": 35 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Iron Staff"
+      },
+      {
+        "name": "Steel Staff",
+        "slot": "weapon",
+        "subtype": "staff",
+        "atk": 97,
+        "stats": { "int": 28, "men": 42, "critDamage": 35, "xpMulti": 10 },
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Steel Staff"
@@ -279,6 +309,15 @@
         "recipe": "Iron Helmet"
       },
       {
+        "name": "Steel Helmet",
+        "slot": "helmet",
+        "def": 43,
+        "stats": { "str": 25, "dex": 25, "int": 25, "con": 25, "xpMulti": 10 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Helmet"
+      },
+      {
         "name": "Thorium Helmet",
         "slot": "helmet",
         "def": 50,
@@ -356,6 +395,15 @@
         "recipe": "Iron Chestplate"
       },
       {
+        "name": "Steel Chestplate",
+        "slot": "chest",
+        "def": 43,
+        "stats": { "str": 25, "dex": 25, "int": 25, "con": 25, "hp": 320, "xpMulti": 10 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Chestplate"
+      },
+      {
         "name": "Thorium Chestplate",
         "slot": "chest",
         "def": 50,
@@ -426,6 +474,15 @@
         "recipe": "Iron Gloves"
       },
       {
+        "name": "Steel Gloves",
+        "slot": "gloves",
+        "def": 43,
+        "stats": { "str": 25, "dex": 25, "int": 25, "con": 25, "xpMulti": 10 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Gloves"
+      },
+      {
         "name": "Thorium Gloves",
         "slot": "gloves",
         "def": 50,
@@ -494,6 +551,15 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Iron Boots"
+      },
+      {
+        "name": "Steel Boots",
+        "slot": "boots",
+        "def": 43,
+        "stats": { "str": 25, "dex": 25, "int": 25, "moveSpeed": 10, "xpMulti": 10 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Boots"
       },
       {
         "name": "Thorium Boots",
@@ -711,6 +777,14 @@
         "recipe": "Iron Pickaxe"
       },
       {
+        "name": "Steel Pickaxe",
+        "slot": "pickaxe",
+        "stats": { "atk": 1, "miningXp": 15, "miningPower": 70 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Pickaxe"
+      },
+      {
         "name": "Thorium Pickaxe",
         "slot": "pickaxe",
         "stats": { "miningPower": 80, "atk": 5 },
@@ -758,6 +832,14 @@
         "source": "Crafted",
         "obtainable": true,
         "recipe": "Iron Axe"
+      },
+      {
+        "name": "Steel Axe",
+        "slot": "axe",
+        "stats": { "con": 1, "wcXp": 15, "wcPower": 76 },
+        "source": "Crafted",
+        "obtainable": true,
+        "recipe": "Steel Axe"
       },
       {
         "name": "Thorium Axe",

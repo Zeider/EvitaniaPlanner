@@ -8,7 +8,7 @@ describe('buildCapabilityMatrix', () => {
       hunterUpgrades: { LeBabka_Str: 15, LeBabka_PAtk: 10 },
       talents: { tt_warrior_0_0: 5, tt_warrior_1_1: 5, novice_0_0_patk: 1, class_1_warrior: 1 },
       ashUpgrades: {}, sacrificeUpgrades: {},
-      gear: { weapon: { name: 'Steel Sword', enhancementLevel: 5 } },
+      gear: { weapon: { name: 'Iron Sword', enhancementLevel: 5 } },
       currentZone: '2.1',
       miningLevel: 20, woodcuttingLevel: 15,
       farmingRates: { killsPerHour: 300, xpPerHour: 50000, goldPerHour: 100 },

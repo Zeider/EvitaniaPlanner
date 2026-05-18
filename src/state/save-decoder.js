@@ -3,7 +3,7 @@
  *
  * The file is ASCII hex (each pair XOR'd with 0xFF) that decodes to UTF-8 JSON.
  */
-import cardsData from '../data/cards.json';
+import cardsData from '../data/cards.json' with { type: 'json' };
 
 const CLASS_MAP = {
   1: 'warrior',
@@ -62,27 +62,39 @@ const GEAR_GUID_MAP = {
   // Swords / Longswords / Daggers
   'f2bf27ef-f604-4f8d-a10e-4161d7f1d087': 'Bone Dagger',
   '5279b9a3-3ac1-44e2-8306-1374d6351c10': 'Essence Sword',
-  'bd3cfbe4-d754-410f-916b-db2a4241977b': 'Steel Longsword',
+  // 0.311.0: old "Steel Longsword/Bow/Staff/Sword" GUIDs were renamed to "Iron"
+  // when the new Steel tier landed. GUIDs unchanged, display names flipped.
+  'bd3cfbe4-d754-410f-916b-db2a4241977b': 'Iron Longsword',
+  '893c67c2-0f7c-468e-a29c-8f00cb8b4218': 'Steel Longsword',
   'b0a19111-6e67-4f9d-bbb4-af27755c7297': 'Thorium Longsword',
   '3f98e0fe-9f6b-4bb6-af30-c690f44a20c9': 'Sunstone Longsword',
   'a4fb1638-2d15-421c-abf5-0f95aed04d66': 'Infinite Longsword I',
   '34233e5d-0201-4183-981e-ec809440c4a6': 'Christmas Longsword',
   // Bows
-  'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Steel Bow',
+  'a30e858e-5429-4c2a-9175-8a6cfd0f5c7a': 'Iron Bow',
+  '85998550-2174-4712-a6fd-58f6d33c75d3': 'Steel Bow',
   'f61790b8-c673-41ed-9b5f-0f3a5d3993de': 'Thorium Bow',
   // Staffs
   '48640cc3-b770-4f91-add7-0ad871dfc7e7': 'Copper Staff',
-  'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Steel Staff',
+  'fe3f786f-4807-4cd5-b34c-e3a0c3b53967': 'Iron Staff',
+  'c22a2fec-faaa-4171-9fbd-46d265c8c610': 'Steel Staff',
   // Pickaxes
   'a36efc3c-9678-4613-8cda-b102e55fe714': 'Bronze Pickaxe',
   'a2e7e691-4c65-49b5-a7f6-2f512a059b56': 'Iron Pickaxe',
+  'be3ba39b-d8cf-4f55-9127-b38f91d8f37c': 'Steel Pickaxe',
   '8500b653-61a3-42b3-9a60-af782562e9e6': 'Thorium Pickaxe',
   '2b86c517-ff48-41e2-8be7-ee2cc1a49519': 'Second Anniversary Pickaxe',
   // Axes
   '95fbcc3e-b5f2-48cd-adc7-42a187ae4179': 'Iron Axe',
+  'af2cf7dd-f286-4b46-a9c3-eacf83bede2f': 'Steel Axe',
   '08cd484a-023b-4bae-93c9-465683d681ed': 'Thorium Axe',
   '4690994f-900e-47e0-9eba-2a57019d4593': 'Second Anniversary Axe',
   '7b5c3c71-2118-49fa-a9e5-8fb84334a5e5': 'Sunstone Axe',
+  // 0.311.0 Steel armor set (full set bonus, see gear.json)
+  '3825c1a7-40a9-49a9-a286-d8d0d51d522b': 'Steel Helmet',
+  '70d40e47-db3c-47ba-a166-fee506f98ee0': 'Steel Chestplate',
+  'cf5d606c-5cf0-4d6e-8174-b6b9fc958a2d': 'Steel Gloves',
+  '9cbaab0e-ba2d-4ea7-9db7-1ddc6b2fdd22': 'Steel Boots',
 
   // ─── Bulk-extracted from Items_en localization (2026-05-06) ───
   // 83 items across all gear slots + 8 Thorium crafting parts. Sorted
@@ -146,7 +158,7 @@ const GEAR_GUID_MAP = {
   'f066ad78-683c-47c5-9bd6-20352ef4ad11': 'Snowy Staff',
   '91145e07-55c8-428d-b8b6-9700583f97dc': 'Snowy Sword',
   'd9c62e8b-c2ec-4103-aa47-d373a784efed': 'Starter Sword',
-  '1a5ec422-991f-417a-aa27-9754a7e83a3d': 'Steel Sword',
+  '1a5ec422-991f-417a-aa27-9754a7e83a3d': 'Iron Sword', // renamed in 0.311.0 (was 'Steel Sword')
   '5ea05025-3e6c-4609-a6db-d675ee864d0b': 'Summer Belt',
   'd88e6bec-e17b-4437-be34-2dd53754a02c': 'Sunstone Boots',
   '91f0e60d-2c4d-45ba-aa7b-951d3d5427a9': 'Sunstone Bow',
@@ -679,8 +691,10 @@ const CARD_GUID_MAP = {
   '49a24059-a3c3-4c30-89ae-82e7a5333393': 'Horus card',
   '563f4aef-ba6d-4c65-89cd-24087826e034': 'Ice Mammoth Card',
   '0ba54af9-0ea2-43b5-9074-b84250a86694': 'Iceboar Card',
+  '01a18d23-4f27-4e23-9f99-6de74e723eb4': 'Goak Card', // 0.311.0
   '04669273-34ee-40d5-adda-4bf162298f91': 'Iron Card',
   'e4df93e0-043a-42d4-82d9-995dfe377ad3': 'Ironwood Card',
+  'bb6c4591-abb8-41a3-87ab-0d9d1439941d': 'Tin Card', // 0.311.0
   'c55b3d08-a246-4f31-bc0d-b994295130a0': 'Jötunn Card',
   '6deeee7a-63be-4d28-9bb8-28b9db41e858': 'Kangaroo card',
   'f45ae0ff-0a4e-455c-a38c-4238279eac7d': 'Kobold Card',
@@ -890,7 +904,7 @@ export function extractProfiles(saveData) {
     // Map equipment slots — normalize game's slot names to our slot IDs
     const SLOT_MAP = {
       Helmet: 'helmet', Chest: 'chest', Legs: 'gloves', Boots: 'boots',
-      Belt: 'belt', Amulet: 'amulet', Ring: 'ring',
+      Belt: 'belt', Amulet: 'amulet', Ring: 'ring', Ring2: 'ring2',
       Weapon1: 'weapon', Weapon2: 'weapon2', Potion: 'potion',
       Axe: 'axe', Pickaxe: 'pickaxe',
     };

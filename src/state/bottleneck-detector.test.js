@@ -9,7 +9,7 @@ describe('detectBottlenecks', () => {
     talents: { tt_rogue_0_0: 5, novice_0_0_patk: 1, class_1_rogue: 1 },
     ashUpgrades: {},
     sacrificeUpgrades: { 'act-2-sacrifice-1': 5 },
-    gear: { weapon: { name: 'Steel Bow', enhancementLevel: 6 } },
+    gear: { weapon: { name: 'Iron Bow', enhancementLevel: 6 } },
     currentZone: '2.1',
   };
 

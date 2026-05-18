@@ -9,7 +9,7 @@ describe('Alt Advisor integration', () => {
     talents: { tt_rogue_0_0: 5, tt_rogue_8_1: 1, tt_rogue_8_0: 5, novice_0_0_patk: 1, class_1_rogue: 1 },
     ashUpgrades: { ash_0_0: 1 },
     sacrificeUpgrades: { 'act-2-sacrifice-1': 5, 'act-2-sacrifice-0': 3 },
-    gear: { weapon: { name: 'Steel Bow', enhancementLevel: 6 } },
+    gear: { weapon: { name: 'Iron Bow', enhancementLevel: 6 } },
     currentZone: '2.1',
     miningLevel: 18, woodcuttingLevel: 21,
     farmingRates: { killsPerHour: 149, xpPerHour: 23698, goldPerHour: 0 },

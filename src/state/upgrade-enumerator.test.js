@@ -26,9 +26,10 @@ describe('enumerateAllUpgrades', () => {
     const hasWarrior = talentUpgrades.some(u => u.id.startsWith('tt_warrior'));
     expect(hasWarrior).toBe(false);
 
-    // Gear: bow should suggest next bow (Steel Bow), not a sword
+    // Gear: bow should suggest next bow (Iron Bow — formerly Steel, renamed in 0.311.0),
+    // not a sword.
     const gearUpgrades = upgrades.filter(u => u.type === 'gear');
-    const bowUpgrade = gearUpgrades.find(u => u.name === 'Steel Bow');
+    const bowUpgrade = gearUpgrades.find(u => u.name === 'Iron Bow');
     expect(bowUpgrade).toBeDefined();
     const swordUpgrade = gearUpgrades.find(u => u.name === 'Wooden Sword');
     expect(swordUpgrade).toBeUndefined();

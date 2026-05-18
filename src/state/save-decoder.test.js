@@ -358,11 +358,11 @@ describe('extractStash', () => {
     expect(ironChest.enhancementLevel).toBe(7);
     expect(ironChest.name).toBe('Iron Chestplate');
 
-    // Steel Bow: gear with Durability=0 — must still be classified as gear
-    const steelBow = byGuid['a30e858e-5429-4c2a-9175-8a6cfd0f5c7a'];
-    expect(steelBow.isGear).toBe(true);
-    expect(steelBow.durability).toBe(0);
-    expect(steelBow.name).toBe('Steel Bow');
+    // Iron Bow (formerly Steel Bow, renamed in 0.311.0): gear with Durability=0 — must still be classified as gear
+    const ironBow = byGuid['a30e858e-5429-4c2a-9175-8a6cfd0f5c7a'];
+    expect(ironBow.isGear).toBe(true);
+    expect(ironBow.durability).toBe(0);
+    expect(ironBow.name).toBe('Iron Bow');
 
     // Resource: no Durability field on either input or output
     const ore = byGuid['res-thorium-ore'];
