@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "npx playwright test",
-    "test:all": "vitest run && npx playwright test"
+    "test:all": "vitest run && npx playwright test",
+    "save:export": "node scripts/save-export.mjs"
   },
   "repository": {
     "type": "git",
