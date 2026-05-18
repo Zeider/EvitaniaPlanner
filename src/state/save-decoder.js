@@ -1119,27 +1119,41 @@ export function extractEngineer(saveData) {
  *   - Legacy hex-XOR `data.sav` (pre-0.311.0 game versions)
  *   - ACTk-encrypted `data.sav.dat` (0.311.0+) — rejected with a CLI pointer
  *
+ * Detection: ACTk-encrypted files are AES-CBC ciphertext, so the first bytes
+ * are high-entropy binary. We sniff for any non-printable / non-whitespace
+ * byte in the head — same heuristic as scripts/save-edit.mjs#detectFormat
+ * and scripts/save-export.mjs#detectFormat. The literal "ACTk" magic lives
+ * *inside* the encrypted payload, not at the file head, so a byte-string
+ * match would never fire on a real save.
+ *
  * @param {Blob} file - A File or Blob representing the save
  * @returns {Promise<Array<object>>} Extracted character profiles
  */
 export async function loadSaveFile(file) {
   const buf = new Uint8Array(await file.arrayBuffer());
 
-  // ACTk magic: bytes 0x41 0x43 0x54 0x6B at offset 0
-  if (
-    buf.length >= 4 &&
-    buf[0] === 0x41 &&
-    buf[1] === 0x43 &&
-    buf[2] === 0x54 &&
-    buf[3] === 0x6b
-  ) {
-    throw new SaveFormatError(
-      'ACTk-encrypted save (.dat). Decrypt locally first:\n' +
-        '  npm run save:export\n' +
-        'Then drop the resulting data.sav.json into the importer.'
-    );
+  if (buf.length === 0) {
+    throw new SaveFormatError('Empty file');
   }
 
+  // Binary-content sniff. Scan up to the first 64 bytes; if any byte is
+  // outside printable ASCII (and isn't whitespace), the file is binary —
+  // which for an Evitania save means ACTk-encrypted.
+  const headLen = Math.min(64, buf.length);
+  for (let i = 0; i < headLen; i++) {
+    const b = buf[i];
+    const isWhitespace = b === 0x09 || b === 0x0a || b === 0x0d;
+    const isPrintable = b >= 0x20 && b <= 0x7e;
+    if (!isWhitespace && !isPrintable) {
+      throw new SaveFormatError(
+        'ACTk-encrypted save (.dat). Decrypt locally first:\n' +
+          '  npm run save:export\n' +
+          'Then drop the resulting data.sav.json into the importer.'
+      );
+    }
+  }
+
+  // Plaintext path: must be either JSON or legacy hex.
   const text = new TextDecoder('utf-8').decode(buf);
   const trimmed = text.replace(/^\s+/, '');
   const first = trimmed.charAt(0);

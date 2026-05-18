@@ -473,19 +473,29 @@ describe('loadSaveFile', () => {
   });
 
   it('throws SaveFormatError with a CLI pointer when given an ACTk-encrypted file', async () => {
-    // Synthetic ACTk file: magic bytes "ACTk" + random binary. The sniff
-    // fires on the magic alone — no need for a valid AES payload.
+    // Realistic ACTk file head: first 4 bytes are a stored xxHash32
+    // (binary low-entropy values), then 16 bytes of AES IV, then ciphertext.
+    // The sniff fires on the first non-printable byte (0x1a here).
     const actk = new Uint8Array(64);
-    actk[0] = 0x41; // 'A'
-    actk[1] = 0x43; // 'C'
-    actk[2] = 0x54; // 'T'
-    actk[3] = 0x6b; // 'k'
-    for (let i = 4; i < actk.length; i++) actk[i] = i & 0xff;
+    actk[0] = 0x1a;
+    actk[1] = 0x5b;
+    actk[2] = 0x91;
+    actk[3] = 0x39;
+    for (let i = 4; i < actk.length; i++) actk[i] = (i * 37) & 0xff;
     const file = makeFile(actk);
 
     await expect(loadSaveFile(file)).rejects.toMatchObject({
       name: 'SaveFormatError',
       message: expect.stringContaining('npm run save:export'),
+    });
+  });
+
+  it('throws SaveFormatError on an empty file', async () => {
+    const file = makeFile(new Uint8Array(0));
+
+    await expect(loadSaveFile(file)).rejects.toMatchObject({
+      name: 'SaveFormatError',
+      message: expect.stringMatching(/[Ee]mpty file/),
     });
   });
 
