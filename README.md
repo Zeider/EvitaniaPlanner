@@ -1,8 +1,10 @@
 # EvitaniaPlanner
 
+> **No longer maintained.** The maintainer has stopped playing the game and taken the hosted site offline, so `https://zeider.github.io/EvitaniaPlanner/` no longer resolves. The code is left up for anyone who wants to fork it. Save import also depends on the game's save format, which is no longer accessible. Fork away — no support, issues, or pull requests will be handled here.
+
 All-in-one character planning suite for **Evitania Online: Idle RPG**.
 
-**[Open EvitaniaPlanner](https://zeider.github.io/EvitaniaPlanner/)** — no download, runs in your browser.
+To run it yourself: `npm install && npm run dev` (or `npm run build` for a static bundle you can host anywhere).
 
 ## What It Does
 
